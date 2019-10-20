@@ -1,0 +1,117 @@
+		.nav-tabs {
+			border-bottom: 0;
+		}
+		.font-size-2 {
+			font-size: 2rem;
+		}
+		
+		#json-tab .nav-link,
+		#rdf-tab .nav-link{
+			color: #f1f1f1;
+		}
+		
+		#json-tab .nav-link.active,
+		#rdf-tab .nav-link.active{
+			color: rgb(255,82,82);
+			border-color: transparent transparent rgb(255,82,82);
+		}
+		
+		#json-tab .nav-link,
+		#rdf-tab .nav-link	{
+			border-color: transparent transparent #f1f1f1;
+			border-radius: 4px;
+		}
+		.nav-tabs .nav-link {
+			border: 3px solid transparent;
+		}
+		#data-content{
+			margin-top: 150px
+		}
+		#json-tab{
+			display:flex;
+			justify-content:center;
+		}
+		#rdf-tab{
+			margin-top: 30px;
+		}
+		#jsondata{
+			background: #191f2b;
+			color: white;
+			width: 100%;
+			height: 84%;
+			resize: none;
+		}
+		.icon-brackets:before{
+			content: "";
+			display: block;
+			background: url("curly-brackets.svg") no-repeat;
+		    width: 25px;
+			height: 40px;
+			float: left;
+			margin: 2px 6px 0 0;
+			background-size: 25px 40px;
+		}
+		#json-tab .nav-link.active > .icon-brackets:before {
+			background: url("curly-brackets-red.svg") no-repeat;
+			background-size: 25px 40px;
+		}
+		.rdf-icon {
+			margin-right: 6px;
+		}
+		pre{
+			padding: 5px;
+			color: white;
+			height: 100%;
+			width: 100%;
+		}
+		pre::-webkit-scrollbar {
+			width: 10px;
+			height: 10px;
+		}
+		pre::-webkit-scrollbar-track {
+		  background: #f1f1f1; 
+		}
+		pre::-webkit-scrollbar-thumb {
+		  border-radius: 10px;
+		  background: #888; 
+		}
+		pre::-webkit-scrollbar-thumb:hover {
+		  background: #555; 
+		}
+		.string{ 
+			color: green; 
+		}
+		.number{ 
+			color: darkorange; 
+		}
+		.boolean{
+			color: blue; 
+		}
+		.null{ 
+			color: magenta; 
+		}
+		.key{ 
+			color: red; 
+		}
+		.add-button {
+			cursor: pointer;
+		}
+		.add-button .fa-stack{
+			width: 100%;
+		}
+		.add-button > .fa-stack > .fas:nth-child(1n) {
+			color: #f1f1f1;;
+		}
+		.add-button > .fa-stack > .fas:nth-child(2n) {
+			color: inherit;
+		}
+		.horizontal-line {
+			position: absolute;
+			width: 100%;
+			background: #f1f1f1;
+			height: 3px;
+			margin-top: 16px;
+		}
+		.margin-top-buttons {
+			margin-top: 42px;
+		}

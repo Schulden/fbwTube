@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>JSON/RDF</title>
+	<!-- Bootstrap core CSS -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<!-- Font Awesome -->
+	<link rel="stylesheet" style="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" />
+	<!-- Material Design Bootstrap -->
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.10/css/mdb.min.css" rel="stylesheet">
+	
+	<!-- JQuery -->
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<!-- Bootstrap tooltips -->
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+	<!-- Bootstrap core JavaScript -->
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+	<!-- MDB core JavaScript -->
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.10/js/mdb.min.js"></script>
+
+	<!-- Die Styles -->
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<!-- Include minified script for FormData Searilize -->
+	<script src="jquery-serialize-object.min.js"></script>
+	<!--<script src="serializeObject_deparam.js"></script>-->
+	<!-- Die JavaScript -->
+	<script type="text/javascript" src="script.js"></script>
+	
+	
+  </head>
+  <body>
+  
+	<div id="data-content" class="container">
+		<ul class="nav nav-tabs" id="json-tab" role="tablist">
+		  <li class="nav-item">
+			<a class="nav-link active font-size-2" id="json-tab-link" data-toggle="tab" href="#json" role="tab" aria-controls="home" aria-selected="true">
+				<span class="icon-brackets"></span>JSON
+			</a>
+		  </li>
+		  <li class="nav-item">
+			<a class="nav-link font-size-2" id="rdf-tab-link" data-toggle="tab" href="#rdf" role="tab" aria-controls="profile" aria-selected="false">
+				<span class="fas fa-share-alt rdf-icon"></span>RDF
+			</a>
+		  </li>
+		</ul>
+		<div class="tab-content" id="rdf-tab">
+		  <div class="tab-pane fade show active" id="json" role="tabpanel" aria-labelledby="home-tab">
+			<div class="row">
+				<div class="col-6" >
+					<div id="jsondata"></div>
+					<div class="d-flex justify-content-between margin-top-buttons">
+						<button id="copy-json" type="button" class="btn btn-primary">
+							<span class="far fa-copy fa-2x"></span>
+						</button>
+						<button id="download-json" type="button" class="btn btn-primary">
+							<span class="fas fa-download fa-2x"></span>
+						</button>
+						<button type="button" class="btn btn-primary">
+							<span class="fas fa-upload fa-2x"></span>
+						</button>
+					</div>
+				</div>
+				<div class="col-6">
+					<form id="dataform">
+					  <div class="md-form">
+						<input type="text" class="form-control" id="formGroupExampleInput1" name="courses[0][title]">
+						<label for="formGroupExampleInput1">Title</label>
+					  </div>
+					  <div class="md-form">
+						<input type="text" class="form-control" id="formGroupExampleInput2" name="courses[0][lectureTitle]">
+						<label for="formGroupExampleInput2">Lecture Title</label>
+					  </div>
+					  <div class="md-form">
+						<input type="text" class="form-control" id="formGroupExampleInput3" name="courses[0][lecturer]">
+						<label for="formGroupExampleInput3">Lecturer Name</label>
+					  </div>
+					  <div class="md-form">
+						<input type="text" class="form-control" id="formGroupExampleInput4" name="courses[0][lecturerMail]">
+						<label for="formGroupExampleInput4">Lecturer Email</label>
+					  </div>
+						<h3>Chapters</h3>
+					  <div class="md-form">
+						<input type="text" class="form-control" id="formGroupExampleInput5" name="courses[0][chapters][0][title]">
+						<label for="formGroupExampleInput5">Chapter Title</label>
+					  </div>
+					  <div class="md-form">
+						<input type="text" class="form-control" id="formGroupExampleInput6" name="courses[0][chapters][0][videos][url_teacher]">
+						<label for="formGroupExampleInput6">Video URL Teacher</label>
+					  </div>
+					  <div class="md-form">
+						<input type="text" class="form-control" id="formGroupExampleInput7" name="courses[0][chapters][0][videos][url_presentation]">
+						<label for="formGroupExampleInput7">Video URL Presentation</label>
+					  </div>
+					  <span class="add-button" title="Chapter einfügen">
+						<span class="horizontal-line"></span>
+						<span class="fa-stack">
+							<span class="fas fa-circle fa-stack-2x"></span>
+							<span class="fas fa-plus fa-stack-1x"></span>
+						</span>
+					  </span>
+					</form>
+					<div class="mt-5">
+						<button type="button" class="btn btn-danger btn-lg btn-block" title="Hochladen">Hochladen</button>
+					</div>
+				</div>
+			</div>
+		  </div>
+		  <div class="tab-pane fade" id="rdf" role="tabpanel" aria-labelledby="profile-tab">
+			<div class="row">
+				<div class="col-6" >
+					<div id="jsondata"></div>
+				</div>
+				<div class="col-6">
+					<form id="dataform">
+					  <div class="md-form">
+						<input type="text" class="form-control" id="formGroupExampleInput1" name="name">
+						<label for="formGroupExampleInput1">Name</label>
+					  </div>
+					  <div class="md-form">
+						<input type="text" class="form-control" id="formGroupExampleInput2" name="email">
+						<label for="formGroupExampleInput2">Email</label>
+					  </div>
+					  <div class="md-form">
+						<input type="text" class="form-control" id="formGroupExampleInput3" name="title">
+						<label for="formGroupExampleInput3">Title</label>
+					  </div>
+					</form>
+				</div>
+			</div>
+		  </div>
+		</div>
+	</div>
+  </body>
+</html>
