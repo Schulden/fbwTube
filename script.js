@@ -1,4 +1,38 @@
 $(document).ready(function(){
+	
+	$('[list="lecturerList"]').on('focusin', function(){
+	  var query = "SELECT ?name ?email WHERE { ?person  a <https://bmake.th-brandenburg.de/vidp%23Lecturer>; <https://schema.org/name>  ?name; <https://schema.org/email> ?email. };";
+	  
+	  $.ajax({
+		  type: "POST",
+		  url: 'http://fbwsvcdev.fh-brandenburg.de/OntoWiki/sparql?query=' + query,
+		  cache: false,
+		  dataType: 'json', 
+		  success: function(successData) {
+			var lecturerList = $('#lecturerList');
+			lecturerList.empty();
+
+			$.each(successData.results.bindings, function( index, value) {
+				var optionForm = document.createElement('option');
+				optionForm.value = value.name.value;
+				optionForm.dataset.email = value.email.value;
+				lecturerList.append(optionForm);
+			});
+
+		  },
+		  error: function(errorText) {
+			 console.log( errorText ); 
+		  }
+	  });
+	});
+	
+	$('[list="lecturerList"]').on('focusout', function(){
+		var email = $('option[value="'+this.value+'"]').attr('data-email');
+		var input = $('[data-insert="email"]');
+		input.trigger('focusin');
+		input.val(email);
+	});
+
 
 	$('form').on('input', function(){
 		var formData = $('#dataform').serializeArray();
@@ -36,16 +70,14 @@ $(document).ready(function(){
 		var inputFormUrlPresentation = document.createElement('input');
 		var labelFormUrlPresentation =  document.createElement('label');
 		
-		var inputIdNumber = parseInt($('#json [id^=formGroupExampleInput]').last().attr('id').replace(/[^0-9]/g,''));
-		var inputId = 'formGroupExampleInput'+(++inputIdNumber);
-		
+		var inputIdNumber = parseInt($('#json [id^=formGroupExampleInput]').last().attr('id').replace(/[^0-9]/g,''));		
 		
 		divForm.classList.add('md-form');
 		inputForm.classList.add('form-control');
 		inputForm.setAttribute('type', 'text');
 		inputForm.setAttribute('name', 'courses[0][chapters]['+chapter+'][title]');
-		inputForm.id = inputId;
-		labelForm.setAttribute('for', inputId);
+		inputForm.id = 'formGroupExampleInput'+(inputIdNumber+1);
+		labelForm.setAttribute('for', 'formGroupExampleInput'+(inputIdNumber+1));
 		labelForm.innerHTML = 'Chapter Title '+chapter;
 		
 		divForm.appendChild(inputForm);
@@ -55,8 +87,8 @@ $(document).ready(function(){
 		inputFormUrlTeacher.classList.add('form-control');
 		inputFormUrlTeacher.setAttribute('type', 'text');
 		inputFormUrlTeacher.setAttribute('name', 'courses[0][chapters]['+chapter+'][videos][url_teacher]');
-		inputFormUrlTeacher.id = inputId;
-		labelFormUrlTeacher.setAttribute('for', inputId);
+		inputFormUrlTeacher.id = 'formGroupExampleInput'+(inputIdNumber+2);
+		labelFormUrlTeacher.setAttribute('for', 'formGroupExampleInput'+(inputIdNumber+2));
 		labelFormUrlTeacher.innerHTML = 'Video URL Teacher '+chapter;
 		
 		divFormUrlTeacher.appendChild(inputFormUrlTeacher);
@@ -66,8 +98,8 @@ $(document).ready(function(){
 		inputFormUrlPresentation.classList.add('form-control');
 		inputFormUrlPresentation.setAttribute('type', 'text');
 		inputFormUrlPresentation.setAttribute('name', 'courses[0][chapters]['+chapter+'][videos][url_presentation]');
-		inputFormUrlPresentation.id = inputId;
-		labelFormUrlPresentation.setAttribute('for', inputId);
+		inputFormUrlPresentation.id = 'formGroupExampleInput'+(inputIdNumber+3);
+		labelFormUrlPresentation.setAttribute('for', 'formGroupExampleInput'+(inputIdNumber+3));
 		labelFormUrlPresentation.innerHTML = 'Video URL Presentation '+chapter;
 		
 		divFormUrlPresentation.appendChild(inputFormUrlPresentation);

@@ -20,6 +20,7 @@
 	<!-- MDB core JavaScript -->
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.10/js/mdb.min.js"></script>
 
+
 	<!-- Die Styles -->
 	<link rel="stylesheet" type="text/css" href="style.css">
 	<!-- Include minified script for FormData Searilize -->
@@ -73,11 +74,12 @@
 						<label for="formGroupExampleInput2">Lecture Title</label>
 					  </div>
 					  <div class="md-form">
-						<input type="text" class="form-control" id="formGroupExampleInput3" name="courses[0][lecturer]">
+						<input list="lecturerList" type="text" class="form-control" id="formGroupExampleInput3" name="courses[0][lecturer]">
+						  <datalist id="lecturerList"></datalist>
 						<label for="formGroupExampleInput3">Lecturer Name</label>
 					  </div>
 					  <div class="md-form">
-						<input type="text" class="form-control" id="formGroupExampleInput4" name="courses[0][lecturerMail]">
+						<input type="text" class="form-control" id="formGroupExampleInput4" data-insert="email" name="courses[0][lecturerMail]">
 						<label for="formGroupExampleInput4">Lecturer Email</label>
 					  </div>
 						<h3>Chapters</h3>
