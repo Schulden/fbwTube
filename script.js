@@ -31,6 +31,7 @@ $(document).ready(function(){
 		var input = $('[data-insert="email"]');
 		input.trigger('focusin');
 		input.val(email);
+		input.trigger('input');
 	});
 
 
