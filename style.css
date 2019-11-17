@@ -25,7 +25,8 @@
 			border: 3px solid transparent;
 		}
 		#data-content{
-			margin-top: 150px
+			margin-top: 150px;
+			margin-bottom: 150px;
 		}
 		#json-tab{
 			display:flex;
@@ -34,11 +35,18 @@
 		#rdf-tab{
 			margin-top: 30px;
 		}
-		#jsondata{
+		#jsonData{
 			background: #191f2b;
 			color: white;
 			width: 100%;
 			height: 84%;
+			resize: none;
+		}
+		#rdfData{
+			background: #191f2b;
+			color: white;
+			width: 100%;
+			height: 99%;
 			resize: none;
 		}
 		.icon-brackets:before{
@@ -88,7 +96,7 @@
 			color: blue; 
 		}
 		.null{ 
-			color: magenta; 
+			color: hotpink;; 
 		}
 		.key{ 
 			color: red; 

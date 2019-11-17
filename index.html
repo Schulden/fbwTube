@@ -28,7 +28,7 @@
 	<!--<script src="serializeObject_deparam.js"></script>-->
 	<!-- Die JavaScript -->
 	<script type="text/javascript" src="script.js"></script>
-	
+
 	
   </head>
   <body>
@@ -50,7 +50,7 @@
 		  <div class="tab-pane fade show active" id="json" role="tabpanel" aria-labelledby="home-tab">
 			<div class="row">
 				<div class="col-6" >
-					<div id="jsondata"></div>
+					<div id="jsonData"></div>
 					<div class="d-flex justify-content-between margin-top-buttons">
 						<button id="copy-json" type="button" class="btn btn-primary">
 							<span class="far fa-copy fa-2x"></span>
@@ -64,7 +64,7 @@
 					</div>
 				</div>
 				<div class="col-6">
-					<form id="dataform">
+					<form id="jsonDataFom">
 					  <div class="md-form">
 						<input type="text" class="form-control" id="formGroupExampleInput1" name="courses[0][title]">
 						<label for="formGroupExampleInput1">Title</label>
@@ -75,7 +75,7 @@
 					  </div>
 					  <div class="md-form">
 						<input list="lecturerList" type="text" class="form-control" id="formGroupExampleInput3" name="courses[0][lecturer]">
-						  <datalist id="lecturerList"></datalist>
+						<datalist id="lecturerList"></datalist>
 						<label for="formGroupExampleInput3">Lecturer Name</label>
 					  </div>
 					  <div class="md-form">
@@ -112,23 +112,50 @@
 		  <div class="tab-pane fade" id="rdf" role="tabpanel" aria-labelledby="profile-tab">
 			<div class="row">
 				<div class="col-6" >
-					<div id="jsondata"></div>
+					<div id="rdfData"></div>
 				</div>
 				<div class="col-6">
-					<form id="dataform">
+					<form id="rdfDataForm">
 					  <div class="md-form">
-						<input type="text" class="form-control" id="formGroupExampleInput1" name="name">
-						<label for="formGroupExampleInput1">Name</label>
+						<input type="text" class="form-control" id="formRdfGroupExampleInput1" name="videoLecture" required>
+						<label for="formRdfGroupExampleInput1">Video Lecture (ex.: AIP)</label>
 					  </div>
 					  <div class="md-form">
-						<input type="text" class="form-control" id="formGroupExampleInput2" name="email">
-						<label for="formGroupExampleInput2">Email</label>
+						<input type="text" class="form-control" id="formRdfGroupExampleInput2" name="schemaDescriptionDe">
+						<label for="formRdfGroupExampleInput2">Schema Description German</label>
 					  </div>
 					  <div class="md-form">
-						<input type="text" class="form-control" id="formGroupExampleInput3" name="title">
-						<label for="formGroupExampleInput3">Title</label>
+						<input type="text" class="form-control" id="formRdfGroupExampleInput3" name="schemaDescriptionEn">
+						<label for="formRdfGroupExampleInput3">Schema Description English</label>
+					  </div>
+					  <div class="md-form">
+						<input type="text" class="form-control" id="formRdfGroupExampleInput4" name="schemaKeywordsDe">
+						<label for="formRdfGroupExampleInput4">Schema Keywords German</label>
+					  </div>
+					  <div class="md-form">
+						<input type="text" class="form-control" id="formRdfGroupExampleInput5" name="schemaKeywordsEn">
+						<label for="formRdfGroupExampleInput5">Schema Keywords English</label>
+					  </div>
+					  <div class="md-form">
+						<input type="text" class="form-control" id="formRdfGroupExampleInput6" name="schemaHeadlineDe">
+						<label for="formRdfGroupExampleInput6">Schema Headline German</label>
+					  </div>
+					  <div class="md-form">
+						<input type="text" class="form-control" id="formRdfGroupExampleInput7" name="schemaHeadlineEn">
+						<label for="formRdfGroupExampleInput7">Schema Headline English</label>
+					  </div>
+					  <div class="md-form">
+						<input type="text" class="form-control" id="formRdfGroupExampleInput8" name="schemaInLanguage">
+						<label for="formRdfGroupExampleInput8">Schema Lecture Language (en, de)</label>
+					  </div>
+					  <div class="md-form">
+						<input type="text" class="form-control" id="formRdfGroupExampleInput9" name="schemaDuration0">
+						<label for="formRdfGroupExampleInput9">Schema Chapter Duration</label>
 					  </div>
 					</form>
+					<div class="mt-5">
+						<button type="button" class="btn btn-danger btn-lg btn-block" title="Hochladen">Hochladen</button>
+					</div>
 				</div>
 			</div>
 		  </div>
