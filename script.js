@@ -4,82 +4,41 @@
 $(function() {
 	var sparqlQuery = null;
 	$('[title="Hochladen"]').on('dblclick', function(){
-	  var query =  'http://fbwsvcdev.fh-brandenburg.de/OntoWiki/update?query=INSERT DATA INTO  <http://fbwsvcdev.fh-brandenburg.de/OntoWiki/test/>  {@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema%23> .  <http://fbwsvcdev.fh-brandenburg.de/OntoWiki/test/> rdfs:label "firstSomeTestWithfbwTubeTechCristianCananau".}';
-				
-	
-	  console.log(sparqlQuery);	
-	  
-	//httpClient.post('http://fbwsvcdev.fh-brandenburg.de/OntoWiki/update?query='+query, '', (xhr) => {});				
-					
+	  var query =  'http://fbwsvcdev.fh-brandenburg.de/OntoWiki/update?query=INSERT DATA INTO  <http://fbwsvcdev.fh-brandenburg.de/OntoWiki/test/>  {@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema%23> .  <http://fbwsvcdev.fh-brandenburg.de/OntoWiki/test/> rdfs:label "firstSomeTestWithfbwTubeTechCristianCananau4".}';
 					
 	  $.ajax({
 		  type: "POST",
 		  url: 'http://fbwsvcdev.fh-brandenburg.de/OntoWiki/update?query=' + query,
-		  cache: false,
 		  dataType: 'jsonp',
-		  crossDomain: true,
-		  //xhrFields : {
-			//withCredentials : true
-		  //},
+		  xhrFields : {
+			withCredentials : true
+		  },
 		  contentType: 'application/x-www-form-urlencoded;charset=UTF-8',
-		  //data: {'query' : query},
 		  beforeSend: function (xhr) {
 			xhr.setRequestHeader('Authorization', makeBaseAuth('fbwTubeTech','fbwTube2019'));
-		  },
-		  headers: {
-			  //'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',fit1701
-			  //'Access-Control-Allow-Origin': '*',
-			  //'Authorization': makeBaseAuth('fbwTubeTech','fbwTube2019')
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 		  },
 		  success: function(successData) {
-			 console.log( successData ); 
-
+			 console.log( successData );
 		  },
 		  error: function(errorText) {
 			 console.log( errorText ); 
 		  }
 	  });
 	});
-	
-	/*$('[title="Hochladen"]').on('click', function(){
-	  var query = 'prefix schema: <https://schema.org/> '+
-					'prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> '+
-					'prefix owl:   <http://www.w3.org/2002/07/owl#> '+
-					'prefix fitness: <http://th-brandenburg.de/ns/kursplanung-fitnessstudio/> '+
-					'prefix xsd:   <http://www.w3.org/2001/XMLSchema#> '+
-					'prefix vidp:  <https://bmake.th-brandenburg.de/vidp#> '+
-					'prefix dcterms: <http://purl.org/dc/terms/> '+
-					'prefix skos:  <http://www.w3.org/2004/02/skos/core#> '+
-					'prefix voaf:  <http://purl.org/vocommons/voaf#> '+
-					'prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> '+
-					'prefix vann:  <http://purl.org/vocab/vann/>'+ 
-					'prefix wd:    <http://www.wikidata.org/entity/>'+ 
-					'prefix dc:    <http://purl.org/dc/elements/1.1/>'+ 
-					'INSERT DATA {fitness:TaiChi123  a schema:SportsEvent; rdfs:comment "Try"; schema:dayOfWeek "Montag";schema:name "Tai Chi123"; schema:organizer fitness:CristianCananau ;}';
-	  	  
-	  $.ajax({
-		  type: "POST",
-		  url: 'http://fbwsvcdev.fh-brandenburg.de:8080/fuseki/Kursplanung-Fitnesstudio/update',
-		  cache: false,
-		  data: {"update": query},
-		  dataType: 'json', 
-		  success: function(successData) {
-			 console.log( successData ); 
+	//SELECT ?name WHERE { ?lectureSeries  a <https://bmake.th-brandenburg.de/vidp%23LectureSeries>; <https://schema.org/name>  ?name .};
 
-		  },
-		  error: function(errorText) {
-			 console.log( errorText ); 
-		  }
-	  });
-	});*/
 	
 	//SELECT LECTURER FROM KNOLEDGE GRAPH	
-	$('[list="lecturerList"]').on('focusin', function(){
-	  var query = "SELECT ?name ?email WHERE { ?person  a <https://bmake.th-brandenburg.de/vidp%23Lecturer>; <https://schema.org/name>  ?name; <https://schema.org/email> ?email. };";
+	//$('[list="lecturerList"]').one('focusin', function(){
+	  var personQuery = "SELECT ?name ?email WHERE { ?person  a <https://bmake.th-brandenburg.de/vidp%23Lecturer>; <https://schema.org/name>  ?name; <https://schema.org/email> ?email. };";
+	  var lectureSeriesQuery = "SELECT ?name WHERE { ?lectureSeries  a <https://bmake.th-brandenburg.de/vidp%23LectureSeries>; <https://schema.org/name>  ?name .};"
+	  var moduleQuery = "SELECT * WHERE { ?Module  a <https://bmake.th-brandenburg.de/vidp%23Module> .}";
+	  
 	  
 	  $.ajax({
 		  type: "POST",
-		  url: 'http://fbwsvcdev.fh-brandenburg.de/OntoWiki/sparql?query=' + query,
+		  url: 'http://fbwsvcdev.fh-brandenburg.de/OntoWiki/sparql?query=' + personQuery,
 		  cache: false,
 		  dataType: 'json', 
 		  success: function(successData) {
@@ -98,7 +57,49 @@ $(function() {
 			 console.log( errorText ); 
 		  }
 	  });
-	});
+	  
+	  $.ajax({
+		  type: "POST",
+		  url: 'http://fbwsvcdev.fh-brandenburg.de/OntoWiki/sparql?query=' + lectureSeriesQuery,
+		  cache: false,
+		  dataType: 'json', 
+		  success: function(successData) {
+			var lectureSeries = $('#lectureSeries');
+			lectureSeries.empty();
+
+			$.each(successData.results.bindings, function( index, value) {
+				var optionForm = document.createElement('option');
+				optionForm.value = value.name.value;
+				lectureSeries.append(optionForm);
+			});
+		  $('[name="lectureSeriesName"]').trigger('focusin');
+		  },
+		  error: function(errorText) {
+			 console.log( errorText ); 
+		  }
+	  });
+	  $.ajax({
+		  type: "POST",
+		  url: 'http://fbwsvcdev.fh-brandenburg.de/OntoWiki/sparql?query=' + moduleQuery,
+		  cache: false,
+		  dataType: 'json', 
+		  success: function(successData) {
+			var module = $('#module');
+			module.empty();
+
+			$.each(successData.results.bindings, function( index, value) {
+				var optionForm = document.createElement('option');
+				optionForm.value = value.Module.value.split('#')[1];
+				module.append(optionForm);
+			});
+		  $('[name="moduleName"]').trigger('focusin');
+		  },
+		  error: function(errorText) {
+			 console.log( errorText ); 
+		  }
+	  });
+	  
+	//});
 	//INSERT MAIL LECTURER IN INPUT
 	$('[list="lecturerList"]').on('focusout', function(){
 		var email = $('option[value="'+this.value+'"]').attr('data-email');
@@ -267,7 +268,7 @@ $(function() {
 		var formDataToObjekt = $(this).serializeObject();
 		var serialisedDataObjekt = JSON.stringify(addRdfPrefix(formDataToObjekt), undefined, 4);
 		
-		var addColors = serialisedDataObjekt.replace(/[":,{}\\b]/g, "")
+		var addColors = serialisedDataObjekt.replace(/[":,{}]/g, "")
 											.replace(/@prefix/g, "<span class="+'"key"'+">@prefix</span>")
 											.replace(/@de/g, "<span class="+'"key"'+">@de</span>")
 											.replace(/@en/g, "<span class="+'"key"'+">@en</span>")
@@ -312,6 +313,9 @@ function addRdfPrefix(formDataToObjekt) {
 	var today = new Date();
 	var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
 	var schemaDuration0 = formDataToObjekt.schemaDuration0;
+	var lectureSeriesName = formDataToObjekt.lectureSeriesName.replace( /\s/g, '');
+	var moduleName = formDataToObjekt.moduleName;
+
 	
 	var rdfPrefix = {
 			'@prefix rdfs&colon;'   : '&lt;http&colon;//www.w3.org/2000/01/rdf-schema&num;&gt; .',
@@ -324,19 +328,27 @@ function addRdfPrefix(formDataToObjekt) {
 		if(i==0){
 			obj = {
 				[vide+' a '] : 'vidp&colon;VideoLecture .',
-				[vide+' rdfs&colon;label'] : '&quot;'+videName+'&quot; .',
+				[vide+' rdfs&colon;label'] : '&quot;'+videName+'&quot; .'
+			}
+			if(lectureSeriesName !== "none" && lectureSeriesName.length !== 0){
+				Object.assign(obj, {['vide&colon;'+ lectureSeriesName + ' schema&colon;hasPart'] : '&quot;'+vide+'&quot; .',});
+			}
+			
+			if(moduleName !== "none" && moduleName.length !== 0) {
+				Object.assign(obj, {[vide+' schema&colon;about'] : 'vide&colon;'+moduleName +' .',});
+			}
+			
+			Object.assign(obj, {				
 				[vide] : ' a vidp&colon;DoubleClip .',
 				[vide+' schema&colon;name'] : '&quot;'+videName+'&quot; .',
 				[vide+' schema&colon;url'] : '&quot;http&colon;//univera.de/FHB/fbwTube/?id='+videName+'&quot; .',
 				[vide+' schema&colon;licence'] : '&quot;https&colon;//creativecommons.org/licenses/by-nc-sa/2.0/de/&quot; .',
 				[vide+' schema&colon;description'] : '&quot;'+schemaDescriptionDe+'&quot; @de&comma; &quot;'+schemaDescriptionEn+'&quot; @en .',
-				//[vide+' schema&colon;description '] : '&quot;'+schemaDescriptionEn+'&quot; @en .',
 				[vide+' schema&colon;keywords'] : '&quot;'+schemaKeywordsDe+'&quot; @de&comma; &quot;'+schemaKeywordsEn+'&quot; @en .',
-				//[vide+' schema&colon;keywords '] : '&quot;'+schemaKeywordsEn+'&quot; @en .',
 				[vide+' schema&colon;headline'] : '&quot;'+schemaHeadlineDe+'&quot; @de&comma; &quot;'+schemaHeadlineEn+'&quot; @en .',
 				[vide+' schema&colon;inLanguage'] : '&quot;'+schemaInLanguage+'&quot; .',
 				[vide+' schema&colon;duration'] : '&quot;PT'+schemaDuration0+'&quot; .'
-			}
+			});
 		}else{
 			var count = i-1;
 			var schemaHeadlineDe = formDataToObjekt["schemaHeadlineDe"+i];
@@ -389,61 +401,4 @@ function makeBaseAuth(user, pswd){
   }
   return "Basic " + hash;
 }
-
-
-var httpClient = {
-
-	get: function( url, data, callback ) {
-		var xhr = new XMLHttpRequest();
-
-		xhr.onreadystatechange = function () {
-			var readyState = xhr.readyState;
-
-			if (readyState == 4) {
-				callback(xhr);
-			}
-		};
-
-		var queryString = '';
-		if (typeof data === 'object') {
-			for (var propertyName in data) {
-				queryString += (queryString.length === 0 ? '' : '&') + propertyName + '=' + encodeURIComponent(data[propertyName]);
-			}
-		}
-
-		if (queryString.length !== 0) {
-			url += (url.indexOf('?') === -1 ? '?' : '&') + queryString;
-		}
-
-		xhr.open('GET', url, true);
-		xhr.withCredentials = true;
-		xhr.send(null);
-	},
-
-	post: function(url, data, callback ) {
-		var xhr = new XMLHttpRequest();
-
-		xhr.onreadystatechange = function () {
-			var readyState = xhr.readyState;
-
-			if (readyState == 4) {
-				callback(xhr);
-			}
-		};
-
-		var queryString='';
-		if (typeof data === 'object') {
-			for (var propertyName in data) {
-				queryString += (queryString.length === 0 ? '' : '&') + propertyName + '=' + encodeURIComponent(data[propertyName]);
-			}
-		} else {
-			queryString=data
-		}
-
-		xhr.open('POST', url, true);
-		xhr.withCredentials = true;
-		xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-		xhr.send(queryString);
-	}
-};
 	

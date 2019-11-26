@@ -1,0 +1,45 @@
+{ 
+	"courses":[ 
+			{ 
+				"title": "Information Systems - Digitalization in Enterprise and Organization", 
+				"lectureTitle": "Digital Forms and Workflows", 
+				"lecturer": "Prof. Dr. Vera Meister", 
+				"lecturerMail": "vera.meister@th-brandenburg.de", 
+				"chapters": 
+					[ 
+						{ 
+							"title": "Forms and their Degree of Digitization", 
+							"videos": 
+									{ 
+										"url_teacher": "https://vimeo.com/296600095", 
+										"url_presentation": "https://vimeo.com/296600051" 
+									} 
+						}, 
+						{ 
+							"title": "Workflows and their Degree of Digitization", 
+							"videos": 
+									{ 
+										"url_teacher": "https://vimeo.com/296600147", 
+										"url_presentation": "https://vimeo.com/296600184" 
+									} 
+						}, 
+						{ 
+							"title": "Portfolio Digital University", 
+							"videos": 
+									{ 
+										"url_teacher": "https://vimeo.com/296600274", 
+										"url_presentation": "https://vimeo.com/296600228" 
+									} 
+						}, 
+						{ 	
+							"title": "Use Case: Enter Course Grades", 
+							"videos": 
+									{ 
+										"url_teacher": "https://vimeo.com/296600330", 
+										"url_presentation": "https://vimeo.com/296600363" 
+									} 
+						}
+					] 
+			} 
+		] 
+}
