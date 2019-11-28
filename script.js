@@ -2,36 +2,37 @@
 
 //ON DOCUMENT READY
 $(function() {
+	//Weiter Button
+	$('#weiter').on('click', function(){$('#rdf-tab-link').trigger('click');});
+	$('.multiple-lecture-name').select2();
 	var sparqlQuery = null;
-	$('[title="Hochladen"]').on('dblclick', function(){
-	  var query =  'http://fbwsvcdev.fh-brandenburg.de/OntoWiki/update?query=INSERT DATA INTO  <http://fbwsvcdev.fh-brandenburg.de/OntoWiki/test/>  {@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema%23> .  <http://fbwsvcdev.fh-brandenburg.de/OntoWiki/test/> rdfs:label "firstSomeTestWithfbwTubeTechCristianCananau4".}';
-					
-	  $.ajax({
+	$('#hochladen').on('dblclick', function(){			
+		$.ajax({
 		  type: "POST",
-		  url: 'http://fbwsvcdev.fh-brandenburg.de/OntoWiki/update?query=' + query,
+		  url: 'http://fbwsvcdev.fh-brandenburg.de/OntoWiki/update?query=' + 'http://fbwsvcdev.fh-brandenburg.de/OntoWiki/update?query=INSERT DATA INTO <http://fbwsvcdev.fh-brandenburg.de/OntoWiki/test/> ' + sparqlQuery,
 		  dataType: 'jsonp',
 		  xhrFields : {
 			withCredentials : true
 		  },
-		  contentType: 'application/x-www-form-urlencoded;charset=UTF-8',
-		  beforeSend: function (xhr) {
-			xhr.setRequestHeader('Authorization', makeBaseAuth('fbwTubeTech','fbwTube2019'));
-            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-		  },
+		  contentType: 'application/x-www-form-urlencoded',
+		  //beforeSend: function (xhr) {
+			//xhr.setRequestHeader('Access-Control-Allow-Origin', 'http://fbwsvcdev.fh-brandenburg.de/');
+			//xhr.setRequestHeader('Access-Control-Allow-Methods', 'POST, GET, OPTIONS');
+			//xhr.setRequestHeader('Access-Control-Allow-Headers', 'Authorization');
+			//xhr.setRequestHeader('Authorization', makeBaseAuth('fbwTubeTech','fbwTube2019'));
+		  //},
 		  success: function(successData) {
 			 console.log( successData );
 		  },
 		  error: function(errorText) {
-			 console.log( errorText ); 
+			console.log( errorText );
+			addWarningAlert();			 
 		  }
-	  });
+		});
 	});
-	//SELECT ?name WHERE { ?lectureSeries  a <https://bmake.th-brandenburg.de/vidp%23LectureSeries>; <https://schema.org/name>  ?name .};
-
 	
 	//SELECT LECTURER FROM KNOLEDGE GRAPH	
-	//$('[list="lecturerList"]').one('focusin', function(){
-	  var personQuery = "SELECT ?name ?email WHERE { ?person  a <https://bmake.th-brandenburg.de/vidp%23Lecturer>; <https://schema.org/name>  ?name; <https://schema.org/email> ?email. };";
+	  var personQuery = "SELECT ?name ?email WHERE { ?person  a <https://bmake.th-brandenburg.de/vidp%23Lecturer>; <http://www.w3.org/2000/01/rdf-schema%23label>  ?name; <https://schema.org/email> ?email. };";
 	  var lectureSeriesQuery = "SELECT ?name WHERE { ?lectureSeries  a <https://bmake.th-brandenburg.de/vidp%23LectureSeries>; <https://schema.org/name>  ?name .};"
 	  var moduleQuery = "SELECT * WHERE { ?Module  a <https://bmake.th-brandenburg.de/vidp%23Module> .}";
 	  
@@ -42,19 +43,19 @@ $(function() {
 		  cache: false,
 		  dataType: 'json', 
 		  success: function(successData) {
-			var lecturerList = $('#lecturerList');
-			lecturerList.empty();
+			var trys = $('.multiple-lecture-name');
 
 			$.each(successData.results.bindings, function( index, value) {
 				var optionForm = document.createElement('option');
 				optionForm.value = value.name.value;
+				optionForm.innerHTML = value.name.value;
 				optionForm.dataset.email = value.email.value;
-				lecturerList.append(optionForm);
+				trys.append(optionForm);
 			});
-
 		  },
 		  error: function(errorText) {
-			 console.log( errorText ); 
+			 console.log( errorText );
+			 addWarningAlert();
 		  }
 	  });
 	  
@@ -75,7 +76,8 @@ $(function() {
 		  $('[name="lectureSeriesName"]').trigger('focusin');
 		  },
 		  error: function(errorText) {
-			 console.log( errorText ); 
+			 console.log( errorText );
+			 addWarningAlert();
 		  }
 	  });
 	  $.ajax({
@@ -95,23 +97,56 @@ $(function() {
 		  $('[name="moduleName"]').trigger('focusin');
 		  },
 		  error: function(errorText) {
-			 console.log( errorText ); 
+			 console.log( errorText );
+			 addWarningAlert();
 		  }
 	  });
 	  
-	//});
 	//INSERT MAIL LECTURER IN INPUT
-	$('[list="lecturerList"]').on('focusout', function(){
-		var email = $('option[value="'+this.value+'"]').attr('data-email');
+	$('.multiple-lecture-name').on('select2:close', function(){
 		var input = $('[data-insert="email"]');
 		input.trigger('focusin');
-		input.val(email);
+		
+		var selectedLecturer = $('.select2-selection__choice');
+		var emails = [];
+		$.each(selectedLecturer, function( index, value) {
+			emails.push($('option[value="'+value.title+'"]').attr('data-email'));
+		});
+		input.val(emails.join(', '));
 		input.trigger('input');
 	});
 	//SHOW DATA ON SCREEN
 	$('form#jsonDataFom').on('input', function(){
-		//var formData = $(this).serializeArray();
 		var formDataToObjekt = $(this).serializeObject();
+		if(formDataToObjekt.states !== undefined){
+			formDataToObjekt.courses[0].lecturer = formDataToObjekt.states.join(', ');
+			delete formDataToObjekt.states
+		}
+		//ADDING NEW LECTURER TO JSON
+		var newLecturer = $(this).find('[id^="formGroupExampleInputNew"]');
+		if(newLecturer.length !== 0){
+			var newLecturersNames = [];
+			$.each($('[name^="lecturerLabe"][id^="formGroupExampleInputNew"]'), function( index, value) {
+				newLecturersNames.push(value.value);
+			});
+			var newLecturersEmail = [];
+			$.each($('[name^="lecturerEmail"][id^="formGroupExampleInputNew"]'), function( index, value) {
+				newLecturersEmail.push(value.value);
+			});
+			
+			if(formDataToObjekt.courses[0].lecturer !== '') {
+				formDataToObjekt.courses[0].lecturer = formDataToObjekt.courses[0].lecturer+', '+newLecturersNames.join(', ');
+				formDataToObjekt.courses[0].lecturerMail = formDataToObjekt.courses[0].lecturerMail+', '+newLecturersEmail.join(', ');
+			}else{
+				formDataToObjekt.courses[0].lecturer = formDataToObjekt.courses[0].lecturer+newLecturersNames.join(', ');
+				formDataToObjekt.courses[0].lecturerMail = formDataToObjekt.courses[0].lecturerMail+newLecturersEmail.join(', ');
+			}
+			
+			$.each(newLecturer, function( index, value) {
+				delete formDataToObjekt[value.name];
+			});
+		}
+		
 		var serialisedDataObjekt = JSON.stringify(formDataToObjekt, undefined, 4);
 
 		forCopy = serialisedDataObjekt;
@@ -131,7 +166,7 @@ $(function() {
 	});
 	//ADD A NEW CHAPTER
 	var chapter = 0;
-	$('.add-button').on('click', function(){
+	$('#addChapters').on('click', function(){
 		++chapter;
 		var divForm = document.createElement('div');
 		var inputForm = document.createElement('input');
@@ -145,7 +180,7 @@ $(function() {
 		var inputFormUrlPresentation = document.createElement('input');
 		var labelFormUrlPresentation =  document.createElement('label');
 		
-		var inputIdNumber = parseInt($('#json [id^=formGroupExampleInput]').last().attr('id').replace(/[^0-9]/g,''));		
+		var inputIdNumber = $('#json [id^=formGroupExampleInput]').length;			
 		
 		divForm.classList.add('md-form');
 		inputForm.classList.add('form-control');
@@ -236,6 +271,56 @@ $(function() {
 			$('form#rdfDataForm').append(divFormDuration);
 		}
 	});
+	var lecturerNumber = null;
+	$('#addLecturer').on('click', function(){
+		++lecturerNumber;
+		var inputIdNumber = $('#json [id^=formGroupExampleInput]').length;			
+		var divForm = document.createElement('div');
+		var inputForm = document.createElement('input');
+		var labelForm =  document.createElement('label');
+		
+		var divFormLabel = document.createElement('div');
+		var inputFormLabel = document.createElement('input');
+		var labelFormLabel =  document.createElement('label');
+		
+		var divFormEmail = document.createElement('div');
+		var inputFormEmail = document.createElement('input');
+		var labelFormEmail =  document.createElement('label');
+		
+		divForm.classList.add('md-form');
+		inputForm.classList.add('form-control');
+		inputForm.setAttribute('type', 'text');
+		inputForm.setAttribute('name', 'lecturerName'+lecturerNumber);
+		inputForm.id = 'formGroupExampleInputNew'+(inputIdNumber+1);
+		labelForm.setAttribute('for', 'formGroupExampleInputNew'+(inputIdNumber+1));
+		labelForm.innerHTML = 'Lecturer Name '+lecturerNumber;
+		divForm.appendChild(inputForm);
+		divForm.appendChild(labelForm);
+		
+		divFormLabel.classList.add('md-form');
+		inputFormLabel.classList.add('form-control');
+		inputFormLabel.setAttribute('type', 'text');
+		inputFormLabel.setAttribute('name', 'lecturerLabel'+lecturerNumber);
+		inputFormLabel.id = 'formGroupExampleInputNew'+(inputIdNumber+2);
+		labelFormLabel.setAttribute('for', 'formGroupExampleInputNew'+(inputIdNumber+2));
+		labelFormLabel.innerHTML = 'Lecturer Label '+lecturerNumber;
+		divFormLabel.appendChild(inputFormLabel);
+		divFormLabel.appendChild(labelFormLabel);
+		
+		divFormEmail.classList.add('md-form');
+		inputFormEmail.classList.add('form-control');
+		inputFormEmail.setAttribute('type', 'text');
+		inputFormEmail.setAttribute('name', 'lecturerEmail'+lecturerNumber);
+		inputFormEmail.id = 'formGroupExampleInputNew'+(inputIdNumber+3);
+		labelFormEmail.setAttribute('for', 'formGroupExampleInputNew'+(inputIdNumber+3));
+		labelFormEmail.innerHTML = 'Lecturer Email '+lecturerNumber;
+		divFormEmail.appendChild(inputFormEmail);
+		divFormEmail.appendChild(labelFormEmail);
+				
+		$(divForm).insertBefore(this);
+		$(divFormLabel).insertBefore(this);
+		$(divFormEmail).insertBefore(this);
+	});
 	//COPY JSON
 	var forCopy = null;
 	$('#copy-json').on('click', function(){
@@ -254,12 +339,30 @@ $(function() {
 		if(forCopy !== null){
 			var a = window.document.createElement('a');
 			a.href = window.URL.createObjectURL(new Blob([forCopy], {type: 'application/json'}));
-			a.download = 'test.json';
+			a.download = JSON.parse(forCopy).courses[0].title+'.json';
 
 			document.body.appendChild(a);
 			a.click();
 
 			document.body.removeChild(a);
+		}
+	});
+	//UPLOAD JSON AS JSON-FILE
+	$('#upload-json').on('click', function(){
+		if(forCopy !== null){
+		  $.ajax({
+				type: 'POST',
+				url: 'file.php',
+				data: {filedata: forCopy, filename: JSON.parse(forCopy).courses[0].title},
+				success: function(result) {
+					console.log('Daten wurden hochgeladen.');
+					addSuccessAlert();
+				},
+				error: function(result) {
+					console.log(result);
+					addWarningAlert();
+				}
+			});
 		}
 	});
 	
@@ -268,23 +371,37 @@ $(function() {
 		var formDataToObjekt = $(this).serializeObject();
 		var serialisedDataObjekt = JSON.stringify(addRdfPrefix(formDataToObjekt), undefined, 4);
 		
-		var addColors = serialisedDataObjekt.replace(/[":,{}]/g, "")
-											.replace(/@prefix/g, "<span class="+'"key"'+">@prefix</span>")
-											.replace(/@de/g, "<span class="+'"key"'+">@de</span>")
-											.replace(/@en/g, "<span class="+'"key"'+">@en</span>")
+		var addColors = serialisedDataObjekt.replace(/[{}]/g, '')
+											.replace(/\":/g, '')
+											.replace(/\"/g, '')
+											.replace(/\.,/g, '.')
+											.replace(/\ &semi;,/g, ';')
+											.replace(/\&semi;,/g, ';')
+											.replace(/&semi;/g, ';')
+											.replace(/&commat;prefix/g, "<span class="+'"key"'+">&commat;prefix</span>")
+											.replace(/&commat;de/g, "<span class="+'"key"'+">&commat;de</span>")
+											.replace(/&commat;en/g, "<span class="+'"key"'+">&commat;en</span>")
 											.replace(/&lt;(.*)&gt;/g, "<span class="+'"null"'+">&lt;$1&gt;</span>")
-											.replace(/&quot(.*)&quot/g, "<span class="+'"string"'+">&quot$1&quot</span>");
+											.replace(/&quot;(.*)&quot;/g, "<span class="+'"string"'+">&quot;$1&quot;</span>");
 		
 		var pre = document.createElement('pre');
 		pre.innerHTML = addColors;
 		
-		sparqlQuery = serialisedDataObjekt.replace(/[":,\\b]/g, '')
+		sparqlQuery = serialisedDataObjekt.replace(/\":/g, '')
+										  .replace(/\"/g, '')
+										  .replace(/\.,/g, '.')
+										  .replace(/\ &semi;,/g, ';')
+										  .replace(/\&semi;,/g, ';')
 										  .replace('\n','')
+										  .replace( /\s\s\s\s+/g, ' ')
 										  .replace(/&colon;/g, ':')
 										  .replace(/&quot;/g, '"')
 										  .replace(/&comma;/g, ',')
+										  .replace(/&semi;/g, ';')
 										  .replace(/&lt;/g, '<')
 										  .replace(/&gt;/g, '>')
+										  .replace(/&commat;/g, '%40')										 
+										  .replace(/&amp;/g, '%26')
 										  .replace(/&num;/g, '%23');
 
 			
@@ -316,13 +433,17 @@ function addRdfPrefix(formDataToObjekt) {
 	var lectureSeriesName = formDataToObjekt.lectureSeriesName.replace( /\s/g, '');
 	var moduleName = formDataToObjekt.moduleName;
 
-	
 	var rdfPrefix = {
-			'@prefix rdfs&colon;'   : '&lt;http&colon;//www.w3.org/2000/01/rdf-schema&num;&gt; .',
-			'@prefix schema&colon;' : '&lt;https&colon;//schema.org/&gt; .',
-			'@prefix vide&colon;'   : '&lt;https&colon;//bmake.th-brandenburg.de/vide&num;&gt; .',
-			'@prefix vidp&colon;'   : '&lt;https&colon;//bmake.th-brandenburg.de/vidp&num;&gt; .',
+			'&commat;prefix rdfs&colon;'   : '&lt;http&colon;//www.w3.org/2000/01/rdf-schema&num;&gt; .',
+			'&commat;prefix schema&colon;' : '&lt;https&colon;//schema.org/&gt; .',
+			'&commat;prefix vide&colon;'   : '&lt;https&colon;//bmake.th-brandenburg.de/vide&num;&gt; .',
+			'&commat;prefix vidp&colon;'   : '&lt;https&colon;//bmake.th-brandenburg.de/vidp&num;&gt; .',
+			'&commat;prefix xsd&colon;'   : '&lt;http://www.w3.org/2001/XMLSchema&num;&gt; .',
+			'&commat;prefix type&colon;'   : '&lt;http&colon;//www.w3.org/1999/02/22-rdf-syntax-ns&num;type&gt; .',
+			'&commat;prefix name&colon;'   : '&lt;https&colon;//schema.org/name&gt; .',
 		}; 
+		
+		
 	var obj = {};
 	for(i=0; i<inputDuration.length; i++){
 		if(i==0){
@@ -343,9 +464,9 @@ function addRdfPrefix(formDataToObjekt) {
 				[vide+' schema&colon;name'] : '&quot;'+videName+'&quot; .',
 				[vide+' schema&colon;url'] : '&quot;http&colon;//univera.de/FHB/fbwTube/?id='+videName+'&quot; .',
 				[vide+' schema&colon;licence'] : '&quot;https&colon;//creativecommons.org/licenses/by-nc-sa/2.0/de/&quot; .',
-				[vide+' schema&colon;description'] : '&quot;'+schemaDescriptionDe+'&quot; @de&comma; &quot;'+schemaDescriptionEn+'&quot; @en .',
-				[vide+' schema&colon;keywords'] : '&quot;'+schemaKeywordsDe+'&quot; @de&comma; &quot;'+schemaKeywordsEn+'&quot; @en .',
-				[vide+' schema&colon;headline'] : '&quot;'+schemaHeadlineDe+'&quot; @de&comma; &quot;'+schemaHeadlineEn+'&quot; @en .',
+				[vide+' schema&colon;description'] : '&quot;'+schemaDescriptionDe+'&quot;&commat;de&comma; &quot;'+schemaDescriptionEn+'&quot;&commat;en .',
+				[vide+' schema&colon;keywords'] : '&quot;'+schemaKeywordsDe+'&quot;&commat;de&comma; &quot;'+schemaKeywordsEn+'&quot;&commat;en .',
+				[vide+' schema&colon;headline'] : '&quot;'+schemaHeadlineDe+'&quot;&commat;de&comma; &quot;'+schemaHeadlineEn+'&quot;&commat;en .',
 				[vide+' schema&colon;inLanguage'] : '&quot;'+schemaInLanguage+'&quot; .',
 				[vide+' schema&colon;duration'] : '&quot;PT'+schemaDuration0+'&quot; .'
 			});
@@ -361,14 +482,34 @@ function addRdfPrefix(formDataToObjekt) {
 				[vide+'_0'+count] : ' a vidp&colon;DoubleClip .',
 				[vide+'_0'+count+' schema&colon;isPartOf '] : vide+' .',
 				[vide+'_0'+count+' schema&colon;name'] : '&quot;'+videName+' Clip 0'+count+'&quot; .',
-				[vide+'_0'+count+' schema&colon;url'] : '&quot;http&colon;//univera.de/FHB/fbwTube/?id='+videName+'&chapter='+count+'&quot; .',
-				[vide+'_0'+count+' schema&colon;headline'] : '&quot;'+schemaHeadlineDe+i+'&quot; @de&comma; &quot;'+schemaHeadlineEn+i+'&quot; @en .',
+				[vide+'_0'+count+' schema&colon;url'] : '&quot;http&colon;//univera.de/FHB/fbwTube/?id='+videName+'&amp;chapter='+count+'&quot; .',
+				[vide+'_0'+count+' schema&colon;headline'] : '&quot;'+schemaHeadlineDe+i+'&quot;&commat;de&comma; &quot;'+schemaHeadlineEn+i+'&quot;&commat;en .',
 				[vide+'_0'+count+' schema&colon;dateCreated'] : '&quot;'+date+'&quot;^^xsd&colon;date .',
-				[vide+'_0'+count+' schema&colon;creator'] : 'vide&colon;VeraMeister .',
 				[vide+'_0'+count+' schema&colon;duration'] : '&quot;PT'+schemaDuration+'&quot; .'
 			}
 		}
-		Object.assign(rdfPrefix,obj);
+		Object.assign(rdfPrefix, obj);
+	}
+	
+	//ADD NEW LECTURER	
+	var addNewLecturer = $('form#jsonDataFom').find('[id^="formGroupExampleInputNew"]');
+	
+	if(addNewLecturer.length !== 0){
+		var newLecturerObject = {};
+		var lecturerCount = $('form#jsonDataFom').find('[name^="lecturerName"]');
+		for(var i=1; i <= lecturerCount.length; i++) {
+			var name = $('[name="lecturerName'+i+'"]').val();
+			var nameWithoutSpaces = name.replace(/\s+/g,'')
+			var label = $('[name="lecturerLabel'+i+'"]').val();
+			var email = $('[name="lecturerEmail'+i+'"]').val();
+			Object.assign(newLecturerObject, {
+				['vide&colon;'+nameWithoutSpaces] : 'a vidp&colon;Lecturer&semi;',
+				['rdfs&colon;label '+'&quot;'+label+'&quot;'] : '&semi;',
+				['schema&colon;name '+'&quot;'+name+'&quot;'] : '&semi;',
+				['schema&colon;email '+'&quot;'+email+'&quot;'] : '.'
+			});
+		}
+		Object.assign(rdfPrefix, newLecturerObject);
 	}
 	
 	return rdfPrefix;
@@ -401,4 +542,54 @@ function makeBaseAuth(user, pswd){
   }
   return "Basic " + hash;
 }
-	
+
+
+function addWarningAlert() {
+	var divAlert = document.createElement('div');
+	var spanAlert = document.createElement('span');
+	var buttonAlert =  document.createElement('button');
+	var spanButtonAlert = document.createElement('span');
+
+	divAlert.classList.add('alert', 'alert-danger', 'alert-dismissible', 'fade', 'show');
+	divAlert.setAttribute('role', 'alert');
+	spanAlert.innerHTML = 'Es tut uns Leid aber etwas ist schiefgelaufen!';
+	buttonAlert.classList.add('close');
+	buttonAlert.setAttribute('type', 'button');
+	buttonAlert.setAttribute('data-dismiss', 'alert');
+	buttonAlert.setAttribute('aria-label', 'Close');
+	spanButtonAlert.setAttribute('aria-hidden', 'true');
+	spanButtonAlert.innerHTML = '&times;';
+
+	divAlert.appendChild(spanAlert);
+	buttonAlert.appendChild(spanButtonAlert);
+	divAlert.appendChild(buttonAlert);
+	$('#data-content').prepend(divAlert)
+};
+
+function addSuccessAlert() {
+	var divAlert = document.createElement('div');
+	var spanAlert = document.createElement('span');
+	var buttonAlert =  document.createElement('button');
+	var spanButtonAlert = document.createElement('span');
+
+	divAlert.classList.add('alert', 'alert-success', 'alert-dismissible', 'fade', 'show');
+	divAlert.setAttribute('role', 'alert');
+	spanAlert.innerHTML = 'Die Daten wurden erfolgreich &uuml;bertragen;!';
+	buttonAlert.classList.add('close');
+	buttonAlert.setAttribute('type', 'button');
+	buttonAlert.setAttribute('data-dismiss', 'alert');
+	buttonAlert.setAttribute('aria-label', 'Close');
+	spanButtonAlert.setAttribute('aria-hidden', 'true');
+	spanButtonAlert.innerHTML = '&times;';
+
+	divAlert.appendChild(spanAlert);
+	buttonAlert.appendChild(spanButtonAlert);
+	divAlert.appendChild(buttonAlert);
+	$('#data-content').prepend(divAlert);
+};
+
+
+
+
+
+

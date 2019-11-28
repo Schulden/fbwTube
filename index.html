@@ -10,6 +10,8 @@
 	<link rel="stylesheet" style="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" />
 	<!-- Material Design Bootstrap -->
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.10/css/mdb.min.css" rel="stylesheet">
+		<!-- Multiple Select CSS -->
+	<link href="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/css/select2.min.css" rel="stylesheet" />
 	
 	<!-- JQuery -->
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -19,7 +21,8 @@
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
 	<!-- MDB core JavaScript -->
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.10/js/mdb.min.js"></script>
-
+	<!-- Multiple Select JavaScript -->
+	<script src="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/js/select2.min.js"></script>
 
 	<!-- Die Styles -->
 	<link rel="stylesheet" type="text/css" href="style.css">
@@ -58,13 +61,17 @@
 						<button id="download-json" type="button" class="btn btn-primary">
 							<span class="fas fa-download fa-2x"></span>
 						</button>
-						<button type="button" class="btn btn-primary">
+						<button id="upload-json" type="button" class="btn btn-primary">
 							<span class="fas fa-upload fa-2x"></span>
 						</button>
 					</div>
 				</div>
 				<div class="col-6">
 					<form id="jsonDataFom">
+					  <div class="md-form">
+						<select id="formGroupExampleInput0" class="form-control multiple-lecture-name" name="states[]" multiple="multiple"></select>
+						<label for="formGroupExampleInput0" class="active">Lecturer Name</label>
+					  </div>
 					  <div class="md-form">
 						<input type="text" class="form-control" id="formGroupExampleInput1" name="courses[0][title]">
 						<label for="formGroupExampleInput1">Title</label>
@@ -82,6 +89,13 @@
 						<input type="text" class="form-control" id="formGroupExampleInput4" data-insert="email" name="courses[0][lecturerMail]">
 						<label for="formGroupExampleInput4">Lecturer Email</label>
 					  </div>
+					  <span id="addLecturer" class="add-button" title="Lecture einfügen">
+						<span class="horizontal-line"></span>
+						<span class="fa-stack">
+							<span class="fas fa-circle fa-stack-2x"></span>
+							<span class="fas fa-plus fa-stack-1x"></span>
+						</span>
+					  </span>
 						<h3>Chapters</h3>
 					  <div class="md-form">
 						<input type="text" class="form-control" id="formGroupExampleInput5" name="courses[0][chapters][0][title]">
@@ -95,7 +109,7 @@
 						<input type="text" class="form-control" id="formGroupExampleInput7" name="courses[0][chapters][0][videos][url_presentation]">
 						<label for="formGroupExampleInput7">Video URL Presentation</label>
 					  </div>
-					  <span class="add-button" title="Chapter einfügen">
+					  <span id="addChapters" class="add-button" title="Chapter einfügen">
 						<span class="horizontal-line"></span>
 						<span class="fa-stack">
 							<span class="fas fa-circle fa-stack-2x"></span>
@@ -104,7 +118,7 @@
 					  </span>
 					</form>
 					<div class="mt-5">
-						<button type="button" class="btn btn-danger btn-lg btn-block" title="Hochladen">Hochladen</button>
+						<button id="weiter" type="button" class="btn btn-danger btn-lg btn-block" title="Weiter">Weiter</button>
 					</div>
 				</div>
 			</div>
@@ -121,50 +135,50 @@
 						<label for="formRdfGroupExampleInput1">Video Lecture (ex.: AIP)</label>
 					  </div>
 					  <div class="md-form">
-						<input list="lectureSeries" type="text" class="form-control" id="formGroupExampleInput2" value="none" name="lectureSeriesName">
+						<input list="lectureSeries" type="text" class="form-control" id="formRdfGroupExampleInput2" value="none" name="lectureSeriesName">
 						<datalist id="lectureSeries"></datalist>
-						<label for="formGroupExampleInput2">Lecture Series</label>
+						<label for="formRdfGroupExampleInput2">Lecture Series</label>
 					  </div>
 					  <div class="md-form">
-						<input list="module" type="text" class="form-control" id="formGroupExampleInput2" value="none" name="moduleName">
+						<input list="module" type="text" class="form-control" id="formRdfGroupExampleInput3" value="none" name="moduleName">
 						<datalist id="module"></datalist>
-						<label for="formGroupExampleInput2">Module Schema About</label>
+						<label for="formRdfGroupExampleInput3">Module Schema About</label>
 					  </div>
 					  <div class="md-form">
-						<input type="text" class="form-control" id="formRdfGroupExampleInput3" name="schemaDescriptionDe">
-						<label for="formRdfGroupExampleInput3">Schema Description German</label>
+						<input type="text" class="form-control" id="formRdfGroupExampleInput4" name="schemaDescriptionDe">
+						<label for="formRdfGroupExampleInput4">Schema Description German</label>
 					  </div>
 					  <div class="md-form">
-						<input type="text" class="form-control" id="formRdfGroupExampleInput4" name="schemaDescriptionEn">
-						<label for="formRdfGroupExampleInput4">Schema Description English</label>
+						<input type="text" class="form-control" id="formRdfGroupExampleInput5" name="schemaDescriptionEn">
+						<label for="formRdfGroupExampleInput5">Schema Description English</label>
 					  </div>
 					  <div class="md-form">
-						<input type="text" class="form-control" id="formRdfGroupExampleInput5" name="schemaKeywordsDe">
-						<label for="formRdfGroupExampleInput5">Schema Keywords German</label>
+						<input type="text" class="form-control" id="formRdfGroupExampleInput6" name="schemaKeywordsDe">
+						<label for="formRdfGroupExampleInput6">Schema Keywords German</label>
 					  </div>
 					  <div class="md-form">
-						<input type="text" class="form-control" id="formRdfGroupExampleInput6" name="schemaKeywordsEn">
-						<label for="formRdfGroupExampleInput6">Schema Keywords English</label>
+						<input type="text" class="form-control" id="formRdfGroupExampleInput7" name="schemaKeywordsEn">
+						<label for="formRdfGroupExampleInput7">Schema Keywords English</label>
 					  </div>
 					  <div class="md-form">
-						<input type="text" class="form-control" id="formRdfGroupExampleInput7" name="schemaHeadlineDe">
-						<label for="formRdfGroupExampleInput7">Schema Headline German</label>
+						<input type="text" class="form-control" id="formRdfGroupExampleInput8" name="schemaHeadlineDe">
+						<label for="formRdfGroupExampleInput8">Schema Headline German</label>
 					  </div>
 					  <div class="md-form">
-						<input type="text" class="form-control" id="formRdfGroupExampleInput8" name="schemaHeadlineEn">
-						<label for="formRdfGroupExampleInput8">Schema Headline English</label>
+						<input type="text" class="form-control" id="formRdfGroupExampleInput9" name="schemaHeadlineEn">
+						<label for="formRdfGroupExampleInput9">Schema Headline English</label>
 					  </div>
 					  <div class="md-form">
-						<input type="text" class="form-control" id="formRdfGroupExampleInput9" name="schemaInLanguage">
-						<label for="formRdfGroupExampleInput9">Schema Lecture Language (en, de)</label>
+						<input type="text" class="form-control" id="formRdfGroupExampleInput10" name="schemaInLanguage">
+						<label for="formRdfGroupExampleInput10">Schema Lecture Language (en, de)</label>
 					  </div>
 					  <div class="md-form">
-						<input type="text" class="form-control" id="formRdfGroupExampleInput10" name="schemaDuration0">
-						<label for="formRdfGroupExampleInput10">Schema Chapter Duration</label>
+						<input type="text" class="form-control" id="formRdfGroupExampleInput11" name="schemaDuration0">
+						<label for="formRdfGroupExampleInput11">Schema Chapter Duration</label>
 					  </div>
 					</form>
 					<div class="mt-5">
-						<button type="button" class="btn btn-danger btn-lg btn-block" title="Hochladen">Hochladen</button>
+						<button id="hochladen" type="button" class="btn btn-danger btn-lg btn-block" title="Hochladen">Hochladen</button>
 					</div>
 				</div>
 			</div>
