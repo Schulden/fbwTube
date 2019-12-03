@@ -6,29 +6,40 @@ $(function() {
 	$('#weiter').on('click', function(){$('#rdf-tab-link').trigger('click');});
 	$('.multiple-lecture-name').select2();
 	var sparqlQuery = null;
-	$('#hochladen').on('dblclick', function(){			
-		$.ajax({
-		  type: "POST",
-		  url: 'http://fbwsvcdev.fh-brandenburg.de/OntoWiki/update?query=' + 'http://fbwsvcdev.fh-brandenburg.de/OntoWiki/update?query=INSERT DATA INTO <http://fbwsvcdev.fh-brandenburg.de/OntoWiki/test/> ' + sparqlQuery,
-		  dataType: 'jsonp',
-		  xhrFields : {
-			withCredentials : true
-		  },
-		  contentType: 'application/x-www-form-urlencoded',
-		  //beforeSend: function (xhr) {
-			//xhr.setRequestHeader('Access-Control-Allow-Origin', 'http://fbwsvcdev.fh-brandenburg.de/');
-			//xhr.setRequestHeader('Access-Control-Allow-Methods', 'POST, GET, OPTIONS');
-			//xhr.setRequestHeader('Access-Control-Allow-Headers', 'Authorization');
-			//xhr.setRequestHeader('Authorization', makeBaseAuth('fbwTubeTech','fbwTube2019'));
-		  //},
-		  success: function(successData) {
-			 console.log( successData );
-		  },
-		  error: function(errorText) {
-			console.log( errorText );
-			addWarningAlert();			 
-		  }
-		});
+	$('#hochladen').on('click', function(){
+		addModalLogin();
+	});
+	
+	
+	$(document).on('click', '#login', function(){
+		
+		var inputPassword = $('#inputPassword').val();
+		var inputUsername = $('#inputUsername').val();
+		
+		if(inputUsername && inputPassword){
+			$.ajax({
+			  type: "POST",
+			  url: 'http://'+inputUsername+':'+inputPassword+'@fbwsvcdev.fh-brandenburg.de/OntoWiki/update?query=' + 'http://fbwsvcdev.fh-brandenburg.de/OntoWiki/update?query=INSERT DATA INTO <http://fbwsvcdev.fh-brandenburg.de/OntoWiki/test/> ' + sparqlQuery,
+			  dataType: 'jsonp',
+			  xhrFields : {
+				withCredentials : true
+			  },
+			  contentType: 'application/x-www-form-urlencoded',
+			  //beforeSend: function (xhr) {
+				//xhr.setRequestHeader('Access-Control-Allow-Origin', 'http://fbwsvcdev.fh-brandenburg.de/');
+				//xhr.setRequestHeader('Access-Control-Allow-Methods', 'POST, GET, OPTIONS');
+				//xhr.setRequestHeader('Access-Control-Allow-Headers', 'Authorization');
+				//xhr.setRequestHeader('Authorization', makeBaseAuth('fbwTubeTech','fbwTube2019'));
+			  //},
+			  success: function(successData) {
+				location.reload();
+			  },
+			  error: function(errorText) {
+				console.log( errorText );
+				addWarningAlert();			 
+			  }
+			});
+		}
 	});
 	
 	//SELECT LECTURER FROM KNOLEDGE GRAPH	
@@ -588,6 +599,100 @@ function addSuccessAlert() {
 	$('#data-content').prepend(divAlert);
 };
 
+function addModalLogin() {
+	var modalFade = document.createElement('div');
+	modalFade.id = 'modalLoginForm';	
+	modalFade.classList.add('modal', 'fade');
+	modalFade.setAttribute('role', 'dialog');
+	modalFade.setAttribute('aria-hidden', 'true');	
+
+	var modalDialog = document.createElement('div');
+	modalDialog.classList.add('modal-dialog');
+	modalFade.appendChild(modalDialog);              
+
+	var modalContent = document.createElement('div');
+	modalContent.classList.add('modal-content');
+	modalDialog.appendChild(modalContent);
+
+	var modalHeader = document.createElement('div');
+	modalHeader.classList.add('modal-header', 'text-center');
+	modalContent.appendChild(modalHeader);
+	
+	var headerTitle = document.createElement('H4');
+	headerTitle.classList.add('modal-title', 'w-100', 'font-weight-bold');
+	modalHeader.appendChild(headerTitle);
+
+	var modalButtonDismiss = document.createElement('button');
+	modalButtonDismiss.classList.add('close');
+	modalButtonDismiss.setAttribute('data-dismiss', 'modal');
+	modalButtonDismiss.setAttribute('type', 'button');
+	modalButtonDismiss.setAttribute('aria-label', 'Close');
+	modalHeader.appendChild(modalButtonDismiss);
+	
+	var modalButtonDismissSpan = document.createElement('span');
+	modalButtonDismissSpan.setAttribute('aria-hidden', 'true');
+	modalButtonDismissSpan.innerHTML = '&times;';
+	modalButtonDismiss.appendChild(modalButtonDismissSpan);
+
+	var modalBody = document.createElement('div');
+	modalBody.classList.add('modal-body', 'mx-3');
+	modalContent.appendChild(modalBody);
+
+	var usernameDiv = document.createElement('div');
+	usernameDiv.classList.add('md-form');
+	modalBody.appendChild(usernameDiv);
+	
+	var usernameIcon = document.createElement('i');
+	usernameIcon.classList.add('fas', 'fa-user', 'prefix');
+	usernameDiv.appendChild(usernameIcon);
+	
+	var usernameInput = document.createElement('input');
+	usernameInput.classList.add('form-control');
+	usernameInput.setAttribute('type', 'text');
+	usernameInput.setAttribute('name', 'username');
+	usernameInput.id = 'inputUsername';
+	usernameDiv.appendChild(usernameInput);
+	
+	var usernameLabel = document.createElement('label');
+	usernameLabel.setAttribute('for', 'inputUsername');
+	usernameLabel.innerHTML = 'Username';
+	usernameDiv.appendChild(usernameLabel);
+	
+	var passwordDiv = document.createElement('div');
+	passwordDiv.classList.add('md-form');
+	modalBody.appendChild(passwordDiv);
+	
+	var passwordIcon = document.createElement('i');
+	passwordIcon.classList.add('fas', 'fa-lock', 'prefix');
+	passwordDiv.appendChild(passwordIcon);
+	
+	var passwordInput = document.createElement('input');
+	passwordInput.classList.add('form-control', 'validate');
+	passwordInput.setAttribute('type', 'password');
+	passwordInput.setAttribute('name', 'password');
+	passwordInput.id = 'inputPassword';
+	passwordDiv.appendChild(passwordInput);
+	
+	var passwordLabel = document.createElement('label');
+	passwordLabel.setAttribute('for', 'inputPassword');
+	passwordLabel.innerHTML = 'Password';
+	passwordLabel.setAttribute('data-error', 'wrong');
+	passwordLabel.setAttribute('data-success', 'right');
+	passwordDiv.appendChild(passwordLabel);
+	
+	var modalFooter =  document.createElement('div');
+	modalFooter.classList.add('modal-footer', 'd-flex', 'justify-content-center');
+	modalContent.appendChild(modalFooter);
+
+	var loginButton = document.createElement('button');
+	loginButton.classList.add('btn', 'btn-danger');
+	loginButton.id = 'login';
+	loginButton.innerHTML = 'Login';
+	modalFooter.appendChild(loginButton);
+
+	document.getElementsByTagName('body')[0].appendChild(modalFade);
+	$(modalFade).modal('show');
+}
 
 
 
