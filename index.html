@@ -69,6 +69,7 @@
 				<div class="col-6">
 					<form id="jsonDataFom">
 					  <div class="md-form">
+						<input list="lecturerList" type="text" class="form-control" id="formGroupExampleInput3" name="courses[0][lecturer]" hidden>
 						<select id="formGroupExampleInput0" class="form-control multiple-lecture-name" name="states[]" multiple="multiple"></select>
 						<label for="formGroupExampleInput0" class="active">Lecturer Name</label>
 					  </div>
@@ -79,11 +80,6 @@
 					  <div class="md-form">
 						<input type="text" class="form-control" id="formGroupExampleInput2" name="courses[0][lectureTitle]">
 						<label for="formGroupExampleInput2">Lecture Title</label>
-					  </div>
-					  <div class="md-form">
-						<input list="lecturerList" type="text" class="form-control" id="formGroupExampleInput3" name="courses[0][lecturer]">
-						<datalist id="lecturerList"></datalist>
-						<label for="formGroupExampleInput3">Lecturer Name</label>
 					  </div>
 					  <div class="md-form">
 						<input type="text" class="form-control" id="formGroupExampleInput4" data-insert="email" name="courses[0][lecturerMail]">
