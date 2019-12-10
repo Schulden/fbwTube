@@ -1,4 +1,4 @@
-//'use strict';
+'use strict';
 
 //ON DOCUMENT READY
 $(function() {
@@ -21,22 +21,22 @@ $(function() {
 			  type: "POST",
 			  url: 'http://'+inputUsername+':'+inputPassword+'@fbwsvcdev.fh-brandenburg.de/OntoWiki/update?query=' + 'http://fbwsvcdev.fh-brandenburg.de/OntoWiki/update?query=INSERT DATA INTO <http://fbwsvcdev.fh-brandenburg.de/OntoWiki/test/> ' + sparqlQuery,
 			  dataType: 'jsonp',
+			  jsonpCallback: 'callBackFunction', 
 			  xhrFields : {
 				withCredentials : true
 			  },
 			  contentType: 'application/x-www-form-urlencoded',
-			  //beforeSend: function (xhr) {
-				//xhr.setRequestHeader('Access-Control-Allow-Origin', 'http://fbwsvcdev.fh-brandenburg.de/');
-				//xhr.setRequestHeader('Access-Control-Allow-Methods', 'POST, GET, OPTIONS');
-				//xhr.setRequestHeader('Access-Control-Allow-Headers', 'Authorization');
-				//xhr.setRequestHeader('Authorization', makeBaseAuth('fbwTubeTech','fbwTube2019'));
-			  //},
 			  success: function(successData) {
-				location.reload();
+				location.reload(true);
 			  },
 			  error: function(errorText) {
-				console.log( errorText );
-				addWarningAlert();			 
+				if(errorText.status == 200){
+					location.reload(true);
+				}else{
+					$('#modalLoginForm').modal('hide');
+					console.log(errorText);
+					addWarningAlert();	 
+				}
 			  }
 			});
 		}
@@ -693,8 +693,5 @@ function addModalLogin() {
 	document.getElementsByTagName('body')[0].appendChild(modalFade);
 	$(modalFade).modal('show');
 }
-
-
-
 
 
