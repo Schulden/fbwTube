@@ -21,7 +21,6 @@ $(function() {
 			  type: "POST",
 			  url: 'http://'+inputUsername+':'+inputPassword+'@fbwsvcdev.fh-brandenburg.de/OntoWiki/update?query=' + 'http://fbwsvcdev.fh-brandenburg.de/OntoWiki/update?query=INSERT DATA INTO <http://fbwsvcdev.fh-brandenburg.de/OntoWiki/test/> ' + sparqlQuery,
 			  dataType: 'jsonp',
-			  jsonpCallback: 'callBackFunction', 
 			  xhrFields : {
 				withCredentials : true
 			  },
@@ -129,6 +128,9 @@ $(function() {
 	//SHOW DATA ON SCREEN
 	$('form#jsonDataFom').on('input', function(){
 		var formDataToObjekt = $(this).serializeObject();
+		var videoLecture = $('[name="videoLecture"]');
+		videoLecture.val($(this).serializeObject().courses[0].title);
+		videoLecture.trigger('focusin');
 		if(formDataToObjekt.states !== undefined){
 			formDataToObjekt.courses[0].lecturer = formDataToObjekt.states.join(', ');
 			delete formDataToObjekt.states
