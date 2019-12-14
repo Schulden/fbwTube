@@ -69,23 +69,27 @@
 				<div class="col-6">
 					<form id="jsonDataFom">
 					  <div class="md-form">
+						<input type="text" class="form-control" id="lectureShortcuts">
+						<label for="lectureShortcuts">Vorlesungskürzel (z. B. AIP)</label>
+					  </div>
+					  <div class="md-form">
 						<input list="lecturerList" type="text" class="form-control" id="formGroupExampleInput3" name="courses[0][lecturer]" hidden>
 						<select id="formGroupExampleInput0" class="form-control multiple-lecture-name" name="states[]" multiple="multiple"></select>
-						<label for="formGroupExampleInput0" class="active">Lecturer Name</label>
+						<label for="formGroupExampleInput0" class="active">Dozent*innen aus Datenbank</label>
 					  </div>
 					  <div class="md-form">
 						<input type="text" class="form-control" id="formGroupExampleInput1" name="courses[0][title]">
-						<label for="formGroupExampleInput1">Title</label>
+						<label for="formGroupExampleInput1">Titel des Moduls</label>
 					  </div>
 					  <div class="md-form">
 						<input type="text" class="form-control" id="formGroupExampleInput2" name="courses[0][lectureTitle]">
-						<label for="formGroupExampleInput2">Lecture Title</label>
+						<label for="formGroupExampleInput2">Titel der Vorlesung</label>
 					  </div>
 					  <div class="md-form">
 						<input type="text" class="form-control" id="formGroupExampleInput4" data-insert="email" name="courses[0][lecturerMail]">
 						<label for="formGroupExampleInput4">Lecturer Email</label>
 					  </div>
-					  <span id="addLecturer" class="add-button" title="Lecture einfügen">
+					  <span id="addLecturer" class="add-button" title="Kasten für jede/n neue/n Dozent*in mit weiterm '+'">
 						<span class="horizontal-line"></span>
 						<span class="fa-stack">
 							<span class="fas fa-circle fa-stack-2x"></span>
@@ -95,17 +99,17 @@
 						<h3>Chapters</h3>
 					  <div class="md-form">
 						<input type="text" class="form-control" id="formGroupExampleInput5" name="courses[0][chapters][0][title]">
-						<label for="formGroupExampleInput5">Chapter Title</label>
+						<label for="formGroupExampleInput5">Titel des Clips</label>
 					  </div>
 					  <div class="md-form">
 						<input type="text" class="form-control" id="formGroupExampleInput6" name="courses[0][chapters][0][videos][url_teacher]">
-						<label for="formGroupExampleInput6">Video URL Teacher</label>
+						<label for="formGroupExampleInput6">Vimeo ID Sprecher</label>
 					  </div>
 					  <div class="md-form">
 						<input type="text" class="form-control" id="formGroupExampleInput7" name="courses[0][chapters][0][videos][url_presentation]">
-						<label for="formGroupExampleInput7">Video URL Presentation</label>
+						<label for="formGroupExampleInput7">Vimeo ID Screencast</label>
 					  </div>
-					  <span id="addChapters" class="add-button" title="Chapter einfügen">
+					  <span id="addChapters" class="add-button" title="Kasten für jeden Clip mit Überschrift: Clip 00 - 0x; '+' erzeugt neuen Kasten mit nächster Nummer">
 						<span class="horizontal-line"></span>
 						<span class="fa-stack">
 							<span class="fas fa-circle fa-stack-2x"></span>

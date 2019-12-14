@@ -10,7 +10,7 @@ $(function() {
 		addModalLogin();
 	});
 	
-	
+	//SPARQL-Query Einfeugen
 	$(document).on('click', '#login', function(){
 		
 		var inputPassword = $('#inputPassword').val();
@@ -111,7 +111,13 @@ $(function() {
 			 addWarningAlert();
 		  }
 	  });
-	  
+	
+	//Select on focus  
+	$(document).on('focusin', 'select.form-control', function(){
+		$(this).next().addClass('active');
+	});
+	
+  
 	//INSERT MAIL LECTURER IN INPUT
 	$('.multiple-lecture-name').on('select2:close', function(){
 		var input = $('[data-insert="email"]');
@@ -129,7 +135,7 @@ $(function() {
 	$('form#jsonDataFom').on('input', function(){
 		var formDataToObjekt = $(this).serializeObject();
 		var videoLecture = $('[name="videoLecture"]');
-		videoLecture.val($(this).serializeObject().courses[0].title);
+		videoLecture.val($('#lectureShortcuts').val());
 		videoLecture.trigger('focusin');
 		if(formDataToObjekt.states !== undefined){
 			formDataToObjekt.courses[0].lecturer = formDataToObjekt.states.join(', ');
@@ -142,6 +148,35 @@ $(function() {
 			$.each($('[name^="lecturerLabe"][id^="formGroupExampleInputNew"]'), function( index, value) {
 				newLecturersNames.push(value.value);
 			});
+			
+			$.each($('[name^="lecturerName1"][id^="formGroupExampleInputNew"]'), function( index, value) {
+				if(value.value){
+					if(newLecturersNames[0].includes('Prof.') || newLecturersNames[0].includes('Prof. Dr.') || newLecturersNames[0].includes('Dr.')){						
+						newLecturersNames[0] = newLecturersNames[0] + ' ' + value.value;						
+					}else{
+						if(newLecturersNames[0].includes(',')){
+							newLecturersNames[0] = value.value + ' ' + newLecturersNames[0];
+						}else{
+							newLecturersNames[0] = value.value + ', ' + newLecturersNames[0];
+						}						
+					}
+				}
+			});
+			
+			$.each($('[name^="lecturerNachname1"][id^="formGroupExampleInputNew"]'), function( index, value) {
+				if(value.value){
+					if(newLecturersNames[0].includes('Prof.') || newLecturersNames[0].includes('Prof. Dr.') || newLecturersNames[0].includes('Dr.')){						
+						newLecturersNames[0] = newLecturersNames[0] + ' ' + value.value;						
+					}else{
+						if(newLecturersNames[0].includes(',')){
+							newLecturersNames[0] = value.value + ' ' + newLecturersNames[0];
+						}else{
+							newLecturersNames[0] = value.value + ', ' + newLecturersNames[0];
+						}		
+					}
+				}
+			});
+
 			var newLecturersEmail = [];
 			$.each($('[name^="lecturerEmail"][id^="formGroupExampleInputNew"]'), function( index, value) {
 				newLecturersEmail.push(value.value);
@@ -201,7 +236,7 @@ $(function() {
 		inputForm.setAttribute('name', 'courses[0][chapters]['+chapter+'][title]');
 		inputForm.id = 'formGroupExampleInput'+(inputIdNumber+1);
 		labelForm.setAttribute('for', 'formGroupExampleInput'+(inputIdNumber+1));
-		labelForm.innerHTML = 'Chapter Title '+chapter;
+		labelForm.innerHTML = 'Titel des Clips '+chapter;
 		
 		divForm.appendChild(inputForm);
 		divForm.appendChild(labelForm);
@@ -212,7 +247,7 @@ $(function() {
 		inputFormUrlTeacher.setAttribute('name', 'courses[0][chapters]['+chapter+'][videos][url_teacher]');
 		inputFormUrlTeacher.id = 'formGroupExampleInput'+(inputIdNumber+2);
 		labelFormUrlTeacher.setAttribute('for', 'formGroupExampleInput'+(inputIdNumber+2));
-		labelFormUrlTeacher.innerHTML = 'Video URL Teacher '+chapter;
+		labelFormUrlTeacher.innerHTML = 'Vimeo ID Sprecher '+chapter;
 		
 		divFormUrlTeacher.appendChild(inputFormUrlTeacher);
 		divFormUrlTeacher.appendChild(labelFormUrlTeacher);
@@ -223,7 +258,7 @@ $(function() {
 		inputFormUrlPresentation.setAttribute('name', 'courses[0][chapters]['+chapter+'][videos][url_presentation]');
 		inputFormUrlPresentation.id = 'formGroupExampleInput'+(inputIdNumber+3);
 		labelFormUrlPresentation.setAttribute('for', 'formGroupExampleInput'+(inputIdNumber+3));
-		labelFormUrlPresentation.innerHTML = 'Video URL Presentation '+chapter;
+		labelFormUrlPresentation.innerHTML = 'Vimeo ID Screencast '+chapter;
 		
 		divFormUrlPresentation.appendChild(inputFormUrlPresentation);
 		divFormUrlPresentation.appendChild(labelFormUrlPresentation);
@@ -292,13 +327,18 @@ $(function() {
 		var inputForm = document.createElement('input');
 		var labelForm =  document.createElement('label');
 		
-		var divFormLabel = document.createElement('div');
-		var inputFormLabel = document.createElement('input');
-		var labelFormLabel =  document.createElement('label');
+		var divFormTitle = document.createElement('div');
+		var selectFormTitle = document.createElement('select');
+		var prefixArray = ['Prof.', 'Prof. Dr.', 'Dr.', 'B.Sc.', 'B.A.', 'M.Sc.'];
+		var labelFormTitle =  document.createElement('label');
 		
 		var divFormEmail = document.createElement('div');
 		var inputFormEmail = document.createElement('input');
 		var labelFormEmail =  document.createElement('label');
+		
+		var divFormNachname = document.createElement('div');
+		var inputFormNachname = document.createElement('input');
+		var labelFormNachname =  document.createElement('label');
 		
 		divForm.classList.add('md-form');
 		inputForm.classList.add('form-control');
@@ -306,19 +346,26 @@ $(function() {
 		inputForm.setAttribute('name', 'lecturerName'+lecturerNumber);
 		inputForm.id = 'formGroupExampleInputNew'+(inputIdNumber+1);
 		labelForm.setAttribute('for', 'formGroupExampleInputNew'+(inputIdNumber+1));
-		labelForm.innerHTML = 'Lecturer Name '+lecturerNumber;
+		labelForm.innerHTML = 'Vorname '+lecturerNumber;
 		divForm.appendChild(inputForm);
 		divForm.appendChild(labelForm);
 		
-		divFormLabel.classList.add('md-form');
-		inputFormLabel.classList.add('form-control');
-		inputFormLabel.setAttribute('type', 'text');
-		inputFormLabel.setAttribute('name', 'lecturerLabel'+lecturerNumber);
-		inputFormLabel.id = 'formGroupExampleInputNew'+(inputIdNumber+2);
-		labelFormLabel.setAttribute('for', 'formGroupExampleInputNew'+(inputIdNumber+2));
-		labelFormLabel.innerHTML = 'Lecturer Label '+lecturerNumber;
-		divFormLabel.appendChild(inputFormLabel);
-		divFormLabel.appendChild(labelFormLabel);
+		divFormTitle.classList.add('md-form');
+		selectFormTitle.classList.add('form-control');
+		selectFormTitle.setAttribute('type', 'text');
+		selectFormTitle.setAttribute('name', 'lecturerLabel'+lecturerNumber);
+		selectFormTitle.id = 'formGroupExampleInputNew'+(inputIdNumber+2);
+		labelFormTitle.setAttribute('for', 'formGroupExampleInputNew'+(inputIdNumber+2));
+		labelFormTitle.innerHTML = 'Titel '+lecturerNumber;
+		divFormTitle.appendChild(selectFormTitle);
+		divFormTitle.appendChild(labelFormTitle);
+		//Create and append the options
+		for (var i = 0; i < prefixArray.length; i++) {
+			var option = document.createElement('option');
+			option.value = prefixArray[i];
+			option.text = prefixArray[i];
+			selectFormTitle.appendChild(option);
+		}
 		
 		divFormEmail.classList.add('md-form');
 		inputFormEmail.classList.add('form-control');
@@ -326,13 +373,25 @@ $(function() {
 		inputFormEmail.setAttribute('name', 'lecturerEmail'+lecturerNumber);
 		inputFormEmail.id = 'formGroupExampleInputNew'+(inputIdNumber+3);
 		labelFormEmail.setAttribute('for', 'formGroupExampleInputNew'+(inputIdNumber+3));
-		labelFormEmail.innerHTML = 'Lecturer Email '+lecturerNumber;
+		labelFormEmail.innerHTML = 'E-Mail '+lecturerNumber;
 		divFormEmail.appendChild(inputFormEmail);
 		divFormEmail.appendChild(labelFormEmail);
+		
+		divFormNachname.classList.add('md-form');
+		inputFormNachname.classList.add('form-control');
+		inputFormNachname.setAttribute('type', 'text');
+		inputFormNachname.setAttribute('name', 'lecturerNachname'+lecturerNumber);
+		inputFormNachname.id = 'formGroupExampleInputNew'+(inputIdNumber+4);
+		labelFormNachname.setAttribute('for', 'formGroupExampleInputNew'+(inputIdNumber+4));
+		labelFormNachname.innerHTML = 'Nachname '+lecturerNumber;
+		divFormNachname.appendChild(inputFormNachname);
+		divFormNachname.appendChild(labelFormNachname);
 				
 		$(divForm).insertBefore(this);
-		$(divFormLabel).insertBefore(this);
+		$(divFormNachname).insertBefore(this);
+		$(divFormTitle).insertBefore(this);
 		$(divFormEmail).insertBefore(this);
+		$(selectFormTitle).trigger('focusin');
 	});
 	//COPY JSON
 	var forCopy = null;
@@ -366,7 +425,7 @@ $(function() {
 		  $.ajax({
 				type: 'POST',
 				url: 'file.php',
-				data: {filedata: forCopy, filename: JSON.parse(forCopy).courses[0].title},
+				data: {filedata: forCopy, filename: $('#lectureShortcuts').val()},
 				success: function(result) {
 					console.log('Daten wurden hochgeladen.');
 					addSuccessAlert();
@@ -512,13 +571,25 @@ function addRdfPrefix(formDataToObjekt) {
 		var lecturerCount = $('form#jsonDataFom').find('[name^="lecturerName"]');
 		for(var i=1; i <= lecturerCount.length; i++) {
 			var name = $('[name="lecturerName'+i+'"]').val();
+			var nachname = $('[name="lecturerNachname'+i+'"]').val();
 			var nameWithoutSpaces = name.replace(/\s+/g,'')
+			var nachnameWithoutSpaces = nachname.replace(/\s+/g,'')
+			var rdfName = nameWithoutSpaces + nachnameWithoutSpaces;
 			var label = $('[name="lecturerLabel'+i+'"]').val();
 			var email = $('[name="lecturerEmail'+i+'"]').val();
+			var rdfLabel =  null;
+			
+			if(label.includes('Prof.') || label.includes('Prof. Dr.') || label.includes('Dr.')){
+				rdfLabel = label+' '+name+' '+nachname;
+			}else{
+				rdfLabel = name+' '+nachname+', '+label;
+			}
+			
+			
 			Object.assign(newLecturerObject, {
-				['vide&colon;'+nameWithoutSpaces] : 'a vidp&colon;Lecturer&semi;',
-				['rdfs&colon;label '+'&quot;'+label+'&quot;'] : '&semi;',
-				['schema&colon;name '+'&quot;'+name+'&quot;'] : '&semi;',
+				['vide&colon;'+rdfName] : 'a vidp&colon;Lecturer&semi;',
+				['rdfs&colon;label '+'&quot;'+rdfLabel+'&quot;'] : '&semi;',
+				['schema&colon;name '+'&quot;'+name+' '+nachname+'&quot;'] : '&semi;',
 				['schema&colon;email '+'&quot;'+email+'&quot;'] : '.'
 			});
 		}
@@ -695,5 +766,3 @@ function addModalLogin() {
 	document.getElementsByTagName('body')[0].appendChild(modalFade);
 	$(modalFade).modal('show');
 }
-
-

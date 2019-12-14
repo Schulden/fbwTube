@@ -157,7 +157,34 @@
 			box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12);
 			will-change: width, height;
 		}
-		
+		select.form-control {
+			box-sizing: content-box;
+			background-color: transparent;
+			border: none;
+			border-bottom-color: currentcolor;
+			border-bottom-style: none;
+			border-bottom-width: medium;
+			border-bottom-color: currentcolor;
+			border-bottom-style: none;
+			border-bottom-width: medium;
+			border-bottom: 1px solid #ced4da;
+			border-radius: 0;
+			outline: 0;
+			box-shadow: none;
+			transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+		}
+		select.form-control {
+			appearance: none;
+			-webkit-appearance: none;
+			-moz-appearance: none;
+			appearance: none;
+			background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAh0lEQVQ4T93TMQrCUAzG8V9x8QziiYSuXdzFC7h4AcELOPQAdXYovZCHEATlgQV5GFTe1ozJlz/kS1IpjKqw3wQBVyy++JI0y1GTe7DCBbMAckeNIQKk/BanALBB+16LtnDELoMcsM/BESDlz2heDR3WePwKSLo5eoxz3z6NNcFD+vu3ij14Aqz/DxGbKB7CAAAAAElFTkSuQmCC');
+			background-repeat: no-repeat;
+			background-position: right center;
+		}
+		select.form-control:focus ~ label {
+			transform: translateY(-14px) scale(.8);			
+		}
 		
 		
 		
