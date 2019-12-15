@@ -10,6 +10,14 @@ $(function() {
 		addModalLogin();
 	});
 	
+	$('.for-datetime').datetimepicker({
+		icons:{
+				up: 'fa fa-angle-up',
+				down: 'fa fa-angle-down'
+			},
+		format: 'mm:ss'
+	});
+	
 	//SPARQL-Query Einfeugen
 	$(document).on('click', '#login', function(){
 		
@@ -45,6 +53,7 @@ $(function() {
 	  var personQuery = "SELECT ?name ?email WHERE { ?person  a <https://bmake.th-brandenburg.de/vidp%23Lecturer>; <http://www.w3.org/2000/01/rdf-schema%23label>  ?name; <https://schema.org/email> ?email. };";
 	  var lectureSeriesQuery = "SELECT ?name WHERE { ?lectureSeries  a <https://bmake.th-brandenburg.de/vidp%23LectureSeries>; <https://schema.org/name>  ?name .};"
 	  var moduleQuery = "SELECT * WHERE { ?Module  a <https://bmake.th-brandenburg.de/vidp%23Module> .}";
+	  var lecturerQuery = "SELECT * FROM { ?person a <https://bmake.th-brandenburg.de/vidp%23Lecturer> . }";
 	  
 	  
 	  $.ajax({
@@ -112,6 +121,27 @@ $(function() {
 		  }
 	  });
 	
+	  $.ajax({
+		  type: "POST",
+		  url: 'http://fbwsvcdev.fh-brandenburg.de/OntoWiki/sparql?query=' + lecturerQuery,
+		  cache: false,
+		  dataType: 'json', 
+		  success: function(successData) {
+			var sprecher = $('#sprecher');
+
+			$.each(successData.results.bindings, function( index, value) {
+				var optionForm = document.createElement('option');
+				optionForm.value = value.person.value.split('#')[1];
+				optionForm.innerHTML = value.person.value.split('#')[1];
+				sprecher.append(optionForm);
+			});
+		  sprecher.trigger('focusin');
+		  },
+		  error: function(errorText) {
+			 console.log( errorText );
+			 addWarningAlert();
+		  }
+	  });
 	//Select on focus  
 	$(document).on('focusin', 'select.form-control', function(){
 		$(this).next().addClass('active');
@@ -134,13 +164,42 @@ $(function() {
 	//SHOW DATA ON SCREEN
 	$('form#jsonDataFom').on('input', function(){
 		var formDataToObjekt = $(this).serializeObject();
+		//Add Lecture Name to RDF
 		var videoLecture = $('[name="videoLecture"]');
 		videoLecture.val($('#lectureShortcuts').val());
 		videoLecture.trigger('focusin');
+		//Add Lecture Title to RDF
+		var titleVorlesungDe = $('[name="schemaHeadlineDe"]');
+		titleVorlesungDe.val($('#titelVorlesung').val());
+		titleVorlesungDe.trigger('focusin');
+		
+		//Add Clip Title to RDF
+		var titleClipNumber = $('#json [id^=titleClip]').length;
+		for(var i=0; i < titleClipNumber; i++) {
+			$('[name="schemaHeadlineDe'+(i+1)+'"]').val($('#titleClip'+i).val());
+			$('[name="schemaHeadlineDe'+(i+1)+'"]').trigger('focusin');
+		}
+		
+		
+		
 		if(formDataToObjekt.states !== undefined){
 			formDataToObjekt.courses[0].lecturer = formDataToObjekt.states.join(', ');
 			delete formDataToObjekt.states
 		}
+		
+		//ADD new Lecturer as new Option for RDF
+		var newAddedLecturer = $('[id^="newAddedLecturer"]');
+		var lecturerNachname = $('[name^="lecturerName"]');
+		for(var a = 0; a < lecturerNachname.length; a++) {
+			var nachName = $('[name="lecturerNachname'+(a+1)+'"]').val();
+			var firstName = $('[name="lecturerName'+(a+1)+'"]').val();
+			
+			for (var i = 0; i < newAddedLecturer.length; i++) {
+				newAddedLecturer[i].value = firstName+nachName;
+				newAddedLecturer[i].text = firstName+nachName;
+			}
+		}		
+		
 		//ADDING NEW LECTURER TO JSON
 		var newLecturer = $(this).find('[id^="formGroupExampleInputNew"]');
 		if(newLecturer.length !== 0){
@@ -149,8 +208,8 @@ $(function() {
 				newLecturersNames.push(value.value);
 			});
 			
-			$.each($('[name^="lecturerName1"][id^="formGroupExampleInputNew"]'), function( index, value) {
-				if(value.value){
+			$.each($('[name^="lecturerName1"][id^="formGroupExampleInputNew"]'), function( index, value) {				
+				if(value.value){					
 					if(newLecturersNames[0].includes('Prof.') || newLecturersNames[0].includes('Prof. Dr.') || newLecturersNames[0].includes('Dr.')){						
 						newLecturersNames[0] = newLecturersNames[0] + ' ' + value.value;						
 					}else{
@@ -228,14 +287,15 @@ $(function() {
 		var inputFormUrlPresentation = document.createElement('input');
 		var labelFormUrlPresentation =  document.createElement('label');
 		
-		var inputIdNumber = $('#json [id^=formGroupExampleInput]').length;			
+		var inputIdNumber = $('#json [id^=formGroupExampleInput]').length;
+		var titleClipNumber = $('#json [id^=titleClip]').length;
 		
 		divForm.classList.add('md-form');
 		inputForm.classList.add('form-control');
 		inputForm.setAttribute('type', 'text');
 		inputForm.setAttribute('name', 'courses[0][chapters]['+chapter+'][title]');
-		inputForm.id = 'formGroupExampleInput'+(inputIdNumber+1);
-		labelForm.setAttribute('for', 'formGroupExampleInput'+(inputIdNumber+1));
+		inputForm.id = 'titleClip'+(titleClipNumber);
+		labelForm.setAttribute('for', 'titleClip'+(titleClipNumber));
 		labelForm.innerHTML = 'Titel des Clips '+chapter;
 		
 		divForm.appendChild(inputForm);
@@ -283,40 +343,54 @@ $(function() {
 			var inputIdNumber = $('#rdf [id^=formRdfGroupExampleInput]').length;		
 			
 			divFormDuration.classList.add('md-form');
-			inputFormDuration.classList.add('form-control');
+			inputFormDuration.classList.add('form-control', 'for-datetime');
 			inputFormDuration.setAttribute('type', 'text');
-			inputFormDuration.setAttribute('name', 'schemaDuration'+chapter+'');
-			inputFormDuration.id = 'formRdfGroupExampleInput'+(inputIdNumber+1);
-			labelFormDuration.setAttribute('for', 'formRdfGroupExampleInput'+(inputIdNumber+1));
-			labelFormDuration.innerHTML = 'Schema Chapter '+chapter+' Duration';	
+			inputFormDuration.setAttribute('name', 'schemaDuration'+(chapter+1)+'');
+			inputFormDuration.id = 'formRdfGroupExampleInput'+(inputIdNumber+2);
+			labelFormDuration.setAttribute('for', 'formRdfGroupExampleInput'+(inputIdNumber+2));
+			labelFormDuration.innerHTML = 'Laufzeit des Clips '+(chapter+1);	
 			divFormDuration.appendChild(inputFormDuration);
 			divFormDuration.appendChild(labelFormDuration);
 			
 			divFormHeadlineDe.classList.add('md-form');
 			inputFormHeadlineDe.classList.add('form-control');
 			inputFormHeadlineDe.setAttribute('type', 'text');
-			inputFormHeadlineDe.setAttribute('name', 'schemaHeadlineDe'+chapter+'');
-			inputFormHeadlineDe.id = 'formRdfGroupExampleInput'+(inputIdNumber+2);
-			labelFormHeadlineDe.setAttribute('for', 'formRdfGroupExampleInput'+(inputIdNumber+2));
-			labelFormHeadlineDe.innerHTML = 'Schema Headline German Chapter '+chapter;	
+			inputFormHeadlineDe.setAttribute('name', 'schemaHeadlineDe'+(chapter+1)+'');
+			inputFormHeadlineDe.id = 'formRdfGroupExampleInput'+(inputIdNumber+3);
+			labelFormHeadlineDe.setAttribute('for', 'formRdfGroupExampleInput'+(inputIdNumber+3));
+			labelFormHeadlineDe.innerHTML = 'Titel des Clips '+(chapter+1)+' (de)';	
 			divFormHeadlineDe.appendChild(inputFormHeadlineDe);
 			divFormHeadlineDe.appendChild(labelFormHeadlineDe);
 			
 			divFormHeadlineEn.classList.add('md-form');
 			inputFormHeadlineEn.classList.add('form-control');
 			inputFormHeadlineEn.setAttribute('type', 'text');
-			inputFormHeadlineEn.setAttribute('name', 'schemaHeadlineEn'+chapter+'');
-			inputFormHeadlineEn.id = 'formRdfGroupExampleInput'+(inputIdNumber+3);
-			labelFormHeadlineEn.setAttribute('for', 'formRdfGroupExampleInput'+(inputIdNumber+3));
-			labelFormHeadlineEn.innerHTML = 'Schema Headline English Chapter '+chapter;	
+			inputFormHeadlineEn.setAttribute('name', 'schemaHeadlineEn'+(chapter+1)+'');
+			inputFormHeadlineEn.id = 'formRdfGroupExampleInput'+(inputIdNumber+4);
+			labelFormHeadlineEn.setAttribute('for', 'formRdfGroupExampleInput'+(inputIdNumber+4));
+			labelFormHeadlineEn.innerHTML = 'Titel des Clips '+(chapter+1)+' (en)';	
 			divFormHeadlineEn.appendChild(inputFormHeadlineEn);
 			divFormHeadlineEn.appendChild(labelFormHeadlineEn);
 			
-			var parentForAppend = $('[name="schemaInLanguage"]').parents().first()
+			var selectSprecher = $('#sprecher');
 			
-			$(divFormHeadlineDe).insertBefore(parentForAppend);
-			$(divFormHeadlineEn).insertBefore(parentForAppend);
-			$('form#rdfDataForm').append(divFormDuration);
+			var clone = selectSprecher.parent()[0].cloneNode(true);
+			clone.children[0].id = selectSprecher[0].id + selectSprecher.length;
+			clone.children[0].name = clone.children[0].name.split(/[0-9]/)[0] + selectSprecher.length;
+			
+			var formDataRdf = $('form#rdfDataForm');
+			
+			formDataRdf.append(divFormHeadlineDe);
+			formDataRdf.append(divFormHeadlineEn);
+			formDataRdf.append(divFormDuration);
+			formDataRdf.append(clone);
+			$('.for-datetime').datetimepicker({
+				icons:{
+						up: 'fa fa-angle-up',
+						down: 'fa fa-angle-down'
+					},
+				format: 'mm:ss'
+			});
 		}
 	});
 	var lecturerNumber = null;
@@ -331,6 +405,11 @@ $(function() {
 		var selectFormTitle = document.createElement('select');
 		var prefixArray = ['Prof.', 'Prof. Dr.', 'Dr.', 'B.Sc.', 'B.A.', 'M.Sc.'];
 		var labelFormTitle =  document.createElement('label');
+		
+		var divFormLecturerType = document.createElement('div');
+		var selectFormTitleLecturerType = document.createElement('select');
+		var lecturerTypeArray = ['Lecturer', 'Accountable'];
+		var labelFormTitleLecturerType =  document.createElement('label');
 		
 		var divFormEmail = document.createElement('div');
 		var inputFormEmail = document.createElement('input');
@@ -367,6 +446,22 @@ $(function() {
 			selectFormTitle.appendChild(option);
 		}
 		
+		divFormLecturerType.classList.add('md-form');
+		selectFormTitleLecturerType.classList.add('form-control');
+		selectFormTitleLecturerType.setAttribute('type', 'text');
+		selectFormTitleLecturerType.id = 'lecturerType';
+		labelFormTitleLecturerType.setAttribute('for', 'lecturerType');
+		labelFormTitleLecturerType.innerHTML = 'Type '+lecturerNumber;
+		divFormLecturerType.appendChild(selectFormTitleLecturerType);
+		divFormLecturerType.appendChild(labelFormTitleLecturerType);
+		//Create and append the options
+		for (var i = 0; i < lecturerTypeArray.length; i++) {
+			var option = document.createElement('option');
+			option.value = lecturerTypeArray[i];
+			option.text = lecturerTypeArray[i];
+			selectFormTitleLecturerType.appendChild(option);
+		}
+		
 		divFormEmail.classList.add('md-form');
 		inputFormEmail.classList.add('form-control');
 		inputFormEmail.setAttribute('type', 'text');
@@ -386,12 +481,24 @@ $(function() {
 		labelFormNachname.innerHTML = 'Nachname '+lecturerNumber;
 		divFormNachname.appendChild(inputFormNachname);
 		divFormNachname.appendChild(labelFormNachname);
+		
+		var schemaCreator = $('[name^="schemaCreator"]');
+		
+		for (var i = 0; i < schemaCreator.length; i++) {
+			var option = document.createElement('option');
+			option.id = 'newAddedLecturer'+i;
+			schemaCreator[i].appendChild(option);
+		}
+		
 				
 		$(divForm).insertBefore(this);
 		$(divFormNachname).insertBefore(this);
 		$(divFormTitle).insertBefore(this);
 		$(divFormEmail).insertBefore(this);
+		$(divFormLecturerType).insertBefore(this);
+		
 		$(selectFormTitle).trigger('focusin');
+		$(selectFormTitleLecturerType).trigger('focusin');
 	});
 	//COPY JSON
 	var forCopy = null;
@@ -496,12 +603,11 @@ function addRdfPrefix(formDataToObjekt) {
 	var schemaDescriptionEn = formDataToObjekt.schemaDescriptionEn;
 	var schemaKeywordsDe = formDataToObjekt.schemaKeywordsDe;
 	var schemaKeywordsEn = formDataToObjekt.schemaKeywordsEn;
-	var schemaHeadlineDe = formDataToObjekt.schemaHeadlineDe;
-	var schemaHeadlineEn = formDataToObjekt.schemaHeadlineEn;
+	var schemaHeadlineDeTitle = formDataToObjekt.schemaHeadlineDe;
+	var schemaHeadlineEnTitle = formDataToObjekt.schemaHeadlineEn;
 	var schemaInLanguage = formDataToObjekt.schemaInLanguage;
 	var today = new Date();
 	var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-	var schemaDuration0 = formDataToObjekt.schemaDuration0;
 	var lectureSeriesName = formDataToObjekt.lectureSeriesName.replace( /\s/g, '');
 	var moduleName = formDataToObjekt.moduleName;
 
@@ -518,7 +624,6 @@ function addRdfPrefix(formDataToObjekt) {
 		
 	var obj = {};
 	for(i=0; i<inputDuration.length; i++){
-		if(i==0){
 			obj = {
 				[vide+' a '] : 'vidp&colon;VideoLecture .',
 				[vide+' rdfs&colon;label'] : '&quot;'+videName+'&quot; .'
@@ -531,35 +636,33 @@ function addRdfPrefix(formDataToObjekt) {
 				Object.assign(obj, {[vide+' schema&colon;about'] : 'vide&colon;'+moduleName +' .',});
 			}
 			
-			Object.assign(obj, {				
-				[vide] : ' a vidp&colon;DoubleClip .',
-				[vide+' schema&colon;name'] : '&quot;'+videName+'&quot; .',
-				[vide+' schema&colon;url'] : '&quot;http&colon;//univera.de/FHB/fbwTube/?id='+videName+'&quot; .',
-				[vide+' schema&colon;licence'] : '&quot;https&colon;//creativecommons.org/licenses/by-nc-sa/2.0/de/&quot; .',
-				[vide+' schema&colon;description'] : '&quot;'+schemaDescriptionDe+'&quot;&commat;de&comma; &quot;'+schemaDescriptionEn+'&quot;&commat;en .',
-				[vide+' schema&colon;keywords'] : '&quot;'+schemaKeywordsDe+'&quot;&commat;de&comma; &quot;'+schemaKeywordsEn+'&quot;&commat;en .',
-				[vide+' schema&colon;headline'] : '&quot;'+schemaHeadlineDe+'&quot;&commat;de&comma; &quot;'+schemaHeadlineEn+'&quot;&commat;en .',
-				[vide+' schema&colon;inLanguage'] : '&quot;'+schemaInLanguage+'&quot; .',
-				[vide+' schema&colon;duration'] : '&quot;PT'+schemaDuration0+'&quot; .'
-			});
-		}else{
-			var count = i-1;
-			var schemaHeadlineDe = formDataToObjekt["schemaHeadlineDe"+i];
-			var schemaHeadlineEn = formDataToObjekt["schemaHeadlineEn"+i];
-			var schemaDuration = formDataToObjekt["schemaDuration"+i];
+			var count = i;
+			var schemaHeadlineDe = formDataToObjekt["schemaHeadlineDe"+(i+1)];
+			var schemaHeadlineEn = formDataToObjekt["schemaHeadlineEn"+(i+1)];
+			var schemaDuration = formDataToObjekt["schemaDuration"+(i+1)];
+			var minutes = schemaDuration.split(':')[0];
+			var seconds = ((typeof schemaDuration.split(':')[1] === 'undefined') ? '0' : schemaDuration.split(':')[1]);
+			var minutesWithoutZero = ((minutes == '') ? '0' : ((minutes.split('')[0] == '0') ? minutes.split('')[1] : (minutes.split('')[0]+minutes.split('')[1])));
+			var creatorName = formDataToObjekt["schemaCreator"+i];
 			
-			obj = {
-				[vide+'_0'+count+' a '] : 'vidp&colon;VideoLecture .',
-				[vide+'_0'+count+' rdfs&colon;label'] : '&quot;'+videName+' Clip '+count+'&quot; .',
+			Object.assign(obj, {				
+				[vide+' schema&colon;name'] : '&quot;'+videName+'&quot; .',
+				[vide+' schema&colon;description'] : '&quot;'+schemaDescriptionDe+'&quot;&commat;de&comma; &quot;'+schemaDescriptionEn+'&quot;&commat;en .',
+				[vide+' schema&colon;headline'] : '&quot;'+schemaHeadlineDeTitle+'&quot;&commat;de&comma; &quot;'+schemaHeadlineEnTitle+'&quot;&commat;en .',
+				[vide+' schema&colon;inLanguage'] : '&quot;'+schemaInLanguage+'&quot; .',
+				[vide+' schema&colon;keywords'] : '&quot;'+schemaKeywordsDe+'&quot;&commat;de&comma; &quot;'+schemaKeywordsEn+'&quot;&commat;en .',
+				[vide+' schema&colon;url'] : '&quot;http&colon;//univera.de/FHB/fbwTube/?id='+videName+'&quot; .',
+				[vide+' schema&colon;licence'] : '&quot;https&colon;//creativecommons.org/licenses/by-nc-sa/2.0/de/&quot; .',								
 				[vide+'_0'+count] : ' a vidp&colon;DoubleClip .',
-				[vide+'_0'+count+' schema&colon;isPartOf '] : vide+' .',
-				[vide+'_0'+count+' schema&colon;name'] : '&quot;'+videName+' Clip 0'+count+'&quot; .',
-				[vide+'_0'+count+' schema&colon;url'] : '&quot;http&colon;//univera.de/FHB/fbwTube/?id='+videName+'&amp;chapter='+count+'&quot; .',
-				[vide+'_0'+count+' schema&colon;headline'] : '&quot;'+schemaHeadlineDe+i+'&quot;&commat;de&comma; &quot;'+schemaHeadlineEn+i+'&quot;&commat;en .',
+				[vide+'_0'+count+' rdfs&colon;label'] : '&quot;'+videName+' Clip '+count+'&quot; .',
+				[vide+'_0'+count+' schema&colon;name'] : '&quot;'+videName+' Clip '+count+'&quot; .',
 				[vide+'_0'+count+' schema&colon;dateCreated'] : '&quot;'+date+'&quot;^^xsd&colon;date .',
-				[vide+'_0'+count+' schema&colon;duration'] : '&quot;PT'+schemaDuration+'&quot; .'
-			}
-		}
+				[vide+'_0'+count+' schema&colon;isPartOf '] : vide+' .',
+				[vide+'_0'+count+' schema&colon;headline'] : '&quot;'+schemaHeadlineDe+'&quot;&commat;de&comma; &quot;'+schemaHeadlineEn+'&quot;&commat;en .',							
+				[vide+'_0'+count+' schema&colon;url'] : '&quot;http&colon;//univera.de/FHB/fbwTube/?id='+videName+'&amp;chapter='+count+'&quot; .',
+				[vide+'_0'+count+' schema&colon;creator'] : 'vide&colon;'+creatorName+' .',
+				[vide+'_0'+count+' schema&colon;duration'] : '&quot;PT'+minutesWithoutZero+'M'+seconds+'S'+'&quot; .'
+			});
 		Object.assign(rdfPrefix, obj);
 	}
 	
@@ -578,6 +681,7 @@ function addRdfPrefix(formDataToObjekt) {
 			var label = $('[name="lecturerLabel'+i+'"]').val();
 			var email = $('[name="lecturerEmail'+i+'"]').val();
 			var rdfLabel =  null;
+			var lecturerType = $('#lecturerType').val();
 			
 			if(label.includes('Prof.') || label.includes('Prof. Dr.') || label.includes('Dr.')){
 				rdfLabel = label+' '+name+' '+nachname;
@@ -587,8 +691,10 @@ function addRdfPrefix(formDataToObjekt) {
 			
 			
 			Object.assign(newLecturerObject, {
-				['vide&colon;'+rdfName] : 'a vidp&colon;Lecturer&semi;',
+				['vide&colon;'+rdfName] : 'a vidp&colon;'+lecturerType+'&semi;',
 				['rdfs&colon;label '+'&quot;'+rdfLabel+'&quot;'] : '&semi;',
+				['schema&colon;familyName '+'&quot;'+name+'&quot;'] : '&semi;',
+				['schema&colon;givenName '+'&quot;'+nachname+'&quot;'] : '&semi;',
 				['schema&colon;name '+'&quot;'+name+' '+nachname+'&quot;'] : '&semi;',
 				['schema&colon;email '+'&quot;'+email+'&quot;'] : '.'
 			});

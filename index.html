@@ -4,6 +4,8 @@
     <meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1">
     <title>JSON/RDF</title>
+	<!-- Datetime Picker CSS -->
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker-standalone.min.css" rel="stylesheet" />
 	<!-- Bootstrap core CSS -->
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<!-- Font Awesome -->
@@ -12,6 +14,7 @@
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.10/css/mdb.min.css" rel="stylesheet">
 		<!-- Multiple Select CSS -->
 	<link href="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/css/select2.min.css" rel="stylesheet" />
+	
 	
 	<!-- JQuery -->
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -23,7 +26,11 @@
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.10/js/mdb.min.js"></script>
 	<!-- Multiple Select JavaScript -->
 	<script src="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/js/select2.min.js"></script>
-
+	<!-- Moment JavaScript -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+	<!-- Datetime Picker JavaScript -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+	
 	<!-- Die Styles -->
 	<link rel="stylesheet" type="text/css" href="style.css">
 	<!-- Include minified script for FormData Searilize -->
@@ -82,8 +89,8 @@
 						<label for="formGroupExampleInput1">Titel des Moduls</label>
 					  </div>
 					  <div class="md-form">
-						<input type="text" class="form-control" id="formGroupExampleInput2" name="courses[0][lectureTitle]">
-						<label for="formGroupExampleInput2">Titel der Vorlesung</label>
+						<input type="text" class="form-control" id="titelVorlesung" name="courses[0][lectureTitle]">
+						<label for="titelVorlesung">Titel der Vorlesung</label>
 					  </div>
 					  <div class="md-form">
 						<input type="text" class="form-control" id="formGroupExampleInput4" data-insert="email" name="courses[0][lecturerMail]">
@@ -98,8 +105,8 @@
 					  </span>
 						<h3>Chapters</h3>
 					  <div class="md-form">
-						<input type="text" class="form-control" id="formGroupExampleInput5" name="courses[0][chapters][0][title]">
-						<label for="formGroupExampleInput5">Titel des Clips</label>
+						<input type="text" class="form-control" id="titleClip0" name="courses[0][chapters][0][title]">
+						<label for="titleClip0">Titel des Clips</label>
 					  </div>
 					  <div class="md-form">
 						<input type="text" class="form-control" id="formGroupExampleInput6" name="courses[0][chapters][0][videos][url_teacher]">
@@ -135,9 +142,41 @@
 						<label for="formRdfGroupExampleInput1">Video Lecture (ex.: AIP)</label>
 					  </div>
 					  <div class="md-form">
+						<input type="text" class="form-control" id="formRdfGroupExampleInput8" name="schemaHeadlineDe">
+						<label for="formRdfGroupExampleInput8">Titel der Videovorlesung (de)</label>
+					  </div>
+					  <div class="md-form">
+						<input type="text" class="form-control" id="formRdfGroupExampleInput9" name="schemaHeadlineEn">
+						<label for="formRdfGroupExampleInput9">Titel der Videovorlesung (en)</label>
+					  </div>
+					  <div class="md-form">
+						<select class="form-control" type="text" id="formRdfGroupExampleInput10" name="schemaInLanguage">
+							<option value="de">de</option>
+							<option value="en">en</option>
+							<option value="ru">ru</option>
+						</select>
+						<label for="formRdfGroupExampleInput10" class="active">Vorlesungssprache</label>
+					  </div>
+					  <div class="md-form">
+						<input type="text" class="form-control" id="formRdfGroupExampleInput4" name="schemaDescriptionDe">
+						<label for="formRdfGroupExampleInput4">Kurzbeschreibung (de)</label>
+					  </div>
+					  <div class="md-form">
+						<input type="text" class="form-control" id="formRdfGroupExampleInput5" name="schemaDescriptionEn">
+						<label for="formRdfGroupExampleInput5">Kurzbeschreibung (en)</label>
+					  </div>
+					  <div class="md-form">
+						<input type="text" class="form-control" id="formRdfGroupExampleInput6" name="schemaKeywordsDe">
+						<label for="formRdfGroupExampleInput6">Schlüsselwörter (de)</label>
+					  </div>
+					  <div class="md-form">
+						<input type="text" class="form-control" id="formRdfGroupExampleInput7" name="schemaKeywordsEn">
+						<label for="formRdfGroupExampleInput7">Schlüsselwörter (en)</label>
+					  </div>
+					  <div class="md-form">
 						<input list="lectureSeries" type="text" class="form-control" id="formRdfGroupExampleInput2" value="none" name="lectureSeriesName">
 						<datalist id="lectureSeries"></datalist>
-						<label for="formRdfGroupExampleInput2">Lecture Series</label>
+						<label for="formRdfGroupExampleInput2">Kürzel der Vorlesungsreihe (z. B. FAWI2020)</label>
 					  </div>
 					  <div class="md-form">
 						<input list="module" type="text" class="form-control" id="formRdfGroupExampleInput3" value="none" name="moduleName">
@@ -145,36 +184,20 @@
 						<label for="formRdfGroupExampleInput3">Module Schema About</label>
 					  </div>
 					  <div class="md-form">
-						<input type="text" class="form-control" id="formRdfGroupExampleInput4" name="schemaDescriptionDe">
-						<label for="formRdfGroupExampleInput4">Schema Description German</label>
+						<input class="form-control" type="text" name="schemaHeadlineDe1" id="formRdfGroupExampleInput13">
+						<label for="formRdfGroupExampleInput13">Titel des Kapitels 1 (de)</label>
 					  </div>
 					  <div class="md-form">
-						<input type="text" class="form-control" id="formRdfGroupExampleInput5" name="schemaDescriptionEn">
-						<label for="formRdfGroupExampleInput5">Schema Description English</label>
+						<input class="form-control" type="text" name="schemaHeadlineEn1" id="formRdfGroupExampleInput14">
+						<label for="formRdfGroupExampleInput14">Titel des Kapitels 1 (en)</label>
 					  </div>
 					  <div class="md-form">
-						<input type="text" class="form-control" id="formRdfGroupExampleInput6" name="schemaKeywordsDe">
-						<label for="formRdfGroupExampleInput6">Schema Keywords German</label>
-					  </div>
+						<select class="form-control" type="text" id="sprecher" name="schemaCreator0"></select>
+						<label for="sprecher" class="active">Sprecher*innen</label>
+					  </div>					  
 					  <div class="md-form">
-						<input type="text" class="form-control" id="formRdfGroupExampleInput7" name="schemaKeywordsEn">
-						<label for="formRdfGroupExampleInput7">Schema Keywords English</label>
-					  </div>
-					  <div class="md-form">
-						<input type="text" class="form-control" id="formRdfGroupExampleInput8" name="schemaHeadlineDe">
-						<label for="formRdfGroupExampleInput8">Schema Headline German</label>
-					  </div>
-					  <div class="md-form">
-						<input type="text" class="form-control" id="formRdfGroupExampleInput9" name="schemaHeadlineEn">
-						<label for="formRdfGroupExampleInput9">Schema Headline English</label>
-					  </div>
-					  <div class="md-form">
-						<input type="text" class="form-control" id="formRdfGroupExampleInput10" name="schemaInLanguage">
-						<label for="formRdfGroupExampleInput10">Schema Lecture Language (en, de)</label>
-					  </div>
-					  <div class="md-form">
-						<input type="text" class="form-control" id="formRdfGroupExampleInput11" name="schemaDuration0">
-						<label for="formRdfGroupExampleInput11">Schema Chapter Duration</label>
+						<input type="text" class="form-control for-datetime" id="formRdfGroupExampleInput11" name="schemaDuration1">
+						<label for="formRdfGroupExampleInput11">Laufzeit des Kapitels 1</label>
 					  </div>
 					</form>
 					<div class="mt-5">
