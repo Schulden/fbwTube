@@ -2,6 +2,9 @@
 
 //ON DOCUMENT READY
 $(function() {
+	//Tooltips initialisation
+	$('[data-toggle="tooltip"]').tooltip();
+	
 	//Weiter Button
 	$('#weiter').on('click', function(){$('#rdf-tab-link').trigger('click');});
 	$('.multiple-lecture-name').select2();
@@ -10,6 +13,7 @@ $(function() {
 		addModalLogin();
 	});
 	
+	//Datatimepicker initialisation
 	$('.for-datetime').datetimepicker({
 		icons:{
 				up: 'fa fa-angle-up',
@@ -53,6 +57,8 @@ $(function() {
 	  var personQuery = "SELECT ?name ?email WHERE { ?person  a <https://bmake.th-brandenburg.de/vidp%23Lecturer>; <http://www.w3.org/2000/01/rdf-schema%23label>  ?name; <https://schema.org/email> ?email. };";
 	  var lectureSeriesQuery = "SELECT ?name WHERE { ?lectureSeries  a <https://bmake.th-brandenburg.de/vidp%23LectureSeries>; <https://schema.org/name>  ?name .};"
 	  var moduleQuery = "SELECT * WHERE { ?Module  a <https://bmake.th-brandenburg.de/vidp%23Module> .}";
+	  var thumbnailQuery = "SELECT * WHERE { ?thumbnail a <https://schema.org/ImageObject> .}";
+	  //Eventuell Löschen
 	  var lecturerQuery = "SELECT * FROM { ?person a <https://bmake.th-brandenburg.de/vidp%23Lecturer> . }";
 	  
 	  
@@ -120,7 +126,29 @@ $(function() {
 			 addWarningAlert();
 		  }
 	  });
-	
+	  $.ajax({
+		  type: "POST",
+		  url: 'http://fbwsvcdev.fh-brandenburg.de/OntoWiki/sparql?query=' + thumbnailQuery,
+		  cache: false,
+		  dataType: 'json', 
+		  success: function(successData) {
+			var bildLogoList = $('#bildLogoList');
+			bildLogoList.empty();
+
+			$.each(successData.results.bindings, function( index, value) {
+				var optionForm = document.createElement('option');
+				optionForm.value = value.thumbnail.value.split('#')[1];
+				optionForm.innerHTML = value.thumbnail.value.split('#')[1];
+				bildLogoList.append(optionForm);
+			});
+		  },
+		  error: function(errorText) {
+			 console.log( errorText );
+			 addWarningAlert();
+		  }
+	  });
+	  
+	//Eventuell Löschen
 	  $.ajax({
 		  type: "POST",
 		  url: 'http://fbwsvcdev.fh-brandenburg.de/OntoWiki/sparql?query=' + lecturerQuery,
@@ -170,14 +198,19 @@ $(function() {
 		videoLecture.trigger('focusin');
 		//Add Lecture Title to RDF
 		var titleVorlesungDe = $('[name="schemaHeadlineDe"]');
+		var titleVorlesungEn = $('[name="schemaHeadlineEn"]');
 		titleVorlesungDe.val($('#titelVorlesung').val());
+		titleVorlesungEn.val($('#titelVorlesung').val());
 		titleVorlesungDe.trigger('focusin');
+		titleVorlesungEn.trigger('focusin');
 		
 		//Add Clip Title to RDF
 		var titleClipNumber = $('#json [id^=titleClip]').length;
 		for(var i=0; i < titleClipNumber; i++) {
 			$('[name="schemaHeadlineDe'+(i+1)+'"]').val($('#titleClip'+i).val());
+			$('[name="schemaHeadlineEn'+(i+1)+'"]').val($('#titleClip'+i).val());
 			$('[name="schemaHeadlineDe'+(i+1)+'"]').trigger('focusin');
+			$('[name="schemaHeadlineEn'+(i+1)+'"]').trigger('focusin');
 		}
 		
 		
@@ -187,6 +220,7 @@ $(function() {
 			delete formDataToObjekt.states
 		}
 		
+		//Eventuell Löschen
 		//ADD new Lecturer as new Option for RDF
 		var newAddedLecturer = $('[id^="newAddedLecturer"]');
 		var lecturerNachname = $('[name^="lecturerName"]');
@@ -287,6 +321,10 @@ $(function() {
 		var inputFormUrlPresentation = document.createElement('input');
 		var labelFormUrlPresentation =  document.createElement('label');
 		
+		var divFormDuration = document.createElement('div');
+		var inputFormDuration = document.createElement('input');
+		var labelFormDuration =  document.createElement('label');
+		
 		var inputIdNumber = $('#json [id^=formGroupExampleInput]').length;
 		var titleClipNumber = $('#json [id^=titleClip]').length;
 		
@@ -320,19 +358,27 @@ $(function() {
 		labelFormUrlPresentation.setAttribute('for', 'formGroupExampleInput'+(inputIdNumber+3));
 		labelFormUrlPresentation.innerHTML = 'Vimeo ID Screencast '+chapter;
 		
+		divFormDuration.classList.add('md-form');
+		inputFormDuration.classList.add('form-control', 'for-datetime');
+		inputFormDuration.setAttribute('type', 'text');
+		inputFormDuration.id = 'schemaDuration'+chapter;
+		labelFormDuration.setAttribute('for', 'schemaDuration'+chapter);
+		labelFormDuration.innerHTML = 'Laufzeit des Clips '+ chapter;	
+		divFormDuration.appendChild(inputFormDuration);
+		divFormDuration.appendChild(labelFormDuration);
+		
 		divFormUrlPresentation.appendChild(inputFormUrlPresentation);
 		divFormUrlPresentation.appendChild(labelFormUrlPresentation);
+		divFormUrlPresentation.append(divFormDuration);
 		
 		$(divForm).insertBefore(this);
 		$(divFormUrlTeacher).insertBefore(this);
 		$(divFormUrlPresentation).insertBefore(this);
+		$(divFormDuration).insertBefore(this);
 		
 		
 		//ADD INPUP CHAPTERS IN RDF
 		if(chapter > 0) {
-			var divFormDuration = document.createElement('div');
-			var inputFormDuration = document.createElement('input');
-			var labelFormDuration =  document.createElement('label');
 			var divFormHeadlineDe = document.createElement('div');
 			var inputFormHeadlineDe = document.createElement('input');
 			var labelFormHeadlineDe =  document.createElement('label');
@@ -341,16 +387,6 @@ $(function() {
 			var labelFormHeadlineEn =  document.createElement('label');
 			
 			var inputIdNumber = $('#rdf [id^=formRdfGroupExampleInput]').length;		
-			
-			divFormDuration.classList.add('md-form');
-			inputFormDuration.classList.add('form-control', 'for-datetime');
-			inputFormDuration.setAttribute('type', 'text');
-			inputFormDuration.setAttribute('name', 'schemaDuration'+(chapter+1)+'');
-			inputFormDuration.id = 'formRdfGroupExampleInput'+(inputIdNumber+2);
-			labelFormDuration.setAttribute('for', 'formRdfGroupExampleInput'+(inputIdNumber+2));
-			labelFormDuration.innerHTML = 'Laufzeit des Clips '+(chapter+1);	
-			divFormDuration.appendChild(inputFormDuration);
-			divFormDuration.appendChild(labelFormDuration);
 			
 			divFormHeadlineDe.classList.add('md-form');
 			inputFormHeadlineDe.classList.add('form-control');
@@ -372,6 +408,7 @@ $(function() {
 			divFormHeadlineEn.appendChild(inputFormHeadlineEn);
 			divFormHeadlineEn.appendChild(labelFormHeadlineEn);
 			
+			//Eventuell Löschen
 			var selectSprecher = $('#sprecher');
 			
 			var clone = selectSprecher.parent()[0].cloneNode(true);
@@ -382,7 +419,8 @@ $(function() {
 			
 			formDataRdf.append(divFormHeadlineDe);
 			formDataRdf.append(divFormHeadlineEn);
-			formDataRdf.append(divFormDuration);
+			
+			//Eventuell Löschen
 			formDataRdf.append(clone);
 			$('.for-datetime').datetimepicker({
 				icons:{
@@ -500,6 +538,130 @@ $(function() {
 		$(selectFormTitle).trigger('focusin');
 		$(selectFormTitleLecturerType).trigger('focusin');
 	});
+	//ADD NEW FOTO
+	$('#addFoto').one('click', function(){
+		var divFormIdentifier = document.createElement('div');
+		var inputFormIdentifier = document.createElement('input');
+		var labelFormIdentifier =  document.createElement('label');
+		
+		divFormIdentifier.classList.add('md-form');
+		inputFormIdentifier.classList.add('form-control');
+		inputFormIdentifier.setAttribute('type', 'text');
+		inputFormIdentifier.setAttribute('name', 'schemaThumbnailIdentifier');
+		inputFormIdentifier.id = 'newFotoIdentifier';
+		labelFormIdentifier.setAttribute('for', 'newFotoIdentifier');
+		labelFormIdentifier.innerHTML = 'Google-Drive ID';
+		divFormIdentifier.appendChild(inputFormIdentifier);
+		divFormIdentifier.appendChild(labelFormIdentifier);
+		
+		$(divFormIdentifier).insertBefore(this);
+	});
+	//ADD NEW Lecture Series
+	$('#addLectureSeries').one('click', function(){
+		var divFormLectureNameSeriesDe = document.createElement('div');
+		var inputFormLectureNameSeriesDe = document.createElement('input');
+		var labelFormLectureNameSeriesDe =  document.createElement('label');
+		
+		var divFormLectureNameSeriesEn = document.createElement('div');
+		var inputFormLectureNameSeriesEn = document.createElement('input');
+		var labelFormLectureNameSeriesEn =  document.createElement('label');
+		
+		divFormLectureNameSeriesDe.classList.add('md-form');
+		inputFormLectureNameSeriesDe.classList.add('form-control');
+		inputFormLectureNameSeriesDe.setAttribute('type', 'text');
+		inputFormLectureNameSeriesDe.setAttribute('name', 'vdipLectureSeriesDe');
+		inputFormLectureNameSeriesDe.id = 'newVdipLectureSeriesDe';
+		labelFormLectureNameSeriesDe.setAttribute('for', 'newVdipLectureSeriesDe');
+		labelFormLectureNameSeriesDe.innerHTML = 'Bezeichnung der Vorlesungsreihe (de)';
+		divFormLectureNameSeriesDe.appendChild(inputFormLectureNameSeriesDe);
+		divFormLectureNameSeriesDe.appendChild(labelFormLectureNameSeriesDe);
+		
+		divFormLectureNameSeriesEn.classList.add('md-form');
+		inputFormLectureNameSeriesEn.classList.add('form-control');
+		inputFormLectureNameSeriesEn.setAttribute('type', 'text');
+		inputFormLectureNameSeriesEn.setAttribute('name', 'vdipLectureSeriesEn');
+		inputFormLectureNameSeriesEn.id = 'newVdipLectureSeriesEn';
+		labelFormLectureNameSeriesEn.setAttribute('for', 'newVdipLectureSeriesEn');
+		labelFormLectureNameSeriesEn.innerHTML = 'Bezeichnung der Vorlesungsreihe (en)';
+		divFormLectureNameSeriesEn.appendChild(inputFormLectureNameSeriesEn);
+		divFormLectureNameSeriesEn.appendChild(labelFormLectureNameSeriesEn);
+		
+		$(divFormLectureNameSeriesDe).insertBefore(this);
+		$(divFormLectureNameSeriesEn).insertBefore(this);
+	});
+	//ADD NEW MODULE
+	$('#addModule').one('click', function(){
+		var divFormModuleNameDe = document.createElement('div');
+		var inputFormModuleNameDe  = document.createElement('input');
+		var labelFormModuleNameDe  =  document.createElement('label');
+		
+		var divFormModuleNameEn = document.createElement('div');
+		var inputFormModuleNameEn  = document.createElement('input');
+		var labelFormModuleNameEn  =  document.createElement('label');
+		
+		var divFormCourseOfStudies = document.createElement('div');
+		var selectFormCourseOfStudies = document.createElement('select');
+		var courseOfStudiesArray = ['Bachelor Wirtschaftsinformatik', 'Master Wirtschaftsinformatik', 'Bachelor Betriebswirtschaftslehre','Master Betriebswirtschaftslehre'];
+		var courseOfStudiesValueArray = ['WIB', 'WIM', 'BWLB', 'BWLM'];
+		var labelFormCourseOfStudies =  document.createElement('label');
+		
+		var divFormModuleUrl = document.createElement('div');
+		var inputFormModuleUrl  = document.createElement('input');
+		var labelFormModuleUrl  =  document.createElement('label');
+		
+		divFormModuleNameDe.classList.add('md-form');
+		inputFormModuleNameDe.classList.add('form-control');
+		inputFormModuleNameDe.setAttribute('type', 'text');
+		inputFormModuleNameDe.setAttribute('name', 'vdipModuleNameDe');
+		inputFormModuleNameDe.id = 'newVdipModuleNameDe';
+		labelFormModuleNameDe.setAttribute('for', 'newVdipModuleNameDe');
+		labelFormModuleNameDe.innerHTML = 'Bezeichnung des Moduls (de)';
+		divFormModuleNameDe.appendChild(inputFormModuleNameDe);
+		divFormModuleNameDe.appendChild(labelFormModuleNameDe);
+		
+		divFormModuleNameEn.classList.add('md-form');
+		inputFormModuleNameEn.classList.add('form-control');
+		inputFormModuleNameEn.setAttribute('type', 'text');
+		inputFormModuleNameEn.setAttribute('name', 'vdipModuleNameEn');
+		inputFormModuleNameEn.id = 'newVdipModuleNameEn';
+		labelFormModuleNameEn.setAttribute('for', 'newVdipModuleNameEn');
+		labelFormModuleNameEn.innerHTML = 'Bezeichnung des Moduls (en)';
+		divFormModuleNameEn.appendChild(inputFormModuleNameEn);
+		divFormModuleNameEn.appendChild(labelFormModuleNameEn);
+		
+		divFormCourseOfStudies.classList.add('md-form');
+		selectFormCourseOfStudies.classList.add('form-control');
+		selectFormCourseOfStudies.setAttribute('type', 'text');
+		selectFormCourseOfStudies.id = 'CourseOfStudies';
+		labelFormCourseOfStudies.setAttribute('for', 'CourseOfStudies');
+		labelFormCourseOfStudies.classList.add('active');
+		selectFormCourseOfStudies.setAttribute('name', 'schemaIsPartOfModul');
+		labelFormCourseOfStudies.innerHTML = 'Gehört zum Studiengang';
+		divFormCourseOfStudies.appendChild(selectFormCourseOfStudies);
+		divFormCourseOfStudies.appendChild(labelFormCourseOfStudies);
+		//Create and append the options
+		for (var i = 0; i < courseOfStudiesValueArray.length; i++) {
+			var option = document.createElement('option');
+			option.value = courseOfStudiesValueArray[i];
+			option.text = courseOfStudiesArray[i];
+			selectFormCourseOfStudies.appendChild(option);
+		}
+		
+		divFormModuleUrl.classList.add('md-form');
+		inputFormModuleUrl.classList.add('form-control');
+		inputFormModuleUrl.setAttribute('type', 'text');
+		inputFormModuleUrl.setAttribute('name', 'schemaModuleUrl');
+		inputFormModuleUrl.id = 'moduleUrl';
+		labelFormModuleUrl.setAttribute('for', 'moduleUrl');
+		labelFormModuleUrl.innerHTML = 'Webseite des Moduls';
+		divFormModuleUrl.appendChild(inputFormModuleUrl);
+		divFormModuleUrl.appendChild(labelFormModuleUrl);
+		
+		$(divFormModuleNameDe).insertBefore(this);
+		$(divFormModuleNameEn).insertBefore(this);
+		$(divFormCourseOfStudies).insertBefore(this);
+		$(divFormModuleUrl).insertBefore(this);
+	});
 	//COPY JSON
 	var forCopy = null;
 	$('#copy-json').on('click', function(){
@@ -596,7 +758,7 @@ $(function() {
 });
 
 function addRdfPrefix(formDataToObjekt) {
-	var inputDuration = $('[name^="schemaDuratio"]');
+	var inputDuration = $('[id^="schemaDuratio"]');
 	var vide = 'vide&colon;'+formDataToObjekt.videoLecture+'';
 	var videName = formDataToObjekt.videoLecture;
 	var schemaDescriptionDe = formDataToObjekt.schemaDescriptionDe;
@@ -609,7 +771,17 @@ function addRdfPrefix(formDataToObjekt) {
 	var today = new Date();
 	var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
 	var lectureSeriesName = formDataToObjekt.lectureSeriesName.replace( /\s/g, '');
+	var lectureSeriesNameWithSpace = formDataToObjekt.lectureSeriesName;
 	var moduleName = formDataToObjekt.moduleName;
+	var schemaThumbnail = formDataToObjekt["schemaThumbnail"];
+	var schemaThumbnailIdentifier = formDataToObjekt["schemaThumbnailIdentifier"];
+	var vdipLectureSeriesDe = formDataToObjekt["vdipLectureSeriesDe"];
+	var vdipLectureSeriesEn = formDataToObjekt["vdipLectureSeriesEn"];
+	var vdipModuleNameDe = formDataToObjekt["vdipModuleNameDe"];
+	var vdipModuleNameEn = formDataToObjekt["vdipModuleNameEn"];
+	var schemaIsPartOfModul = formDataToObjekt["schemaIsPartOfModul"];
+	var schemaModuleUrl = formDataToObjekt["schemaModuleUrl"];
+	
 
 	var rdfPrefix = {
 			'&commat;prefix rdfs&colon;'   : '&lt;http&colon;//www.w3.org/2000/01/rdf-schema&num;&gt; .',
@@ -639,10 +811,11 @@ function addRdfPrefix(formDataToObjekt) {
 			var count = i;
 			var schemaHeadlineDe = formDataToObjekt["schemaHeadlineDe"+(i+1)];
 			var schemaHeadlineEn = formDataToObjekt["schemaHeadlineEn"+(i+1)];
-			var schemaDuration = formDataToObjekt["schemaDuration"+(i+1)];
+			var schemaDuration = $('[id="schemaDuration'+i+'"]').val();
 			var minutes = schemaDuration.split(':')[0];
 			var seconds = ((typeof schemaDuration.split(':')[1] === 'undefined') ? '0' : schemaDuration.split(':')[1]);
 			var minutesWithoutZero = ((minutes == '') ? '0' : ((minutes.split('')[0] == '0') ? minutes.split('')[1] : (minutes.split('')[0]+minutes.split('')[1])));
+			//Eventuell Löschen
 			var creatorName = formDataToObjekt["schemaCreator"+i];
 			
 			Object.assign(obj, {				
@@ -661,9 +834,45 @@ function addRdfPrefix(formDataToObjekt) {
 				[vide+'_0'+count+' schema&colon;headline'] : '&quot;'+schemaHeadlineDe+'&quot;&commat;de&comma; &quot;'+schemaHeadlineEn+'&quot;&commat;en .',							
 				[vide+'_0'+count+' schema&colon;url'] : '&quot;http&colon;//univera.de/FHB/fbwTube/?id='+videName+'&amp;chapter='+count+'&quot; .',
 				[vide+'_0'+count+' schema&colon;creator'] : 'vide&colon;'+creatorName+' .',
-				[vide+'_0'+count+' schema&colon;duration'] : '&quot;PT'+minutesWithoutZero+'M'+seconds+'S'+'&quot; .'
+				[vide+'_0'+count+' schema&colon;duration'] : '&quot;PT'+minutesWithoutZero+'M'+seconds+'S'+'&quot; .'								
 			});
+			
+		if(schemaThumbnail !== "none" && schemaThumbnail.length !== 0) {
+			Object.assign(obj, {[vide+'_0'+count+' schema&colon;humbnail'] : 'vide&colon;'+schemaThumbnail+' .'});
+		}
+		
 		Object.assign(rdfPrefix, obj);
+	}
+	
+	//ADD NEW FOTO
+	if(schemaThumbnailIdentifier !== undefined){
+		Object.assign(rdfPrefix, {
+				['vide&colon;'+schemaThumbnail] : 'a schema&colon;ImageObject &semi;',
+				['schema&colon;identifier &quot;'+schemaThumbnailIdentifier+'&quot;'] : '&semi;',
+				['schema&colon;name &quot;'+schemaThumbnail+'.png&quot;'] : '&semi;',
+				['schema&colon;url &quot;https&colon;//drive.google.com/open?id='+schemaThumbnailIdentifier+'&quot;'] : '.'				
+			});
+	}
+	
+	//ADD NEW Abbreviation for Lecture Series
+	if(vdipLectureSeriesDe !== undefined && vdipLectureSeriesEn !== undefined){
+		Object.assign(rdfPrefix, {
+				['vide&colon;'+lectureSeriesName] : 'a vidp:&colon;LectureSeries &semi;',
+				['rdfs&colon;label &quot;'+lectureSeriesNameWithSpace+'&quot;'] : '&semi;',
+				['schema&colon;name &quot;'+lectureSeriesNameWithSpace+'&quot;'] : '&semi;',
+				['schema&colon;headline &quot;'+vdipLectureSeriesDe+'&quot;&commat;de&comma; &quot;'+vdipLectureSeriesEn+'&quot;&commat;en'] : '.'				
+			});
+	}
+	
+	//ADD NEW MODULE
+	if(vdipModuleNameDe !== undefined && vdipModuleNameEn !== undefined){
+		Object.assign(rdfPrefix, {
+				['vide&colon;'+moduleName] : 'a vidp&colon;Module &semi;',
+				['rdfs&colon;label &quot;'+vdipModuleNameDe+'&quot;'] : '&semi;',				
+				['schema&colon;name &quot;'+vdipModuleNameDe+'&quot;&commat;de&comma; &quot;'+vdipModuleNameEn+'&quot;&commat;en'] : '&semi;',
+				['schema&colon;isPartOf vide&colon;'+schemaIsPartOfModul] : '&semi;',
+				['schema&colon;url &quot;'+schemaModuleUrl+'&quot;'] : '.'				
+			});
 	}
 	
 	//ADD NEW LECTURER	
