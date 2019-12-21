@@ -75,58 +75,62 @@
 				</div>
 				<div class="col-6">
 					<form id="jsonDataFom">
-					  <div class="md-form">
-						<input type="text" class="form-control" id="lectureShortcuts">
-						<label for="lectureShortcuts">Vorlesungskürzel (z. B. AIP)</label>
-					  </div>
-					  <div class="md-form">
-						<input list="lecturerList" type="text" class="form-control" id="formGroupExampleInput3" name="courses[0][lecturer]" hidden>
-						<select id="formGroupExampleInput0" class="form-control multiple-lecture-name" name="states[]" multiple="multiple"></select>
-						<label for="formGroupExampleInput0" class="active">Dozent*innen aus Datenbank</label>
-					  </div>
-					  <div class="md-form">
-						<input type="text" class="form-control" id="formGroupExampleInput1" name="courses[0][title]">
-						<label for="formGroupExampleInput1">Titel des Moduls</label>
-					  </div>
-					  <div class="md-form">
-						<input type="text" class="form-control" id="titelVorlesung" name="courses[0][lectureTitle]">
-						<label for="titelVorlesung">Titel der Vorlesung</label>
-					  </div>
-					  <div class="md-form">
-						<input type="text" class="form-control" id="formGroupExampleInput4" data-insert="email" name="courses[0][lecturerMail]">
-						<label for="formGroupExampleInput4">Lecturer Email</label>
-					  </div>
-					  <span id="addLecturer" class="add-button" title="Neue/n Dozent*in hinzufügen">
-						<span class="horizontal-line"></span>
-						<span class="fa-stack">
-							<span class="fas fa-circle fa-stack-2x"></span>
-							<span class="fas fa-plus fa-stack-1x"></span>
+						<div class="json-card">
+							<div class="md-form">
+								<input type="text" class="form-control" id="lectureShortcuts">
+								<label for="lectureShortcuts">Vorlesungskürzel (z. B. AIP)</label>
+							</div>					  
+							<div class="md-form">
+								<input type="text" class="form-control" id="titelVorlesung" name="courses[0][lectureTitle]">
+								<label for="titelVorlesung">Titel der Vorlesung</label>
+							</div>
+							<div class="md-form">
+								<input type="text" class="form-control" id="formGroupExampleInput1" name="courses[0][title]">
+								<label for="formGroupExampleInput1">Titel des Moduls</label>
+							</div>
+							<div class="md-form">
+								<input list="lecturerList" type="text" class="form-control" id="formGroupExampleInput3" name="courses[0][lecturer]" hidden>
+								<select id="formGroupExampleInput0" class="form-control multiple-lecture-name" name="states[]" multiple="multiple"></select>
+								<label for="formGroupExampleInput0" class="active">Dozent*innen aus Datenbank</label>
+							</div>					  
+							<!-- <div class="md-form"> -->
+								<input type="text" class="form-control" id="formGroupExampleInput4" data-insert="email" name="courses[0][lecturerMail]" hidden>
+							<!-- <label for="formGroupExampleInput4">Lecturer Email</label>
+							</div> -->
+						</div>
+						<span id="addLecturer" class="add-button" title="Neue/n Dozent*in hinzufügen">
+							<span class="horizontal-line"></span>
+							<span class="fa-stack">
+								<span class="fas fa-circle fa-stack-2x"></span>
+								<span class="fas fa-plus fa-stack-1x"></span>
+							</span>
 						</span>
-					  </span>
 						<h3>Chapters</h3>
-					  <div class="md-form">
-						<input type="text" class="form-control" id="titleClip0" name="courses[0][chapters][0][title]">
-						<label for="titleClip0">Titel des Clips</label>
-					  </div>
-					  <div class="md-form">
-						<input type="text" class="form-control" id="formGroupExampleInput6" name="courses[0][chapters][0][videos][url_teacher]" value="www.vimeo.com/">
-						<label for="formGroupExampleInput6" class="active">Vimeo ID Sprecher</label>
-					  </div>
-					  <div class="md-form">
-						<input type="text" class="form-control" id="formGroupExampleInput7" name="courses[0][chapters][0][videos][url_presentation]" value="www.vimeo.com/">
-						<label for="formGroupExampleInput7" class="active">Vimeo ID Screencast</label>
-					  </div>
-					  <div class="md-form">
-						<input type="text" class="form-control for-datetime" id="schemaDuration0">
-						<label for="schemaDuration0">Laufzeit des Kapitels</label>
-					  </div>
-					  <span id="addChapters" class="add-button" title="Neuen Clip hinzufügen">
-						<span class="horizontal-line"></span>
-						<span class="fa-stack">
-							<span class="fas fa-circle fa-stack-2x"></span>
-							<span class="fas fa-plus fa-stack-1x"></span>
+						<div class="json-card">
+							<div class="md-form">
+								<input type="text" class="form-control" id="titleClip0" name="courses[0][chapters][0][title]">
+								<label for="titleClip0">Titel des Clips</label>
+							</div>
+							<div class="md-form">
+								<input type="text" class="form-control" id="speakerClip0" name="courses[0][chapters][0][videos][url_teacher]">
+								<label for="speakerClip0">Vimeo ID Sprecher</label>
+							</div>
+							<div class="md-form">
+								<input type="text" class="form-control" id="screencastClip0" name="courses[0][chapters][0][videos][url_presentation]">
+								<label for="screencastClip0">Vimeo ID Screencast</label>
+							</div>
+							<div class="md-form">
+								<input type="text" class="form-control for-datetime" id="schemaDuration0">
+								<label for="schemaDuration0">Laufzeit des Kapitels</label>
+							</div>
+						</div>
+						<span id="addChapters" class="add-button" title="Neuen Clip hinzufügen">
+							<span class="horizontal-line"></span>
+							<span class="fa-stack">
+								<span class="fas fa-circle fa-stack-2x"></span>
+								<span class="fas fa-plus fa-stack-1x"></span>
+							</span>
 						</span>
-					  </span>
 					</form>
 					<div class="mt-5">
 						<button id="weiter" type="button" class="btn btn-danger btn-lg btn-block" title="Weiter">Weiter</button>
@@ -141,91 +145,92 @@
 				</div>
 				<div class="col-6">
 					<form id="rdfDataForm">
-					  <div class="md-form">
-						<input type="text" class="form-control" id="formRdfGroupExampleInput1" name="videoLecture" readonly>
-						<label for="formRdfGroupExampleInput1">Video Lecture (ex.: AIP)</label>
-					  </div>
-					  <div class="md-form">
-						<input type="text" class="form-control" id="formRdfGroupExampleInput8" name="schemaHeadlineDe" readonly>
-						<label for="formRdfGroupExampleInput8">Titel der Videovorlesung (de)</label>
-					  </div>
-					  <div class="md-form">
-						<input type="text" class="form-control" id="formRdfGroupExampleInput9" name="schemaHeadlineEn" readonly>
-						<label for="formRdfGroupExampleInput9">Titel der Videovorlesung (en)</label>
-					  </div>
-					  <div class="md-form">
-						<select class="form-control" type="text" id="formRdfGroupExampleInput10" name="schemaInLanguage">
-							<option value="de">de</option>
-							<option value="en">en</option>
-							<option value="ru">ru</option>
-						</select>
-						<label for="formRdfGroupExampleInput10" class="active">Vorlesungssprache</label>
-					  </div>
-					  <div class="md-form">
-						<textarea class="md-textarea form-control" id="formRdfGroupExampleInput4" name="schemaDescriptionDe" rows="2"></textarea>
-						<label for="formRdfGroupExampleInput4">Kurzbeschreibung (de)</label>
-					  </div>
-					  <div class="md-form">
-						<textarea class="md-textarea form-control" id="formRdfGroupExampleInput4" name="schemaDescriptionEn" rows="2"></textarea>
-						<label for="formRdfGroupExampleInput5">Kurzbeschreibung (en)</label>
-					  </div>
-					  <div class="md-form">
-						<input type="text" class="form-control" id="formRdfGroupExampleInput6" name="schemaKeywordsDe">
-						<label for="formRdfGroupExampleInput6" data-toggle="tooltip" title="Schlüsselwörter durch Komma trennen.">Schlüsselwörter (de) <span class="fas fa-info-circle"></span></label>
-					  </div>
-					  <div class="md-form">
-						<input type="text" class="form-control" id="formRdfGroupExampleInput7" name="schemaKeywordsEn" >
-						<label for="formRdfGroupExampleInput7" data-toggle="tooltip" title="Schlüsselwörter durch Komma trennen.">Schlüsselwörter (en) <span class="fas fa-info-circle"></span></label>
-					  </div>
-					  <div class="md-form">
-						<input list="lectureSeries" type="text" class="form-control" id="formRdfGroupExampleInput2" value="none" name="lectureSeriesName">
-						<datalist id="lectureSeries"></datalist>
-						<label for="formRdfGroupExampleInput2">Kürzel der Vorlesungsreihe (z. B. FAWI2020)</label>
-					  </div>
-					  <span id="addLectureSeries" class="add-button" title="Neuen Kürzel Vorlesungsreihe hinzufügen">
-						<span class="horizontal-line"></span>
-						<span class="fa-stack">
-							<span class="fas fa-circle fa-stack-2x"></span>
-							<span class="fas fa-plus fa-stack-1x"></span>
+						<div class="rdf-card">
+							<div class="md-form">
+								<input type="text" class="form-control" id="formRdfGroupExampleInput1" name="videoLecture" readonly>
+								<label for="formRdfGroupExampleInput1">Video Lecture (ex.: AIP)</label>
+							</div>
+							<div class="md-form">
+								<input type="text" class="form-control" id="formRdfGroupExampleInput8" name="schemaHeadlineDe">
+								<label for="formRdfGroupExampleInput8">Titel der Videovorlesung</label>
+							</div>
+							<div class="md-form">
+								<select class="form-control" type="text" id="formRdfGroupExampleInput10" name="schemaInLanguage">
+									<option value="de">de</option>
+									<option value="en">en</option>
+									<option value="ru">ru</option>
+								</select>
+								<label for="formRdfGroupExampleInput10" class="active">Vorlesungssprache</label>
+							</div>
+							<div class="md-form">
+								<textarea class="md-textarea form-control" id="formRdfGroupExampleInput4" name="schemaDescriptionDe" rows="2"></textarea>
+								<label for="formRdfGroupExampleInput4">Kurzbeschreibung (de)</label>
+							</div>
+							<div class="md-form">
+								<textarea class="md-textarea form-control" id="formRdfGroupExampleInput4" name="schemaDescriptionEn" rows="2"></textarea>
+								<label for="formRdfGroupExampleInput5">Kurzbeschreibung (en)</label>
+							</div>
+							<div class="md-form">
+								<input type="text" class="form-control" id="formRdfGroupExampleInput6" name="schemaKeywordsDe">
+								<label for="formRdfGroupExampleInput6" data-toggle="tooltip" title="Schlüsselwörter durch Komma trennen.">Schlüsselwörter (de) <span class="fas fa-info-circle"></span></label>
+							</div>
+							<div class="md-form">
+								<input type="text" class="form-control" id="formRdfGroupExampleInput7" name="schemaKeywordsEn" >
+								<label for="formRdfGroupExampleInput7" data-toggle="tooltip" title="Schlüsselwörter durch Komma trennen.">Schlüsselwörter (en) <span class="fas fa-info-circle"></span></label>
+							</div>
+						</div>
+						<div class="rdf-card">
+							<div class="md-form">
+								<input list="bildLogoList" type="text" class="form-control" id="bildLogo" value="none" name="schemaThumbnail">
+								<datalist id="bildLogoList"></datalist>
+								<label for="thumbnail" class="active">Bild-Logo</label>
+							</div>
+						</div>
+						<span id="addFoto" class="add-button" title="Neues Logo hinzufügen">
+							<span class="horizontal-line"></span>
+							<span class="fa-stack">
+								<span class="fas fa-circle fa-stack-2x"></span>
+								<span class="fas fa-plus fa-stack-1x"></span>
+							</span>
 						</span>
-					  </span>
-					  <div class="md-form">
-						<input list="module" type="text" class="form-control" id="formRdfGroupExampleInput3" value="none" name="moduleName">
-						<datalist id="module"></datalist>
-						<label for="formRdfGroupExampleInput3">Verwendbar in den Modulen</label>
-					  </div>
-					  <span id="addModule" class="add-button" title="Neues Moduls in der Vorlesungsreihe hinzufügen">
-						<span class="horizontal-line"></span>
-						<span class="fa-stack">
-							<span class="fas fa-circle fa-stack-2x"></span>
-							<span class="fas fa-plus fa-stack-1x"></span>
+						<div class="rdf-card">
+							<div class="md-form">
+								<input list="module" type="text" class="form-control" id="formRdfGroupExampleInput3" value="none" name="moduleName">
+								<datalist id="module"></datalist>
+								<label for="formRdfGroupExampleInput3">Verwendbar in den Modulen</label>
+							</div>
+						</div>
+							<span id="addModule" class="add-button" title="Neues Moduls in der Vorlesungsreihe hinzufügen">
+								<span class="horizontal-line"></span>
+								<span class="fa-stack">
+									<span class="fas fa-circle fa-stack-2x"></span>
+									<span class="fas fa-plus fa-stack-1x"></span>
+								</span>
+							</span>
+						<div class="rdf-card">
+							<div class="md-form">
+								<input list="lectureSeries" type="text" class="form-control" id="formRdfGroupExampleInput2" value="none" name="lectureSeriesName">
+								<datalist id="lectureSeries"></datalist>
+								<label for="formRdfGroupExampleInput2">Kürzel der Vorlesungsreihe (z. B. FAWI2020)</label>
+							</div>
+						</div>
+						<span id="addLectureSeries" class="add-button" title="Neuen Kürzel Vorlesungsreihe hinzufügen">
+							<span class="horizontal-line"></span>
+							<span class="fa-stack">
+								<span class="fas fa-circle fa-stack-2x"></span>
+								<span class="fas fa-plus fa-stack-1x"></span>
+							</span>
 						</span>
-					  </span>
-					  <div class="md-form">
-						<input class="form-control" type="text" name="schemaHeadlineDe1" id="formRdfGroupExampleInput13">
-						<label for="formRdfGroupExampleInput13">Titel des Kapitels 1 (de)</label>
-					  </div>
-					  <div class="md-form">
-						<input class="form-control" type="text" name="schemaHeadlineEn1" id="formRdfGroupExampleInput14">
-						<label for="formRdfGroupExampleInput14">Titel des Kapitels 1 (en)</label>
-					  </div>
-					  <!-- Löschen -->
-					  <div class="md-form">
-						<select class="form-control" type="text" id="sprecher" name="schemaCreator0"></select>
-						<label for="sprecher" class="active">Sprecher*innen</label>
-					  </div>
-					  <div class="md-form">
-						<input list="bildLogoList" type="text" class="form-control" id="bildLogo" value="none" name="schemaThumbnail">
-						<datalist id="bildLogoList"></datalist>
-						<label for="thumbnail" class="active">Bild-Logo</label>
-					  </div>
-					  <span id="addFoto" class="add-button" title="Neues Logo hinzufügen">
-						<span class="horizontal-line"></span>
-						<span class="fa-stack">
-							<span class="fas fa-circle fa-stack-2x"></span>
-							<span class="fas fa-plus fa-stack-1x"></span>
-						</span>
-					  </span>
+						<div class="rdf-card">
+							<div class="md-form">
+								<input class="form-control" type="text" name="schemaHeadlineDe1" id="formRdfGroupExampleInput13">
+								<label for="formRdfGroupExampleInput13">Titel des Kapitels (de)</label>
+							</div>
+							<div class="md-form">
+								<input class="form-control" type="text" name="schemaHeadlineEn1" id="formRdfGroupExampleInput14">
+								<label for="formRdfGroupExampleInput14">Titel des Kapitels (en)</label>
+							</div>
+						</div>
 					</form>
 					<div class="mt-5">
 						<button id="hochladen" type="button" class="btn btn-danger btn-lg btn-block" title="Hochladen" data-toggle="modal" data-target="#modalLoginForm">Hochladen</button>

@@ -49,6 +49,22 @@
 			height: 99%;
 			resize: none;
 		}
+		.json-card, .rdf-card {
+			box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+			padding: 5px 15px;
+		}
+		.json-card:not(:first-child), .rdf-card:not(:first-child){
+			margin-top: 15px;
+		}
+		.json-card .md-form .btn:hover, .rdf-card .md-form .btn:hover {
+			color: rgb(255,82,82);
+		}
+		.input-border {
+			border-bottom: 1px solid #ced4da;
+		}
+		.fa-1p3x {
+			font-size: 1.3rem;
+		}
 		.icon-brackets:before{
 			content: "";
 			display: block;
@@ -106,6 +122,7 @@
 		}
 		.add-button .fa-stack{
 			width: 100%;
+			margin-top: 10px;
 		}
 		.add-button > .fa-stack > .fas:nth-child(1n) {
 			color: #f1f1f1;;
@@ -115,10 +132,11 @@
 		}
 		.horizontal-line {
 			position: absolute;
-			width: 100%;
+			width: 95%;
 			background: #f1f1f1;
 			height: 3px;
-			margin-top: 16px;
+			margin-top: 25px;
+			left: 15px;
 		}
 		.margin-top-buttons {
 			margin-top: 42px;
