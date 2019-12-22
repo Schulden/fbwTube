@@ -2,18 +2,27 @@
 
 //ON DOCUMENT READY
 $(function() {
-	//Tooltips initialisation
+	//ALL Persons
+	var personList = null;
+	//PostQuery declaration
+	var sparqlQuery = null;
+	
+	//Tooltips initialization
 	$('[data-toggle="tooltip"]').tooltip();
 	
 	//Weiter Button
 	$('#weiter').on('click', function(){$('#rdf-tab-link').trigger('click');});
+	
+	//Multiple Select initialization
 	$('.multiple-lecture-name').select2();
-	var sparqlQuery = null;
+	$('.multiple-person-names').select2();
+	$('.multiple-person-names').on('select2:close', function(){$('.form-control').trigger('input');});
+	
 	$('#hochladen').on('click', function(){
 		addModalLogin();
 	});
 	
-	//Datatimepicker initialisation
+	//Datatimepicker initialization
 	$('.for-datetime').datetimepicker({
 		icons:{
 				up: 'fa fa-angle-up',
@@ -23,8 +32,7 @@ $(function() {
 	});
 	
 	//SPARQL-Query Einfeugen
-	$(document).on('click', '#login', function(){
-		
+	$(document).on('click', '#login', function(){		
 		var inputPassword = $('#inputPassword').val();
 		var inputUsername = $('#inputUsername').val();
 		
@@ -54,122 +62,110 @@ $(function() {
 	});
 	
 	//SELECT LECTURER FROM KNOLEDGE GRAPH	
-	  var personQuery = "SELECT ?name ?email WHERE { ?person  a <https://bmake.th-brandenburg.de/vidp%23Lecturer>; <http://www.w3.org/2000/01/rdf-schema%23label>  ?name; <https://schema.org/email> ?email. };";
-	  var lectureSeriesQuery = "SELECT ?name WHERE { ?lectureSeries  a <https://bmake.th-brandenburg.de/vidp%23LectureSeries>; <https://schema.org/name>  ?name .};"
-	  var moduleQuery = "SELECT * WHERE { ?Module  a <https://bmake.th-brandenburg.de/vidp%23Module> .}";
-	  var thumbnailQuery = "SELECT * WHERE { ?thumbnail a <https://schema.org/ImageObject> .}";
-	  var allPersonQuery = "SELECT ?link ?label FROM <http://fbwsvcdev.fh-brandenburg.de/OntoWiki/test/> WHERE { ?link <http://www.w3.org/2000/01/rdf-schema%23label> ?label . ?link <http://www.w3.org/1999/02/22-rdf-syntax-ns%23type> ?type . ?type <http://www.w3.org/2000/01/rdf-schema%23subClassOf> <https://schema.org/Person> . }";
-
+	var personQuery = "SELECT ?name ?email WHERE { ?person  a <https://bmake.th-brandenburg.de/vidp%23Lecturer>; <http://www.w3.org/2000/01/rdf-schema%23label>  ?name; <https://schema.org/email> ?email. };";
+	var lectureSeriesQuery = "SELECT ?name WHERE { ?lectureSeries  a <https://bmake.th-brandenburg.de/vidp%23LectureSeries>; <https://schema.org/name>  ?name .};"
+	var moduleQuery = "SELECT * WHERE { ?Module  a <https://bmake.th-brandenburg.de/vidp%23Module> .}";
+	var thumbnailQuery = "SELECT * WHERE { ?thumbnail a <https://schema.org/ImageObject> .}";
+	var allPersonQuery = "SELECT ?link ?label FROM <http://fbwsvcdev.fh-brandenburg.de/OntoWiki/test/> WHERE { ?link <http://www.w3.org/2000/01/rdf-schema%23label> ?label . ?link <http://www.w3.org/1999/02/22-rdf-syntax-ns%23type> ?type . ?type <http://www.w3.org/2000/01/rdf-schema%23subClassOf> <https://schema.org/Person> . }";
 	  
-	  
-	  $.ajax({
-		  type: "POST",
-		  url: 'http://fbwsvcdev.fh-brandenburg.de/OntoWiki/sparql?query=' + personQuery,
-		  cache: false,
-		  dataType: 'json', 
-		  success: function(successData) {
-			var trys = $('.multiple-lecture-name');
+	$.ajax({
+	  type: "POST",
+	  url: 'http://fbwsvcdev.fh-brandenburg.de/OntoWiki/sparql?query=' + personQuery,
+	  cache: false,
+	  dataType: 'json', 
+	  success: function(successData) {
+		var trys = $('.multiple-lecture-name');
 
-			$.each(successData.results.bindings, function( index, value) {
-				var optionForm = document.createElement('option');
-				optionForm.value = value.name.value;
-				optionForm.innerHTML = value.name.value;
-				optionForm.dataset.email = value.email.value;
-				trys.append(optionForm);
-			});
-		  },
-		  error: function(errorText) {
-			 console.log( errorText );
-			 addWarningAlert();
-		  }
-	  });
-	  $.ajax({
-		  type: "POST",
-		  url: 'http://fbwsvcdev.fh-brandenburg.de/OntoWiki/sparql?query=' + lectureSeriesQuery,
-		  cache: false,
-		  dataType: 'json', 
-		  success: function(successData) {
-			var lectureSeries = $('#lectureSeries');
-			lectureSeries.empty();
+		$.each(successData.results.bindings, function( index, value) {
+			var optionForm = document.createElement('option');
+			optionForm.value = value.name.value;
+			optionForm.innerHTML = value.name.value;
+			optionForm.dataset.email = value.email.value;
+			trys.append(optionForm);
+		});
+	  },
+	  error: function(errorText) {
+		 console.log( errorText );
+		 addWarningAlert();
+	  }
+	});
+	$.ajax({
+	  type: "POST",
+	  url: 'http://fbwsvcdev.fh-brandenburg.de/OntoWiki/sparql?query=' + lectureSeriesQuery,
+	  cache: false,
+	  dataType: 'json', 
+	  success: function(successData) {
+		var lectureSeries = $('#lectureSeries');
+		lectureSeries.empty();
 
-			$.each(successData.results.bindings, function( index, value) {
-				var optionForm = document.createElement('option');
-				optionForm.value = value.name.value;
-				lectureSeries.append(optionForm);
-			});
-		  $('[name="lectureSeriesName"]').trigger('focusin');
-		  },
-		  error: function(errorText) {
-			 console.log( errorText );
-			 addWarningAlert();
-		  }
-	  });
-	  $.ajax({
-		  type: "POST",
-		  url: 'http://fbwsvcdev.fh-brandenburg.de/OntoWiki/sparql?query=' + moduleQuery,
-		  cache: false,
-		  dataType: 'json', 
-		  success: function(successData) {
-			var module = $('#module');
-			module.empty();
+		$.each(successData.results.bindings, function( index, value) {
+			var optionForm = document.createElement('option');
+			optionForm.value = value.name.value;
+			lectureSeries.append(optionForm);
+		});
+	  $('[name="lectureSeriesName"]').trigger('focusin');
+	  },
+	  error: function(errorText) {
+		 console.log( errorText );
+		 addWarningAlert();
+	  }
+	});
+	$.ajax({
+	  type: "POST",
+	  url: 'http://fbwsvcdev.fh-brandenburg.de/OntoWiki/sparql?query=' + moduleQuery,
+	  cache: false,
+	  dataType: 'json', 
+	  success: function(successData) {
+		var module = $('#module');
+		module.empty();
 
-			$.each(successData.results.bindings, function( index, value) {
-				var optionForm = document.createElement('option');
-				optionForm.value = value.Module.value.split('#')[1];
-				module.append(optionForm);
-			});
-		  $('[name="moduleName"]').trigger('focusin');
-		  },
-		  error: function(errorText) {
-			 console.log( errorText );
-			 addWarningAlert();
-		  }
-	  });
-	  $.ajax({
-		  type: "POST",
-		  url: 'http://fbwsvcdev.fh-brandenburg.de/OntoWiki/sparql?query=' + thumbnailQuery,
-		  cache: false,
-		  dataType: 'json', 
-		  success: function(successData) {
-			var bildLogoList = $('#bildLogoList');
-			bildLogoList.empty();
+		$.each(successData.results.bindings, function( index, value) {
+			var optionForm = document.createElement('option');
+			optionForm.value = value.Module.value.split('#')[1];
+			optionForm.innerHTML = value.Module.value.split('#')[1];
+			module.append(optionForm);
+		});
+	  $('[name="moduleName"]').trigger('focusin');
+	  },
+	  error: function(errorText) {
+		 console.log( errorText );
+		 addWarningAlert();
+	  }
+	});
+	$.ajax({
+	  type: "POST",
+	  url: 'http://fbwsvcdev.fh-brandenburg.de/OntoWiki/sparql?query=' + thumbnailQuery,
+	  cache: false,
+	  dataType: 'json', 
+	  success: function(successData) {
+		var bildLogoList = $('#bildLogoList');
+		bildLogoList.empty();
 
-			$.each(successData.results.bindings, function( index, value) {
-				var optionForm = document.createElement('option');
-				optionForm.value = value.thumbnail.value.split('#')[1];
-				optionForm.innerHTML = value.thumbnail.value.split('#')[1];
-				bildLogoList.append(optionForm);
-			});
-		  },
-		  error: function(errorText) {
-			 console.log( errorText );
-			 addWarningAlert();
-		  }
-	  });
-	  $.ajax({
-		  type: "POST",
-		  url: 'http://fbwsvcdev.fh-brandenburg.de/OntoWiki/sparql?query=' + allPersonQuery,
-		  cache: false,
-		  dataType: 'json', 
-		  success: function(successData) {
-			console.log(successData);
-			
-			
-			//var sprecher = $('#sprecher');
-
-			//$.each(successData.results.bindings, function( index, value) {
-				//var optionForm = document.createElement('option');
-				//optionForm.value = value.person.value.split('#')[1];
-				//optionForm.innerHTML = value.person.value.split('#')[1];
-				//sprecher.append(optionForm);
-			//});
-		  //sprecher.trigger('focusin');
-		  },
-		  error: function(errorText) {
-			 console.log( errorText );
-			 addWarningAlert();
-		  }
-	  });
+		$.each(successData.results.bindings, function( index, value) {
+			var optionForm = document.createElement('option');
+			optionForm.value = value.thumbnail.value.split('#')[1];
+			optionForm.innerHTML = value.thumbnail.value.split('#')[1];
+			bildLogoList.append(optionForm);
+		});
+	  },
+	  error: function(errorText) {
+		 console.log( errorText );
+		 addWarningAlert();
+	  }
+	});
+	$.ajax({
+	  type: "POST",
+	  url: 'http://fbwsvcdev.fh-brandenburg.de/OntoWiki/sparql?query=' + allPersonQuery,
+	  cache: false,
+	  dataType: 'json', 
+	  success: function(successData) {
+		personList = successData;
+	  },
+	  error: function(errorText) {
+		 console.log( errorText );
+		 addWarningAlert();
+	  }
+	});
 	 
 	//Remove inserted Element
 	$(document).on('click', '[data-remove="delete-element"]', function(){
@@ -179,8 +175,19 @@ $(function() {
 			$('[name="schemaHeadlineDe'+(removeElementNumber+1)+'"]').closest('.md-form').remove();
 			$('[name="schemaHeadlineEn'+(removeElementNumber+1)+'"]').closest('.md-form').remove();
 			
+			var personNamesSelect = $('[name^="personSelect"]');
+			if(personNamesSelect.length !== 0){
+				var firstName = closestCard.find('[name^="lecturerName"]').val();
+				var lastName = closestCard.find('[name^="lecturerNachname"]').val();
+				for(var i=0; i < personNamesSelect.length; i++) {
+					$('[name="'+personNamesSelect[i].name+'"] option[value="'+firstName+lastName+'"]').remove();
+				}
+			}
+
+			//DELETE CARD
 			closestCard.remove();
 			
+			//ADD actual Number to Lecturers
 			var lecturerName = $('[name^="lecturerName"]');
 			var lecturerNachname = $('[name^="lecturerNachname"]');
 			var lecturerLabel = $('[name^="lecturerLabel"]');
@@ -195,11 +202,15 @@ $(function() {
 				}
 			}
 			
+			//ADD actual Number to Clips
 			var chaptersClip = $('[id^="titleClip"]');
 			var speakerClip = $('[id^="speakerClip"]');
 			var screencastClip = $('[id^="screencastClip"]');
 			var schemaDuration = $('[id^="schemaDuration"]');
-			
+			var labelForTitleId = $('[for^="titleClip"]');
+			var labelForSpeakerClipId = $('[for^="speakerClip"]');
+			var labelForScreencastClipId = $('[for^="screencastClip"]');
+			var labelForSchemaDurationId = $('[for^="schemaDuration"]');			
 			for(var i=0; i < chaptersClip.length; i++){
 				//Change ID for JSON
 				chaptersClip[i].id = 'titleClip'+i;
@@ -207,25 +218,107 @@ $(function() {
 				screencastClip[i].id = 'screencastClip'+i;
 				schemaDuration[i].id = 'schemaDuration'+i;
 				
+				//Change for Id for Labels
+				labelForTitleId[i].setAttribute('for', 'titleClip'+i);
+				labelForSpeakerClipId[i].setAttribute('for', 'speakerClip'+i);
+				labelForScreencastClipId[i].setAttribute('for', 'screencastClip'+i);
+				labelForSchemaDurationId[i].setAttribute('for', 'schemaDuration'+i);				
+				
 				//Change Name for JSON
 				chaptersClip[i].name = 'courses[0][chapters]['+i+'][title]';
 				speakerClip[i].name = 'courses[0][chapters]['+i+'][videos][url_teacher]';
 				screencastClip[i].name = 'courses[0][chapters]['+i+'][videos][url_presentation]';
 			}
-
-
+			
+			//ADD actual Number to Moduls
+			var vdipModuleTitle = $('[name^="vdipModuleTitle"]');
+			var vdipModuleNameDe = $('[name^="vdipModuleNameDe"]');
+			var vdipModuleNameEn = $('[name^="vdipModuleNameEn"]');
+			var schemaIsPartOfModul = $('[name^="schemaIsPartOfModul"]');
+			var schemaModuleUrl = $('[name^="schemaModuleUrl"]');
+			var personSelect = $('[name^="personSelect"]');
+			var vdipModuleTitleIdFor = $('[for^="vdipModuleTitleId"]');
+			var vdipModuleNameDeIdFor = $('[for^="vdipModuleNameDeId"]');
+			var vdipModuleNameEnIdFor = $('[for^="vdipModuleNameEnId"]');
+			var schemaIsPartOfModulIdFor = $('[for^="schemaIsPartOfModulId"]');
+			var schemaModuleUrlIdFor = $('[for^="schemaModuleUrlId"]');
+			var personSelectIdFor = $('[for^="personSelectId"]');
+			for(var i=0; i < vdipModuleTitle.length; i++){
+				//Change ID for JSON
+				vdipModuleTitle[i].id = 'vdipModuleTitleId'+i;
+				vdipModuleNameDe[i].id = 'vdipModuleNameDeId'+i;
+				vdipModuleNameEn[i].id = 'vdipModuleNameEnId'+i;
+				schemaIsPartOfModul[i].id = 'schemaIsPartOfModulId'+i;
+				schemaModuleUrl[i].id = 'schemaModuleUrlId'+i;
+				personSelect[i].id = 'personSelectId'+i;
+				
+				//Change for Id for Labels
+				vdipModuleTitleIdFor[i].setAttribute('for', 'vdipModuleTitleId'+i);
+				vdipModuleNameDeIdFor[i].setAttribute('for', 'vdipModuleNameDeId'+i);
+				vdipModuleNameEnIdFor[i].setAttribute('for', 'vdipModuleNameEnId'+i);
+				schemaIsPartOfModulIdFor[i].setAttribute('for', 'schemaIsPartOfModulId'+i);
+				schemaModuleUrlIdFor[i].setAttribute('for', 'schemaModuleUrlId'+i);
+				personSelectIdFor[i].setAttribute('for', 'personSelectId'+i);				
+				
+				//Change Name for JSON
+				vdipModuleTitle[i].name = 'vdipModuleTitle'+i;
+				vdipModuleNameDe[i].name = 'vdipModuleNameDe'+i;
+				vdipModuleNameEn[i].name = 'vdipModuleNameEn'+i;
+				schemaIsPartOfModul[i].name = 'schemaIsPartOfModul'+i;
+				schemaModuleUrl[i].name = 'schemaModuleUrl'+i;
+				personSelect[i].name = 'personSelect'+i;
+			}
+			
+			
 		}else{
-			$(this).closest('.rdf-card').children().not(':nth-child(2)').remove();			
+			$(this).closest('.rdf-card').children().not(':nth-child(2)').remove();
+			
+			//ADD actual Number to Moduls
+			var vdipModuleTitle = $('[name^="vdipModuleTitle"]');
+			var vdipModuleNameDe = $('[name^="vdipModuleNameDe"]');
+			var vdipModuleNameEn = $('[name^="vdipModuleNameEn"]');
+			var schemaIsPartOfModul = $('[name^="schemaIsPartOfModul"]');
+			var schemaModuleUrl = $('[name^="schemaModuleUrl"]');
+			var personSelect = $('[name^="personSelect"]');
+			var vdipModuleTitleIdFor = $('[for^="vdipModuleTitleId"]');
+			var vdipModuleNameDeIdFor = $('[for^="vdipModuleNameDeId"]');
+			var vdipModuleNameEnIdFor = $('[for^="vdipModuleNameEnId"]');
+			var schemaIsPartOfModulIdFor = $('[for^="schemaIsPartOfModulId"]');
+			var schemaModuleUrlIdFor = $('[for^="schemaModuleUrlId"]');
+			var personSelectIdFor = $('[for^="personSelectId"]');
+			for(var i=0; i < vdipModuleTitle.length; i++){
+				//Change ID for JSON
+				vdipModuleTitle[i].id = 'vdipModuleTitleId'+i;
+				vdipModuleNameDe[i].id = 'vdipModuleNameDeId'+i;
+				vdipModuleNameEn[i].id = 'vdipModuleNameEnId'+i;
+				schemaIsPartOfModul[i].id = 'schemaIsPartOfModulId'+i;
+				schemaModuleUrl[i].id = 'schemaModuleUrlId'+i;
+				personSelect[i].id = 'personSelectId'+i;
+				
+				//Change for Id for Labels
+				vdipModuleTitleIdFor[i].setAttribute('for', 'vdipModuleTitleId'+i);
+				vdipModuleNameDeIdFor[i].setAttribute('for', 'vdipModuleNameDeId'+i);
+				vdipModuleNameEnIdFor[i].setAttribute('for', 'vdipModuleNameEnId'+i);
+				schemaIsPartOfModulIdFor[i].setAttribute('for', 'schemaIsPartOfModulId'+i);
+				schemaModuleUrlIdFor[i].setAttribute('for', 'schemaModuleUrlId'+i);
+				personSelectIdFor[i].setAttribute('for', 'personSelectId'+i);				
+				
+				//Change Name for JSON
+				vdipModuleTitle[i].name = 'vdipModuleTitle'+i;
+				vdipModuleNameDe[i].name = 'vdipModuleNameDe'+i;
+				vdipModuleNameEn[i].name = 'vdipModuleNameEn'+i;
+				schemaIsPartOfModul[i].name = 'schemaIsPartOfModul'+i;
+				schemaModuleUrl[i].name = 'schemaModuleUrl'+i;
+				personSelect[i].name = 'personSelect'+i;
+			}			
 		}
 		$('.form-control').trigger('input');
 	});
   
-	  
 	//Select on focus  
 	$(document).on('focusin', 'select.form-control', function(){
 		$(this).next().addClass('active');
 	});
-	
   
 	//INSERT MAIL LECTURER IN INPUT
 	$('.multiple-lecture-name').on('select2:close', function(){
@@ -311,7 +404,7 @@ $(function() {
 						}		
 					}
 				}
-			});
+			});			
 			//ADD Email to JSON-View
 			var newLecturersEmail = [];
 			$.each($('[name^="lecturerEmail"][id^="formGroupExampleInputNew"]'), function( index, value) {
@@ -669,93 +762,166 @@ $(function() {
 	});
 	//ADD NEW MODULE
 	$('#addModule').on('click', function(){
-		if($('#moduleUrl').length === 0) {			
-			var divFormTrash = document.createElement('div');
-			var deleteTrashButton = document.createElement('button');
-			var deleteTrashIcon =  document.createElement('span');
+		var cardsNumber = $('[id^=schemaModuleUrlId]').length;
+		var divFormTrash = document.createElement('div');
+		var deleteTrashButton = document.createElement('button');
+		var deleteTrashIcon =  document.createElement('span');
+		
+		var divFormModuleTitle = document.createElement('div');
+		var inputFormModuleTitle  = document.createElement('input');
+		var labelFormModuleTitle  =  document.createElement('label');
+		
+		var divFormModuleNameDe = document.createElement('div');
+		var inputFormModuleNameDe  = document.createElement('input');
+		var labelFormModuleNameDe  =  document.createElement('label');
+		
+		var divFormModuleNameEn = document.createElement('div');
+		var inputFormModuleNameEn  = document.createElement('input');
+		var labelFormModuleNameEn  =  document.createElement('label');
+		
+		var divFormCourseOfStudies = document.createElement('div');
+		var selectFormCourseOfStudies = document.createElement('select');
+		var courseOfStudiesArray = ['Bachelor Wirtschaftsinformatik', 'Master Wirtschaftsinformatik', 'Bachelor Betriebswirtschaftslehre','Master Betriebswirtschaftslehre'];
+		var courseOfStudiesValueArray = ['WIB', 'WIM', 'BWLB', 'BWLM'];
+		var labelFormCourseOfStudies =  document.createElement('label');
+		
+		var divFormModuleUrl = document.createElement('div');
+		var inputFormModuleUrl  = document.createElement('input');
+		var labelFormModuleUrl  =  document.createElement('label');
+		
+		var divFormPerson = document.createElement('div');
+		var selectFormPerson = document.createElement('select');
+		var personArray = personList.results.bindings;
+		var labelFormPerson =  document.createElement('label');
+		
+		divFormModuleTitle.classList.add('md-form');
+		inputFormModuleTitle.classList.add('form-control');
+		inputFormModuleTitle.setAttribute('type', 'text');
+		inputFormModuleTitle.setAttribute('name', 'vdipModuleTitle'+cardsNumber);
+		inputFormModuleTitle.id = 'vdipModuleTitleId'+cardsNumber;
+		labelFormModuleTitle.setAttribute('for', 'vdipModuleTitleId'+cardsNumber);
+		labelFormModuleTitle.innerHTML = 'Modulkürzel (z. B. FAWI)';
+		divFormModuleTitle.appendChild(inputFormModuleTitle);
+		divFormModuleTitle.appendChild(labelFormModuleTitle);
+		
+		divFormModuleNameDe.classList.add('md-form');
+		inputFormModuleNameDe.classList.add('form-control');
+		inputFormModuleNameDe.setAttribute('type', 'text');
+		inputFormModuleNameDe.setAttribute('name', 'vdipModuleNameDe'+cardsNumber);
+		inputFormModuleNameDe.id = 'vdipModuleNameDeId'+cardsNumber;
+		labelFormModuleNameDe.setAttribute('for', 'vdipModuleNameDeId'+cardsNumber);
+		labelFormModuleNameDe.innerHTML = 'Bezeichnung des Moduls (de)';
+		divFormModuleNameDe.appendChild(inputFormModuleNameDe);
+		divFormModuleNameDe.appendChild(labelFormModuleNameDe);
+		
+		divFormModuleNameEn.classList.add('md-form');
+		inputFormModuleNameEn.classList.add('form-control');
+		inputFormModuleNameEn.setAttribute('type', 'text');
+		inputFormModuleNameEn.setAttribute('name', 'vdipModuleNameEn'+cardsNumber);
+		inputFormModuleNameEn.id = 'vdipModuleNameEnId'+cardsNumber;
+		labelFormModuleNameEn.setAttribute('for', 'vdipModuleNameEnId'+cardsNumber);
+		labelFormModuleNameEn.innerHTML = 'Bezeichnung des Moduls (en)';
+		divFormModuleNameEn.appendChild(inputFormModuleNameEn);
+		divFormModuleNameEn.appendChild(labelFormModuleNameEn);
+		
+		divFormCourseOfStudies.classList.add('md-form');
+		selectFormCourseOfStudies.classList.add('form-control');
+		selectFormCourseOfStudies.setAttribute('type', 'text');
+		selectFormCourseOfStudies.id = 'schemaIsPartOfModulId'+cardsNumber;
+		labelFormCourseOfStudies.setAttribute('for', 'schemaIsPartOfModulId'+cardsNumber);
+		labelFormCourseOfStudies.classList.add('active');
+		selectFormCourseOfStudies.setAttribute('name', 'schemaIsPartOfModul'+cardsNumber);
+		labelFormCourseOfStudies.innerHTML = 'Gehört zum Studiengang';
+		divFormCourseOfStudies.appendChild(selectFormCourseOfStudies);
+		divFormCourseOfStudies.appendChild(labelFormCourseOfStudies);
+		//Create and append the options
+		for (var i = 0; i < courseOfStudiesValueArray.length; i++) {
+			var option = document.createElement('option');
+			option.value = courseOfStudiesValueArray[i];
+			option.text = courseOfStudiesArray[i];
+			selectFormCourseOfStudies.appendChild(option);
+		}
+		
+		divFormModuleUrl.classList.add('md-form');
+		inputFormModuleUrl.classList.add('form-control');
+		inputFormModuleUrl.setAttribute('type', 'text');
+		inputFormModuleUrl.setAttribute('name', 'schemaModuleUrl'+cardsNumber);
+		inputFormModuleUrl.id = 'schemaModuleUrlId'+cardsNumber;
+		labelFormModuleUrl.setAttribute('for', 'schemaModuleUrlId'+cardsNumber);
+		labelFormModuleUrl.innerHTML = 'Webseite des Moduls';
+		divFormModuleUrl.appendChild(inputFormModuleUrl);
+		divFormModuleUrl.appendChild(labelFormModuleUrl);
+		
+		divFormPerson.classList.add('md-form');
+		selectFormPerson.classList.add('form-control');
+		selectFormPerson.setAttribute('type', 'text');
+		selectFormPerson.id = 'personSelectId'+cardsNumber;
+		labelFormPerson.setAttribute('for', 'personSelectId'+cardsNumber);
+		labelFormPerson.classList.add('active');
+		selectFormPerson.setAttribute('name', 'personSelect'+cardsNumber);
+		labelFormPerson.innerHTML = 'Modulverantwortliche(r)';
+		divFormPerson.appendChild(selectFormPerson);
+		divFormPerson.appendChild(labelFormPerson);
+		//Create and append the options
+		for (var i = 0; i < personArray.length; i++) {
+			var option = document.createElement('option');
+			option.value = personArray[i].link.value.split('#')[1];
+			option.text = personArray[i].label.value;
+			selectFormPerson.appendChild(option);
+		}
+		//ADD new Lecturer as new Option for RDF
+		var lecturerNachname = $('[name^="lecturerName"]');
+		if(lecturerNachname.length !== 0) {
+			for(var a = 0; a < lecturerNachname.length; a++) {
+				var nachName = $('[name="lecturerNachname'+(a+1)+'"]').val();
+				var firstName = $('[name="lecturerName'+(a+1)+'"]').val();
+				var label = $('[name="lecturerLabel'+(a+1)+'"]').val();
+				var nameWithLabel = null;
+				
+				if(label.includes('Prof.') || label.includes('Prof. Dr.') || label.includes('Dr.')){
+					nameWithLabel = label+' '+firstName+' '+nachName;
+				}else{
+					nameWithLabel = firstName+' '+nachName+', '+label;
+				}
 			
-			var divFormModuleNameDe = document.createElement('div');
-			var inputFormModuleNameDe  = document.createElement('input');
-			var labelFormModuleNameDe  =  document.createElement('label');
-			
-			var divFormModuleNameEn = document.createElement('div');
-			var inputFormModuleNameEn  = document.createElement('input');
-			var labelFormModuleNameEn  =  document.createElement('label');
-			
-			var divFormCourseOfStudies = document.createElement('div');
-			var selectFormCourseOfStudies = document.createElement('select');
-			var courseOfStudiesArray = ['Bachelor Wirtschaftsinformatik', 'Master Wirtschaftsinformatik', 'Bachelor Betriebswirtschaftslehre','Master Betriebswirtschaftslehre'];
-			var courseOfStudiesValueArray = ['WIB', 'WIM', 'BWLB', 'BWLM'];
-			var labelFormCourseOfStudies =  document.createElement('label');
-			
-			var divFormModuleUrl = document.createElement('div');
-			var inputFormModuleUrl  = document.createElement('input');
-			var labelFormModuleUrl  =  document.createElement('label');
-			
-			divFormModuleNameDe.classList.add('md-form');
-			inputFormModuleNameDe.classList.add('form-control');
-			inputFormModuleNameDe.setAttribute('type', 'text');
-			inputFormModuleNameDe.setAttribute('name', 'vdipModuleNameDe');
-			inputFormModuleNameDe.id = 'newVdipModuleNameDe';
-			labelFormModuleNameDe.setAttribute('for', 'newVdipModuleNameDe');
-			labelFormModuleNameDe.innerHTML = 'Bezeichnung des Moduls (de)';
-			divFormModuleNameDe.appendChild(inputFormModuleNameDe);
-			divFormModuleNameDe.appendChild(labelFormModuleNameDe);
-			
-			divFormModuleNameEn.classList.add('md-form');
-			inputFormModuleNameEn.classList.add('form-control');
-			inputFormModuleNameEn.setAttribute('type', 'text');
-			inputFormModuleNameEn.setAttribute('name', 'vdipModuleNameEn');
-			inputFormModuleNameEn.id = 'newVdipModuleNameEn';
-			labelFormModuleNameEn.setAttribute('for', 'newVdipModuleNameEn');
-			labelFormModuleNameEn.innerHTML = 'Bezeichnung des Moduls (en)';
-			divFormModuleNameEn.appendChild(inputFormModuleNameEn);
-			divFormModuleNameEn.appendChild(labelFormModuleNameEn);
-			
-			divFormCourseOfStudies.classList.add('md-form');
-			selectFormCourseOfStudies.classList.add('form-control');
-			selectFormCourseOfStudies.setAttribute('type', 'text');
-			selectFormCourseOfStudies.id = 'CourseOfStudies';
-			labelFormCourseOfStudies.setAttribute('for', 'CourseOfStudies');
-			labelFormCourseOfStudies.classList.add('active');
-			selectFormCourseOfStudies.setAttribute('name', 'schemaIsPartOfModul');
-			labelFormCourseOfStudies.innerHTML = 'Gehört zum Studiengang';
-			divFormCourseOfStudies.appendChild(selectFormCourseOfStudies);
-			divFormCourseOfStudies.appendChild(labelFormCourseOfStudies);
-			//Create and append the options
-			for (var i = 0; i < courseOfStudiesValueArray.length; i++) {
 				var option = document.createElement('option');
-				option.value = courseOfStudiesValueArray[i];
-				option.text = courseOfStudiesArray[i];
-				selectFormCourseOfStudies.appendChild(option);
+				option.value = firstName+nachName;
+				option.text = nameWithLabel;
+				selectFormPerson.appendChild(option);
 			}
-			
-			divFormModuleUrl.classList.add('md-form');
-			inputFormModuleUrl.classList.add('form-control');
-			inputFormModuleUrl.setAttribute('type', 'text');
-			inputFormModuleUrl.setAttribute('name', 'schemaModuleUrl');
-			inputFormModuleUrl.id = 'moduleUrl';
-			labelFormModuleUrl.setAttribute('for', 'moduleUrl');
-			labelFormModuleUrl.innerHTML = 'Webseite des Moduls';
-			divFormModuleUrl.appendChild(inputFormModuleUrl);
-			divFormModuleUrl.appendChild(labelFormModuleUrl);
-			
-			divFormTrash.classList.add('md-form', 'input-border', 'm-0', 'd-flex', 'justify-content-end');	
-			deleteTrashButton.classList.add('btn', 'mt-2', 'mb-2', 'p-0', 'shadow-none');
-			deleteTrashButton.setAttribute('type', 'button');
-			deleteTrashButton.setAttribute('title', 'löschen');
-			deleteTrashIcon.classList.add('fas', 'fa-trash', 'fa-1p3x');
-			deleteTrashButton.dataset.remove = 'delete-element';
-			deleteTrashButton.appendChild(deleteTrashIcon);
-			divFormTrash.appendChild(deleteTrashButton);
-			
-			var toAppend = $(this).prev();
-			
+		}
+		
+		divFormTrash.classList.add('md-form', 'input-border', 'm-0', 'd-flex', 'justify-content-end');	
+		deleteTrashButton.classList.add('btn', 'mt-2', 'mb-2', 'p-0', 'shadow-none');
+		deleteTrashButton.setAttribute('type', 'button');
+		deleteTrashButton.setAttribute('title', 'löschen');
+		deleteTrashIcon.classList.add('fas', 'fa-trash', 'fa-1p3x');
+		deleteTrashButton.dataset.remove = 'delete-element';
+		deleteTrashButton.appendChild(deleteTrashIcon);
+		divFormTrash.appendChild(deleteTrashButton);
+		
+		var toAppend = $(this).prev();
+		if (cardsNumber === 0) {
 			$(toAppend).prepend(divFormTrash);
+			$(toAppend).append(divFormModuleTitle);			
 			$(toAppend).append(divFormModuleNameDe);
 			$(toAppend).append(divFormModuleNameEn);
 			$(toAppend).append(divFormCourseOfStudies);
 			$(toAppend).append(divFormModuleUrl);
+			$(toAppend).append(divFormPerson);
+		}else{
+			var jsonCard = document.createElement('div');
+			
+			jsonCard.classList.add('json-card');
+			
+			jsonCard.appendChild(divFormTrash);
+			jsonCard.appendChild(divFormModuleTitle);			
+			jsonCard.appendChild(divFormModuleNameDe);
+			jsonCard.appendChild(divFormModuleNameEn);
+			jsonCard.appendChild(divFormCourseOfStudies);
+			jsonCard.appendChild(divFormModuleUrl);
+			jsonCard.appendChild(divFormPerson);
+			$(jsonCard).insertBefore(this);				
 		}
 	});
 	//COPY JSON
@@ -871,11 +1037,8 @@ function addRdfPrefix(formDataToObjekt) {
 	var schemaThumbnail = formDataToObjekt["schemaThumbnail"];
 	var schemaThumbnailIdentifier = formDataToObjekt["schemaThumbnailIdentifier"];
 	var vdipLectureSeriesDe = formDataToObjekt["vdipLectureSeriesDe"];
-	var vdipLectureSeriesEn = formDataToObjekt["vdipLectureSeriesEn"];
-	var vdipModuleNameDe = formDataToObjekt["vdipModuleNameDe"];
-	var vdipModuleNameEn = formDataToObjekt["vdipModuleNameEn"];
-	var schemaIsPartOfModul = formDataToObjekt["schemaIsPartOfModul"];
-	var schemaModuleUrl = formDataToObjekt["schemaModuleUrl"];
+	var vdipLectureSeriesEn = formDataToObjekt["vdipLectureSeriesEn"];	
+	var modulNumber = $('[id^="vdipModuleTitleId"]').length;
 	
 
 	var rdfPrefix = {
@@ -895,14 +1058,23 @@ function addRdfPrefix(formDataToObjekt) {
 				[vide+' rdfs&colon;label'] : '&quot;'+videName+'&quot; .'
 			}
 			if(lectureSeriesName !== "none" && lectureSeriesName.length !== 0){
-				Object.assign(obj, {['vide&colon;'+ lectureSeriesName + ' schema&colon;hasPart'] : '&quot;'+vide+'&quot; .',});
+				Object.assign(obj, {['vide&colon;'+ lectureSeriesName + ' schema&colon;hasPart'] : vide+' .',});
 			}
 			
-			if(moduleName !== "none" && moduleName.length !== 0) {
-				Object.assign(obj, {[vide+' schema&colon;about'] : 'vide&colon;'+moduleName +' .',});
+			if(moduleName !== undefined) {
+				for(var a=0; a < moduleName.length; a++){
+					Object.assign(obj, {[vide+' schema&colon;about vide&colon;'+moduleName[a]] : '.',});	
+				}
 			}
 			
-			var count = i;
+			if(modulNumber !== 0){
+				for(var b=0; b < modulNumber; b++){
+					var schemaModuleTitle = formDataToObjekt["vdipModuleTitle"+b];
+					Object.assign(obj, {[vide+' schema&colon;about vide&colon;'+schemaModuleTitle] : '.',});
+				}
+			}
+			
+			var count = (i < 10 ? '0' : '') + i;
 			var schemaHeadlineDe = formDataToObjekt["schemaHeadlineDe"+(i+1)];
 			var schemaHeadlineEn = formDataToObjekt["schemaHeadlineEn"+(i+1)];
 			var schemaDuration = $('[id="schemaDuration'+i+'"]').val();
@@ -925,14 +1097,14 @@ function addRdfPrefix(formDataToObjekt) {
 			}
 			
 			Object.assign(obj, {									
-				[vide+'_0'+count] : ' a vidp&colon;DoubleClip .',
-				[vide+'_0'+count+' rdfs&colon;label'] : '&quot;'+videName+' Clip '+count+'&quot; .',
-				[vide+'_0'+count+' schema&colon;name'] : '&quot;'+videName+' Clip '+count+'&quot; .',
-				[vide+'_0'+count+' schema&colon;dateCreated'] : '&quot;'+date+'&quot;^^xsd&colon;date .',
-				[vide+'_0'+count+' schema&colon;isPartOf '] : vide+' .',
-				[vide+'_0'+count+' schema&colon;headline'] : '&quot;'+schemaHeadlineDe+'&quot;&commat;de&comma; &quot;'+schemaHeadlineEn+'&quot;&commat;en .',							
-				[vide+'_0'+count+' schema&colon;url'] : '&quot;http&colon;//univera.de/FHB/fbwTube/?id='+videName+'&amp;chapter='+count+'&quot; .',
-				[vide+'_0'+count+' schema&colon;duration'] : '&quot;PT'+minutesWithoutZero+'M'+seconds+'S'+'&quot; .'								
+				[vide+'_'+count] : ' a vidp&colon;DoubleClip .',
+				[vide+'_'+count+' rdfs&colon;label'] : '&quot;'+videName+' Clip '+count+'&quot; .',
+				[vide+'_'+count+' schema&colon;name'] : '&quot;'+videName+' Clip '+count+'&quot; .',
+				[vide+'_'+count+' schema&colon;dateCreated'] : '&quot;'+date+'&quot;^^xsd&colon;date .',
+				[vide+'_'+count+' schema&colon;isPartOf '] : vide+' .',
+				[vide+'_'+count+' schema&colon;headline'] : '&quot;'+schemaHeadlineDe+'&quot;&commat;de&comma; &quot;'+schemaHeadlineEn+'&quot;&commat;en .',							
+				[vide+'_'+count+' schema&colon;url'] : '&quot;http&colon;//univera.de/FHB/fbwTube/?id='+videName+'&amp;chapter='+i+'&quot; .',
+				[vide+'_'+count+' schema&colon;duration'] : '&quot;PT'+minutesWithoutZero+'M'+seconds+'S'+'&quot; .'								
 			});
 			
 		
@@ -942,32 +1114,41 @@ function addRdfPrefix(formDataToObjekt) {
 	//ADD NEW FOTO
 	if(schemaThumbnailIdentifier !== undefined){
 		Object.assign(rdfPrefix, {
-				['vide&colon;'+schemaThumbnail] : 'a schema&colon;ImageObject &semi;',
-				['schema&colon;identifier &quot;'+schemaThumbnailIdentifier+'&quot;'] : '&semi;',
-				['schema&colon;name &quot;'+schemaThumbnail+'.png&quot;'] : '&semi;',
-				['schema&colon;url &quot;https&colon;//drive.google.com/open?id='+schemaThumbnailIdentifier+'&quot;'] : '.'				
+				['vide&colon;'+schemaThumbnail] : 'a schema&colon;ImageObject .',
+				['vide&colon;'+schemaThumbnail+' schema&colon;identifier &quot;'+schemaThumbnailIdentifier+'&quot;'] : '.',
+				['vide&colon;'+schemaThumbnail+' schema&colon;name &quot;'+schemaThumbnail+'.png&quot;'] : '.',
+				['vide&colon;'+schemaThumbnail+' schema&colon;url &quot;https&colon;//drive.google.com/open?id='+schemaThumbnailIdentifier+'&quot;'] : '.'				
 			});
 	}
 	
 	//ADD NEW Abbreviation for Lecture Series
 	if(vdipLectureSeriesDe !== undefined && vdipLectureSeriesEn !== undefined){
-		Object.assign(rdfPrefix, {
-				['vide&colon;'+lectureSeriesName] : 'a vidp:&colon;LectureSeries &semi;',
-				['rdfs&colon;label &quot;'+lectureSeriesNameWithSpace+'&quot;'] : '&semi;',
-				['schema&colon;name &quot;'+lectureSeriesNameWithSpace+'&quot;'] : '&semi;',
-				['schema&colon;headline &quot;'+vdipLectureSeriesDe+'&quot;&commat;de&comma; &quot;'+vdipLectureSeriesEn+'&quot;&commat;en'] : '.'				
+		Object.assign(rdfPrefix, {				
+				['vide&colon;'+lectureSeriesName] : 'a vidp&colon;LectureSeries .',
+				['vide&colon;'+lectureSeriesName+' rdfs&colon;label &quot;'+lectureSeriesNameWithSpace+'&quot;'] : '.',
+				['vide&colon;'+lectureSeriesName+' schema&colon;name &quot;'+lectureSeriesNameWithSpace+'&quot;'] : '.',
+				['vide&colon;'+lectureSeriesName+' schema&colon;headline &quot;'+vdipLectureSeriesDe+'&quot;&commat;de&comma; &quot;'+vdipLectureSeriesEn+'&quot;&commat;en'] : '.'				
 			});
-	}
+	}	
 	
 	//ADD NEW MODULE
-	if(vdipModuleNameDe !== undefined && vdipModuleNameEn !== undefined){
-		Object.assign(rdfPrefix, {
-				['vide&colon;'+moduleName] : 'a vidp&colon;Module &semi;',
-				['rdfs&colon;label &quot;'+vdipModuleNameDe+'&quot;'] : '&semi;',				
-				['schema&colon;name &quot;'+vdipModuleNameDe+'&quot;&commat;de&comma; &quot;'+vdipModuleNameEn+'&quot;&commat;en'] : '&semi;',
-				['schema&colon;isPartOf vide&colon;'+schemaIsPartOfModul] : '&semi;',
-				['schema&colon;url &quot;'+schemaModuleUrl+'&quot;'] : '.'				
+	if(modulNumber !== 0){
+		for(var c=0; c < modulNumber; c++){
+			var schemaModuleTitle = formDataToObjekt["vdipModuleTitle"+c];
+			var vdipModuleNameDe = formDataToObjekt["vdipModuleNameDe"+c];
+			var vdipModuleNameEn = formDataToObjekt["vdipModuleNameEn"+c];
+			var schemaIsPartOfModul = formDataToObjekt["schemaIsPartOfModul"+c];
+			var schemaModuleUrl = formDataToObjekt["schemaModuleUrl"+c];
+			var personSelect = formDataToObjekt["personSelect"+c];
+			Object.assign(rdfPrefix, {				
+				['vide&colon;'+schemaModuleTitle] : 'a vidp&colon;Module .',
+				['vide&colon;'+schemaModuleTitle+' rdfs&colon;label &quot;'+vdipModuleNameDe+'&quot;'] : '.',				
+				['vide&colon;'+schemaModuleTitle+' schema&colon;name &quot;'+vdipModuleNameDe+'&quot;&commat;de&comma; &quot;'+vdipModuleNameEn+'&quot;&commat;en'] : '.',
+				['vide&colon;'+schemaModuleTitle+' schema&colon;isPartOf vide&colon;'+schemaIsPartOfModul] : '.',
+				['vide&colon;'+schemaModuleTitle+' schema&colon;url &quot;'+schemaModuleUrl+'&quot;'] : '.',
+				['vide&colon;'+schemaModuleTitle+' schema&colon;accountablePerson &quot;'+personSelect+'&quot;'] : '.'				
 			});
+		}
 	}
 	
 	//ADD NEW LECTURER	
@@ -993,12 +1174,12 @@ function addRdfPrefix(formDataToObjekt) {
 			}
 			
 			Object.assign(newLecturerObject, {
-				['vide&colon;'+rdfName] : 'a vidp&colon;Lecturer &semi;',
-				['rdfs&colon;label '+'&quot;'+rdfLabel+'&quot;'] : '&semi;',
-				['schema&colon;familyName '+'&quot;'+name+'&quot;'] : '&semi;',
-				['schema&colon;givenName '+'&quot;'+nachname+'&quot;'] : '&semi;',
-				['schema&colon;name '+'&quot;'+name+' '+nachname+'&quot;'] : '&semi;',
-				['schema&colon;email '+'&quot;'+email+'&quot;'] : '.'
+				['vide&colon;'+rdfName] : 'a vidp&colon;Lecturer .',
+				['vide&colon;'+rdfName+' rdfs&colon;label '+'&quot;'+rdfLabel+'&quot;'] : '.',
+				['vide&colon;'+rdfName+' schema&colon;familyName '+'&quot;'+name+'&quot;'] : '.',
+				['vide&colon;'+rdfName+' schema&colon;givenName '+'&quot;'+nachname+'&quot;'] : '.',
+				['vide&colon;'+rdfName+' schema&colon;name '+'&quot;'+name+' '+nachname+'&quot;'] : '.',
+				['vide&colon;'+rdfName+' schema&colon;email '+'&quot;'+email+'&quot;'] : '.'
 			});
 		}
 		Object.assign(rdfPrefix, newLecturerObject);

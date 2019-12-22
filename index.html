@@ -93,10 +93,7 @@
 								<select id="formGroupExampleInput0" class="form-control multiple-lecture-name" name="states[]" multiple="multiple"></select>
 								<label for="formGroupExampleInput0" class="active">Dozent*innen aus Datenbank</label>
 							</div>					  
-							<!-- <div class="md-form"> -->
-								<input type="text" class="form-control" id="formGroupExampleInput4" data-insert="email" name="courses[0][lecturerMail]" hidden>
-							<!-- <label for="formGroupExampleInput4">Lecturer Email</label>
-							</div> -->
+							<input type="text" class="form-control" id="formGroupExampleInput4" data-insert="email" name="courses[0][lecturerMail]" hidden>
 						</div>
 						<span id="addLecturer" class="add-button" title="Neue/n Dozent*in hinzufügen">
 							<span class="horizontal-line"></span>
@@ -194,10 +191,14 @@
 							</span>
 						</span>
 						<div class="rdf-card">
-							<div class="md-form">
+							<!--<div class="md-form">
 								<input list="module" type="text" class="form-control" id="formRdfGroupExampleInput3" value="none" name="moduleName">
 								<datalist id="module"></datalist>
 								<label for="formRdfGroupExampleInput3">Verwendbar in den Modulen</label>
+							</div>-->
+							<div class="md-form">
+								<select id="module" class="form-control multiple-person-names" name="moduleName[]" multiple="multiple"></select>
+								<label for="module" class="active">Verwendbar in den Modulen</label>
 							</div>
 						</div>
 							<span id="addModule" class="add-button" title="Neues Moduls in der Vorlesungsreihe hinzufügen">

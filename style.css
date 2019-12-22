@@ -141,6 +141,9 @@
 		.margin-top-buttons {
 			margin-top: 42px;
 		}
+		.select2.select2-container.select2-container--default {
+			width: 100% !important;
+		}
 		.select2-selection.select2-selection--multiple {
 			box-sizing: content-box;
 			background-color: transparent;
