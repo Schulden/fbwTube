@@ -228,89 +228,52 @@ $(function() {
 				chaptersClip[i].name = 'courses[0][chapters]['+i+'][title]';
 				speakerClip[i].name = 'courses[0][chapters]['+i+'][videos][url_teacher]';
 				screencastClip[i].name = 'courses[0][chapters]['+i+'][videos][url_presentation]';
-			}
-			
-			//ADD actual Number to Moduls
-			var vdipModuleTitle = $('[name^="vdipModuleTitle"]');
-			var vdipModuleNameDe = $('[name^="vdipModuleNameDe"]');
-			var vdipModuleNameEn = $('[name^="vdipModuleNameEn"]');
-			var schemaIsPartOfModul = $('[name^="schemaIsPartOfModul"]');
-			var schemaModuleUrl = $('[name^="schemaModuleUrl"]');
-			var personSelect = $('[name^="personSelect"]');
-			var vdipModuleTitleIdFor = $('[for^="vdipModuleTitleId"]');
-			var vdipModuleNameDeIdFor = $('[for^="vdipModuleNameDeId"]');
-			var vdipModuleNameEnIdFor = $('[for^="vdipModuleNameEnId"]');
-			var schemaIsPartOfModulIdFor = $('[for^="schemaIsPartOfModulId"]');
-			var schemaModuleUrlIdFor = $('[for^="schemaModuleUrlId"]');
-			var personSelectIdFor = $('[for^="personSelectId"]');
-			for(var i=0; i < vdipModuleTitle.length; i++){
-				//Change ID for JSON
-				vdipModuleTitle[i].id = 'vdipModuleTitleId'+i;
-				vdipModuleNameDe[i].id = 'vdipModuleNameDeId'+i;
-				vdipModuleNameEn[i].id = 'vdipModuleNameEnId'+i;
-				schemaIsPartOfModul[i].id = 'schemaIsPartOfModulId'+i;
-				schemaModuleUrl[i].id = 'schemaModuleUrlId'+i;
-				personSelect[i].id = 'personSelectId'+i;
-				
-				//Change for Id for Labels
-				vdipModuleTitleIdFor[i].setAttribute('for', 'vdipModuleTitleId'+i);
-				vdipModuleNameDeIdFor[i].setAttribute('for', 'vdipModuleNameDeId'+i);
-				vdipModuleNameEnIdFor[i].setAttribute('for', 'vdipModuleNameEnId'+i);
-				schemaIsPartOfModulIdFor[i].setAttribute('for', 'schemaIsPartOfModulId'+i);
-				schemaModuleUrlIdFor[i].setAttribute('for', 'schemaModuleUrlId'+i);
-				personSelectIdFor[i].setAttribute('for', 'personSelectId'+i);				
-				
-				//Change Name for JSON
-				vdipModuleTitle[i].name = 'vdipModuleTitle'+i;
-				vdipModuleNameDe[i].name = 'vdipModuleNameDe'+i;
-				vdipModuleNameEn[i].name = 'vdipModuleNameEn'+i;
-				schemaIsPartOfModul[i].name = 'schemaIsPartOfModul'+i;
-				schemaModuleUrl[i].name = 'schemaModuleUrl'+i;
-				personSelect[i].name = 'personSelect'+i;
-			}
-			
-			
-		}else{
-			$(this).closest('.rdf-card').children().not(':nth-child(2)').remove();
-			
-			//ADD actual Number to Moduls
-			var vdipModuleTitle = $('[name^="vdipModuleTitle"]');
-			var vdipModuleNameDe = $('[name^="vdipModuleNameDe"]');
-			var vdipModuleNameEn = $('[name^="vdipModuleNameEn"]');
-			var schemaIsPartOfModul = $('[name^="schemaIsPartOfModul"]');
-			var schemaModuleUrl = $('[name^="schemaModuleUrl"]');
-			var personSelect = $('[name^="personSelect"]');
-			var vdipModuleTitleIdFor = $('[for^="vdipModuleTitleId"]');
-			var vdipModuleNameDeIdFor = $('[for^="vdipModuleNameDeId"]');
-			var vdipModuleNameEnIdFor = $('[for^="vdipModuleNameEnId"]');
-			var schemaIsPartOfModulIdFor = $('[for^="schemaIsPartOfModulId"]');
-			var schemaModuleUrlIdFor = $('[for^="schemaModuleUrlId"]');
-			var personSelectIdFor = $('[for^="personSelectId"]');
-			for(var i=0; i < vdipModuleTitle.length; i++){
-				//Change ID for JSON
-				vdipModuleTitle[i].id = 'vdipModuleTitleId'+i;
-				vdipModuleNameDe[i].id = 'vdipModuleNameDeId'+i;
-				vdipModuleNameEn[i].id = 'vdipModuleNameEnId'+i;
-				schemaIsPartOfModul[i].id = 'schemaIsPartOfModulId'+i;
-				schemaModuleUrl[i].id = 'schemaModuleUrlId'+i;
-				personSelect[i].id = 'personSelectId'+i;
-				
-				//Change for Id for Labels
-				vdipModuleTitleIdFor[i].setAttribute('for', 'vdipModuleTitleId'+i);
-				vdipModuleNameDeIdFor[i].setAttribute('for', 'vdipModuleNameDeId'+i);
-				vdipModuleNameEnIdFor[i].setAttribute('for', 'vdipModuleNameEnId'+i);
-				schemaIsPartOfModulIdFor[i].setAttribute('for', 'schemaIsPartOfModulId'+i);
-				schemaModuleUrlIdFor[i].setAttribute('for', 'schemaModuleUrlId'+i);
-				personSelectIdFor[i].setAttribute('for', 'personSelectId'+i);				
-				
-				//Change Name for JSON
-				vdipModuleTitle[i].name = 'vdipModuleTitle'+i;
-				vdipModuleNameDe[i].name = 'vdipModuleNameDe'+i;
-				vdipModuleNameEn[i].name = 'vdipModuleNameEn'+i;
-				schemaIsPartOfModul[i].name = 'schemaIsPartOfModul'+i;
-				schemaModuleUrl[i].name = 'schemaModuleUrl'+i;
-				personSelect[i].name = 'personSelect'+i;
 			}			
+		}else{
+			var colosestCard = $(this).closest('.rdf-card');
+			if(colosestCard.children().find('#module').length !==0){
+				colosestCard.children().not(':nth-child(2)').remove();				
+			}else{
+				colosestCard.remove();
+			}				
+			//ADD actual Number to Moduls
+			var vdipModuleTitle = $('[name^="vdipModuleTitle"]');
+			var vdipModuleNameDe = $('[name^="vdipModuleNameDe"]');
+			var vdipModuleNameEn = $('[name^="vdipModuleNameEn"]');
+			var schemaIsPartOfModul = $('[name^="schemaIsPartOfModul"]');
+			var schemaModuleUrl = $('[name^="schemaModuleUrl"]');
+			var personSelect = $('[name^="personSelect"]');
+			var vdipModuleTitleIdFor = $('[for^="vdipModuleTitleId"]');
+			var vdipModuleNameDeIdFor = $('[for^="vdipModuleNameDeId"]');
+			var vdipModuleNameEnIdFor = $('[for^="vdipModuleNameEnId"]');
+			var schemaIsPartOfModulIdFor = $('[for^="schemaIsPartOfModulId"]');
+			var schemaModuleUrlIdFor = $('[for^="schemaModuleUrlId"]');
+			var personSelectIdFor = $('[for^="personSelectId"]');
+			for(var i=0; i < vdipModuleTitle.length; i++){
+				//Change ID for JSON
+				vdipModuleTitle[i].id = 'vdipModuleTitleId'+i;
+				vdipModuleNameDe[i].id = 'vdipModuleNameDeId'+i;
+				vdipModuleNameEn[i].id = 'vdipModuleNameEnId'+i;
+				schemaIsPartOfModul[i].id = 'schemaIsPartOfModulId'+i;
+				schemaModuleUrl[i].id = 'schemaModuleUrlId'+i;
+				personSelect[i].id = 'personSelectId'+i;
+				
+				//Change for Id for Labels
+				vdipModuleTitleIdFor[i].setAttribute('for', 'vdipModuleTitleId'+i);
+				vdipModuleNameDeIdFor[i].setAttribute('for', 'vdipModuleNameDeId'+i);
+				vdipModuleNameEnIdFor[i].setAttribute('for', 'vdipModuleNameEnId'+i);
+				schemaIsPartOfModulIdFor[i].setAttribute('for', 'schemaIsPartOfModulId'+i);
+				schemaModuleUrlIdFor[i].setAttribute('for', 'schemaModuleUrlId'+i);
+				personSelectIdFor[i].setAttribute('for', 'personSelectId'+i);				
+				
+				//Change Name for JSON
+				vdipModuleTitle[i].name = 'vdipModuleTitle'+i;
+				vdipModuleNameDe[i].name = 'vdipModuleNameDe'+i;
+				vdipModuleNameEn[i].name = 'vdipModuleNameEn'+i;
+				schemaIsPartOfModul[i].name = 'schemaIsPartOfModul'+i;
+				schemaModuleUrl[i].name = 'schemaModuleUrl'+i;
+				personSelect[i].name = 'personSelect'+i;
+			}						
 		}
 		$('.form-control').trigger('input');
 	});
@@ -912,7 +875,7 @@ $(function() {
 		}else{
 			var jsonCard = document.createElement('div');
 			
-			jsonCard.classList.add('json-card');
+			jsonCard.classList.add('rdf-card');
 			
 			jsonCard.appendChild(divFormTrash);
 			jsonCard.appendChild(divFormModuleTitle);			
