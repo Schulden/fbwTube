@@ -329,8 +329,8 @@ $(function() {
 		
 		//ADD VIMEO LINK
 		for(var i = 0; i < formDataToObjekt.courses[0].chapters.length; i++){
-			formDataToObjekt.courses[0].chapters[i].videos.url_teacher = 'www.vimeo.com/' + formDataToObjekt.courses[0].chapters[i].videos.url_teacher;
-			formDataToObjekt.courses[0].chapters[i].videos.url_presentation = 'www.vimeo.com/' + formDataToObjekt.courses[0].chapters[i].videos.url_presentation;
+			formDataToObjekt.courses[0].chapters[i].videos.url_teacher = 'https://vimeo.com/' + formDataToObjekt.courses[0].chapters[i].videos.url_teacher;
+			formDataToObjekt.courses[0].chapters[i].videos.url_presentation = 'https://vimeo.com/' + formDataToObjekt.courses[0].chapters[i].videos.url_presentation;
 		}
 		
 		//ADDING NEW LECTURER TO JSON
@@ -493,6 +493,15 @@ $(function() {
 		jsonCard.appendChild(divFormUrlPresentation);
 		jsonCard.appendChild(divFormDuration);
 		$(jsonCard).insertBefore(this);
+		
+		//Datatimepicker initialization after append
+		$(inputFormDuration).datetimepicker({
+			icons:{
+				up: 'fa fa-angle-up',
+				down: 'fa fa-angle-down'
+			},
+			format: 'mm:ss'
+		});
 			
 		
 		//ADD INPUP CHAPTERS IN RDF
@@ -905,7 +914,7 @@ $(function() {
 		if(forCopy !== null){
 			var a = window.document.createElement('a');
 			a.href = window.URL.createObjectURL(new Blob([forCopy], {type: 'application/json'}));
-			a.download = JSON.parse(forCopy).courses[0].title+'.json';
+			a.download = $('#lectureShortcuts').val()+'.json';
 
 			document.body.appendChild(a);
 			a.click();
