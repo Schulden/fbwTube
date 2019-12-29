@@ -83,7 +83,7 @@
 							<div class="md-form">
 								<input type="text" class="form-control" id="titelVorlesung" name="courses[0][lectureTitle]">
 								<label for="titelVorlesung">Titel der Vorlesung</label>
-							</div>
+							</div>							
 							<div class="md-form">
 								<input type="text" class="form-control" id="formGroupExampleInput1" name="courses[0][title]">
 								<label for="formGroupExampleInput1">Titel des Moduls</label>
@@ -148,8 +148,12 @@
 								<label for="formRdfGroupExampleInput1">Video Lecture (ex.: AIP)</label>
 							</div>
 							<div class="md-form">
-								<input type="text" class="form-control" id="formRdfGroupExampleInput8" name="schemaHeadlineDe">
-								<label for="formRdfGroupExampleInput8">Titel der Videovorlesung</label>
+								<input type="text" class="form-control" id="headlineDe" name="schemaHeadlineDe">
+								<label for="headlineDe">Titel der Videovorlesung (de)</label>
+							</div>
+							<div class="md-form">
+								<input type="text" class="form-control" id="headlineEn" name="schemaHeadlineEn">
+								<label for="headlineEn">Titel der Videovorlesung (en)</label>
 							</div>
 							<div class="md-form">
 								<select class="form-control" type="text" id="formRdfGroupExampleInput10" name="schemaInLanguage">
@@ -217,16 +221,16 @@
 								<span class="fas fa-plus fa-stack-1x"></span>
 							</span>
 						</span>
-						<div class="rdf-card">
-							<div class="md-form">
-								<input class="form-control" type="text" name="schemaHeadlineDe1" id="formRdfGroupExampleInput13">
-								<label for="formRdfGroupExampleInput13">Titel des Kapitels (de)</label>
-							</div>
-							<div class="md-form">
+						<!--<div class="rdf-card">
+							div class="md-form">-->
+								<input class="form-control" type="text" name="schemaHeadlineDe1" id="formRdfGroupExampleInput13" hidden>
+								<!--<label for="formRdfGroupExampleInput13">Titel des Kapitels</label>
+							</div>-->
+						<!--	<div class="md-form">
 								<input class="form-control" type="text" name="schemaHeadlineEn1" id="formRdfGroupExampleInput14">
 								<label for="formRdfGroupExampleInput14">Titel des Kapitels (en)</label>
 							</div>
-						</div>
+						</div> -->
 					</form>
 					<div class="mt-5">
 						<button id="hochladen" type="button" class="btn btn-danger btn-lg btn-block" title="Hochladen" data-toggle="modal" data-target="#modalLoginForm">Hochladen</button>

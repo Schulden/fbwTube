@@ -173,7 +173,6 @@ $(function() {
 		if(closestCard.length !== 0) {
 			var removeElementNumber = parseInt($(this).closest('.json-card').find('.form-control')[0].id.match(/\d+/)[0]);
 			$('[name="schemaHeadlineDe'+(removeElementNumber+1)+'"]').closest('.md-form').remove();
-			$('[name="schemaHeadlineEn'+(removeElementNumber+1)+'"]').closest('.md-form').remove();
 			
 			var personNamesSelect = $('[name^="personSelect"]');
 			if(personNamesSelect.length !== 0){
@@ -317,9 +316,7 @@ $(function() {
 		var titleClipNumber = $('#json [id^=titleClip]').length;
 		for(var i=0; i < titleClipNumber; i++) {
 			$('[name="schemaHeadlineDe'+(i+1)+'"]').val($('#titleClip'+i).val());
-			$('[name="schemaHeadlineEn'+(i+1)+'"]').val($('#titleClip'+i).val());
 			$('[name="schemaHeadlineDe'+(i+1)+'"]').trigger('focusin');
-			$('[name="schemaHeadlineEn'+(i+1)+'"]').trigger('focusin');
 		}
 
 		if(formDataToObjekt.states !== undefined){
@@ -405,7 +402,6 @@ $(function() {
 		}
 	});
 	//ADD A NEW CHAPTER
-	//var chapter = 0;
 	$('#addChapters').on('click', function(){
 		var chapter = $('[id^="titleClip"]').length;
 		
@@ -506,40 +502,18 @@ $(function() {
 		
 		//ADD INPUP CHAPTERS IN RDF
 		if(chapter > 0) {
-			var divFormHeadlineDe = document.createElement('div');
 			var inputFormHeadlineDe = document.createElement('input');
-			var labelFormHeadlineDe =  document.createElement('label');
-			var divFormHeadlineEn = document.createElement('div');
-			var inputFormHeadlineEn = document.createElement('input');
-			var labelFormHeadlineEn =  document.createElement('label');
 			
 			var inputIdNumber = $('#rdf [id^=formRdfGroupExampleInput]').length;		
 			
-			divFormHeadlineDe.classList.add('md-form');
 			inputFormHeadlineDe.classList.add('form-control');
-			inputFormHeadlineDe.setAttribute('type', 'text');
+			inputFormHeadlineDe.setAttribute('hidden', '');
 			inputFormHeadlineDe.setAttribute('name', 'schemaHeadlineDe'+(chapter+1)+'');
 			inputFormHeadlineDe.id = 'formRdfGroupExampleInput'+(inputIdNumber+3);
-			labelFormHeadlineDe.setAttribute('for', 'formRdfGroupExampleInput'+(inputIdNumber+3));
-			labelFormHeadlineDe.innerHTML = 'Titel des Clips (de)';	
-			divFormHeadlineDe.appendChild(inputFormHeadlineDe);
-			divFormHeadlineDe.appendChild(labelFormHeadlineDe);
 			
-			divFormHeadlineEn.classList.add('md-form');
-			inputFormHeadlineEn.classList.add('form-control');
-			inputFormHeadlineEn.setAttribute('type', 'text');
-			inputFormHeadlineEn.setAttribute('name', 'schemaHeadlineEn'+(chapter+1)+'');
-			inputFormHeadlineEn.id = 'formRdfGroupExampleInput'+(inputIdNumber+4);
-			labelFormHeadlineEn.setAttribute('for', 'formRdfGroupExampleInput'+(inputIdNumber+4));
-			labelFormHeadlineEn.innerHTML = 'Titel des Clips (en)';	
-			divFormHeadlineEn.appendChild(inputFormHeadlineEn);
-			divFormHeadlineEn.appendChild(labelFormHeadlineEn);
+			var formDataRdf = $('form#rdfDataForm');
 			
-			var formDataRdf = $('form#rdfDataForm .rdf-card:last-child');
-			
-			formDataRdf.append(divFormHeadlineDe);
-			formDataRdf.append(divFormHeadlineEn);			
-
+			formDataRdf.append(inputFormHeadlineDe);
 		}
 	});
 	//ADD NEW LECTURER
@@ -1000,6 +974,7 @@ function addRdfPrefix(formDataToObjekt) {
 	var schemaKeywordsDe = formDataToObjekt.schemaKeywordsDe;
 	var schemaKeywordsEn = formDataToObjekt.schemaKeywordsEn;
 	var schemaHeadlineDeTitle = formDataToObjekt.schemaHeadlineDe;
+	var schemaHeadlineEnTitle = formDataToObjekt.schemaHeadlineEn;
 	var schemaInLanguage = formDataToObjekt.schemaInLanguage;
 	var today = new Date();
 	var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
@@ -1048,7 +1023,7 @@ function addRdfPrefix(formDataToObjekt) {
 			
 			var count = (i < 10 ? '0' : '') + i;
 			var schemaHeadlineDe = formDataToObjekt["schemaHeadlineDe"+(i+1)];
-			var schemaHeadlineEn = formDataToObjekt["schemaHeadlineEn"+(i+1)];
+			//var schemaHeadlineEn = formDataToObjekt["schemaHeadlineEn"+(i+1)];
 			var schemaDuration = $('[id="schemaDuration'+i+'"]').val();
 			var minutes = schemaDuration.split(':')[0];
 			var seconds = ((typeof schemaDuration.split(':')[1] === 'undefined') ? '0' : schemaDuration.split(':')[1]);
@@ -1057,7 +1032,7 @@ function addRdfPrefix(formDataToObjekt) {
 			Object.assign(obj, {				
 				[vide+' schema&colon;name'] : '&quot;'+videName+'&quot; .',
 				[vide+' schema&colon;description'] : '&quot;'+schemaDescriptionDe+'&quot;&commat;de&comma; &quot;'+schemaDescriptionEn+'&quot;&commat;en .',
-				[vide+' schema&colon;headline'] : '&quot;'+schemaHeadlineDeTitle+'&quot; .',
+				[vide+' schema&colon;headline'] : '&quot;'+schemaHeadlineDeTitle+'&quot;&commat;de&comma; &quot;'+schemaHeadlineEnTitle+'&quot;&commat;en .',
 				[vide+' schema&colon;inLanguage'] : '&quot;'+schemaInLanguage+'&quot; .',
 				[vide+' schema&colon;keywords'] : '&quot;'+schemaKeywordsDe+'&quot;&commat;de&comma; &quot;'+schemaKeywordsEn+'&quot;&commat;en .',
 				[vide+' schema&colon;url'] : '&quot;http&colon;//univera.de/FHB/fbwTube/?id='+videName+'&quot; .',
@@ -1074,7 +1049,7 @@ function addRdfPrefix(formDataToObjekt) {
 				[vide+'_'+count+' schema&colon;name'] : '&quot;'+videName+' Clip '+count+'&quot; .',
 				[vide+'_'+count+' schema&colon;dateCreated'] : '&quot;'+date+'&quot;^^xsd&colon;date .',
 				[vide+'_'+count+' schema&colon;isPartOf '] : vide+' .',
-				[vide+'_'+count+' schema&colon;headline'] : '&quot;'+schemaHeadlineDe+'&quot;&commat;de&comma; &quot;'+schemaHeadlineEn+'&quot;&commat;en .',							
+				[vide+'_'+count+' schema&colon;headline'] : '&quot;'+schemaHeadlineDe+'&quot; .',							
 				[vide+'_'+count+' schema&colon;url'] : '&quot;http&colon;//univera.de/FHB/fbwTube/?id='+videName+'&amp;chapter='+i+'&quot; .',
 				[vide+'_'+count+' schema&colon;duration'] : '&quot;PT'+minutesWithoutZero+'M'+seconds+'S'+'&quot; .'								
 			});
@@ -1148,8 +1123,8 @@ function addRdfPrefix(formDataToObjekt) {
 			Object.assign(newLecturerObject, {
 				['vide&colon;'+rdfName] : 'a vidp&colon;Lecturer .',
 				['vide&colon;'+rdfName+' rdfs&colon;label '+'&quot;'+rdfLabel+'&quot;'] : '.',
-				['vide&colon;'+rdfName+' schema&colon;familyName '+'&quot;'+name+'&quot;'] : '.',
-				['vide&colon;'+rdfName+' schema&colon;givenName '+'&quot;'+nachname+'&quot;'] : '.',
+				['vide&colon;'+rdfName+' schema&colon;givenName '+'&quot;'+name+'&quot;'] : '.',
+				['vide&colon;'+rdfName+' schema&colon;familyName '+'&quot;'+nachname+'&quot;'] : '.',
 				['vide&colon;'+rdfName+' schema&colon;name '+'&quot;'+name+' '+nachname+'&quot;'] : '.',
 				['vide&colon;'+rdfName+' schema&colon;email '+'&quot;'+email+'&quot;'] : '.'
 			});
