@@ -102,7 +102,7 @@
 								<span class="fas fa-plus fa-stack-1x"></span>
 							</span>
 						</span>
-						<h3>Chapters</h3>
+						<h3>Clips</h3>
 						<div class="json-card">
 							<div class="md-form">
 								<input type="text" class="form-control" id="titleClip0" name="courses[0][chapters][0][title]">
@@ -145,7 +145,7 @@
 						<div class="rdf-card">
 							<div class="md-form">
 								<input type="text" class="form-control" id="formRdfGroupExampleInput1" name="videoLecture" readonly>
-								<label for="formRdfGroupExampleInput1">Video Lecture (ex.: AIP)</label>
+								<label for="formRdfGroupExampleInput1">Vorlesungskürzel (z. B. AIP)</label>
 							</div>
 							<div class="md-form">
 								<input type="text" class="form-control" id="headlineDe" name="schemaHeadlineDe">
@@ -184,7 +184,7 @@
 							<div class="md-form">
 								<input list="bildLogoList" type="text" class="form-control" id="bildLogo" value="none" name="schemaThumbnail">
 								<datalist id="bildLogoList"></datalist>
-								<label for="thumbnail" class="active">Bild-Logo</label>
+								<label for="bildLogo" class="active">Bild-Logo</label>
 							</div>
 						</div>
 						<span id="addFoto" class="add-button" title="Neues Logo hinzufügen">
@@ -209,9 +209,9 @@
 							</span>
 						<div class="rdf-card">
 							<div class="md-form">
-								<input list="lectureSeries" type="text" class="form-control" id="formRdfGroupExampleInput2" value="none" name="lectureSeriesName">
+								<input list="lectureSeries" type="text" class="form-control" id="vorlesungsKurzel" value="none" name="lectureSeriesName">
 								<datalist id="lectureSeries"></datalist>
-								<label for="formRdfGroupExampleInput2">Kürzel der Vorlesungsreihe (z. B. FAWI2020)</label>
+								<label for="vorlesungsKurzel">Kürzel der Vorlesungsreihe (z. B. FAWI2020)</label>
 							</div>
 						</div>
 						<span id="addLectureSeries" class="add-button" title="Neuen Kürzel Vorlesungsreihe hinzufügen">
@@ -221,16 +221,7 @@
 								<span class="fas fa-plus fa-stack-1x"></span>
 							</span>
 						</span>
-						<!--<div class="rdf-card">
-							div class="md-form">-->
-								<input class="form-control" type="text" name="schemaHeadlineDe1" id="formRdfGroupExampleInput13" hidden>
-								<!--<label for="formRdfGroupExampleInput13">Titel des Kapitels</label>
-							</div>-->
-						<!--	<div class="md-form">
-								<input class="form-control" type="text" name="schemaHeadlineEn1" id="formRdfGroupExampleInput14">
-								<label for="formRdfGroupExampleInput14">Titel des Kapitels (en)</label>
-							</div>
-						</div> -->
+							<input class="form-control" type="text" name="schemaHeadlineDe1" id="formRdfGroupExampleInput13" hidden>
 					</form>
 					<div class="mt-5">
 						<button id="hochladen" type="button" class="btn btn-danger btn-lg btn-block" title="Hochladen" data-toggle="modal" data-target="#modalLoginForm">Hochladen</button>

@@ -230,7 +230,7 @@ $(function() {
 			}			
 		}else{
 			var colosestCard = $(this).closest('.rdf-card');
-			if(colosestCard.children().find('#module').length !==0){
+			if(colosestCard.children().find('#module').length !==0 || colosestCard.children().find('#bildLogo').length !==0 || colosestCard.children().find('#vorlesungsKurzel').length !==0){
 				colosestCard.children().not(':nth-child(2)').remove();				
 			}else{
 				colosestCard.remove();
