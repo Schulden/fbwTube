@@ -28,7 +28,8 @@ $(function() {
 				up: 'fa fa-angle-up',
 				down: 'fa fa-angle-down'
 			},
-		format: 'mm:ss'
+		format: 'mm:ss',
+		defaultDate: moment(new Date()).hours(0).minutes(6).seconds(0).milliseconds(0)
 	});
 	
 	//SPARQL-Query Einfeugen
@@ -475,6 +476,7 @@ $(function() {
 		inputFormDuration.setAttribute('type', 'text');
 		inputFormDuration.id = 'schemaDuration'+chapter;
 		labelFormDuration.setAttribute('for', 'schemaDuration'+chapter);
+		labelFormDuration.classList.add('active');
 		labelFormDuration.innerHTML = 'Laufzeit des Clips';	
 		divFormDuration.appendChild(inputFormDuration);
 		divFormDuration.appendChild(labelFormDuration);
@@ -496,7 +498,8 @@ $(function() {
 				up: 'fa fa-angle-up',
 				down: 'fa fa-angle-down'
 			},
-			format: 'mm:ss'
+			format: 'mm:ss',
+			defaultDate:moment(new Date()).hours(0).minutes(6).seconds(0).milliseconds(0)
 		});
 			
 		
