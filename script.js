@@ -63,7 +63,7 @@ $(function() {
 	});
 	
 	//SELECT LECTURER FROM KNOLEDGE GRAPH	
-	var personQuery = "SELECT ?name ?email WHERE { ?person  a <https://bmake.th-brandenburg.de/vidp%23Lecturer>; <http://www.w3.org/2000/01/rdf-schema%23label>  ?name; <https://schema.org/email> ?email. };";
+	var personQuery = "SELECT ?person ?name ?email WHERE { ?person  a <https://bmake.th-brandenburg.de/vidp%23Lecturer>; <http://www.w3.org/2000/01/rdf-schema%23label>  ?name; <https://schema.org/email> ?email. };";
 	var lectureSeriesQuery = "SELECT ?name WHERE { ?lectureSeries  a <https://bmake.th-brandenburg.de/vidp%23LectureSeries>; <https://schema.org/name>  ?name .};"
 	var moduleQuery = "SELECT * WHERE { ?Module  a <https://bmake.th-brandenburg.de/vidp%23Module> .}";
 	var thumbnailQuery = "SELECT * WHERE { ?thumbnail a <https://schema.org/ImageObject> .}";
@@ -75,14 +75,15 @@ $(function() {
 	  cache: false,
 	  dataType: 'json', 
 	  success: function(successData) {
-		var trys = $('.multiple-lecture-name');
+		var lectuerNamesForAppend = $('.multiple-lecture-name');
 
 		$.each(successData.results.bindings, function( index, value) {
 			var optionForm = document.createElement('option');
 			optionForm.value = value.name.value;
 			optionForm.innerHTML = value.name.value;
 			optionForm.dataset.email = value.email.value;
-			trys.append(optionForm);
+			optionForm.dataset.url = value.person.value.split('#')[1];
+			lectuerNamesForAppend.append(optionForm);
 		});
 	  },
 	  error: function(errorText) {
@@ -989,6 +990,8 @@ function addRdfPrefix(formDataToObjekt) {
 	var vdipLectureSeriesDe = formDataToObjekt["vdipLectureSeriesDe"];
 	var vdipLectureSeriesEn = formDataToObjekt["vdipLectureSeriesEn"];	
 	var modulNumber = $('[id^="vdipModuleTitleId"]').length;
+	var lecturerList = $('[name="states[]"]').val();
+	var addNewLecturer = $('form#jsonDataFom').find('[id^="formGroupExampleInputNew"]');
 	
 
 	var rdfPrefix = {
@@ -1024,9 +1027,28 @@ function addRdfPrefix(formDataToObjekt) {
 				}
 			}
 			
+			//Lecturer List
+			if(lecturerList.length !== 0) {
+				for(var c=0; c < lecturerList.length; c++){
+					var lecturerUrl = $('.multiple-lecture-name option[value="'+lecturerList[c]+'"]');
+					Object.assign(obj, {[vide+' schema&colon;creator vide&colon;'+lecturerUrl.data().url] : '.',});	
+				}
+			}
+			if(addNewLecturer.length !== 0){
+				var lecturerCount = $('form#jsonDataFom').find('[name^="lecturerName"]');
+				for(var d=1; d <= lecturerCount.length; d++) {
+					var name = $('[name="lecturerName'+d+'"]').val();
+					var nachname = $('[name="lecturerNachname'+d+'"]').val();
+					var nameWithoutSpaces = name.replace(/\s+/g,'');
+					var nachnameWithoutSpaces = nachname.replace(/\s+/g,'');
+					var rdfName = nameWithoutSpaces + nachnameWithoutSpaces;
+					Object.assign(obj, {[vide+' schema&colon;creator vide&colon;'+rdfName] : '.'});	
+					
+				}
+			}
+			
 			var count = (i < 10 ? '0' : '') + i;
 			var schemaHeadlineDe = formDataToObjekt["schemaHeadlineDe"+(i+1)];
-			//var schemaHeadlineEn = formDataToObjekt["schemaHeadlineEn"+(i+1)];
 			var schemaDuration = $('[id="schemaDuration'+i+'"]').val();
 			var minutes = schemaDuration.split(':')[0];
 			var seconds = ((typeof schemaDuration.split(':')[1] === 'undefined') ? '0' : schemaDuration.split(':')[1]);
@@ -1101,17 +1123,15 @@ function addRdfPrefix(formDataToObjekt) {
 		}
 	}
 	
-	//ADD NEW LECTURER	
-	var addNewLecturer = $('form#jsonDataFom').find('[id^="formGroupExampleInputNew"]');
-	
+	//ADD NEW LECTURER		
 	if(addNewLecturer.length !== 0){
 		var newLecturerObject = {};
 		var lecturerCount = $('form#jsonDataFom').find('[name^="lecturerName"]');
 		for(var i=1; i <= lecturerCount.length; i++) {
 			var name = $('[name="lecturerName'+i+'"]').val();
 			var nachname = $('[name="lecturerNachname'+i+'"]').val();
-			var nameWithoutSpaces = name.replace(/\s+/g,'')
-			var nachnameWithoutSpaces = nachname.replace(/\s+/g,'')
+			var nameWithoutSpaces = name.replace(/\s+/g,'');
+			var nachnameWithoutSpaces = nachname.replace(/\s+/g,'');
 			var rdfName = nameWithoutSpaces + nachnameWithoutSpaces;
 			var label = $('[name="lecturerLabel'+i+'"]').val();
 			var email = $('[name="lecturerEmail'+i+'"]').val();
