@@ -19,8 +19,10 @@ Einige wichtige Ressourcen vorab:
 
 Verwendete Technologien:
 - JavaScript
-    *jQuery
-    *AJAX
+
+    •jQuery
+    
+    •AJAX
 - HTML5
 - CSS3
 
