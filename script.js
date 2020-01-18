@@ -1217,7 +1217,7 @@ function addSuccessAlert() {
 
 	divAlert.classList.add('alert', 'alert-success', 'alert-dismissible', 'fade', 'show');
 	divAlert.setAttribute('role', 'alert');
-	spanAlert.innerHTML = 'Die Daten wurden erfolgreich &uuml;bertragen;!';
+	spanAlert.innerHTML = 'Die Daten wurden erfolgreich &uuml;bertragen!';
 	buttonAlert.classList.add('close');
 	buttonAlert.setAttribute('type', 'button');
 	buttonAlert.setAttribute('data-dismiss', 'alert');
