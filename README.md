@@ -3,6 +3,7 @@
 Dieses Projekt hat im Rahmen der Lehrveranstaltung "Enterprise Knowledge Grapg Implementation" im Studiengang Wirtschaftsinformatik (3. Semester) der TH Brandenburg und Betreuung von Fr. Prof. Dr. Vera G. Meister (Auftraggeber) und Fr. Wenxin Hu stattgefunden. Das Projektteam besteht aus: Cristian Cananau, Marcel Cikus, Jennifer Ferle, Shyshlin Juri und Dennis Schulz.
 
 Ziel des Projektes war es, für die bestehnde Videoplattform "fbwTube" der Hochschule eine neue, vom Auftraggeber vorgegebene Architektur für das Einpflegen von Informationen rund um das zu veröffentlichende Video durch den Bearbeiter zu implementieren. Orientiert wurde sich dabei an: 
+
 <Bild "New Architecture with fbwTube KG Editor" Seite 10 Einführungsfolie>
 
 Die Herausforderung war dabei, dass auf Basis der Nutzereingaben (Bearbeiter) über ein Web-Formular sowohl ein JSON-File, welches dann über FTB auf den Web-Server gelangt, also auch ein RDF-File, welches mit der Graph-Datenbank OntoWiki syncronisiert wird, erstellt wird. 
