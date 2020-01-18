@@ -17,6 +17,12 @@ Einige wichtige Ressourcen vorab:
 
 ## WICHTIGER HINWEIS: Für die Benutzung des Tools ist die aktuelle Version des Internetbrowsers Mozilla FireFox notwendig!
 
+Verwendete Technologien:
+- JavaScript
+    *jQuery
+    *AJAX
+- HTML5
+- CSS3
 
 
 
