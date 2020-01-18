@@ -24,5 +24,43 @@ Verwendete Technologien:
 - HTML5
 - CSS3
 
+## Erläuterung ausgewählter Codes
+
+Holen der Daten aus der DB mit jQuery und AJAX:
+´
+var lectureSeriesQuery = "SELECT ?name WHERE { ?lectureSeries  a <https://bmake.th-brandenburg.de/vidp%23LectureSeries>; <https://schema.org/name>  ?name .};"
+´
+
+Hierbei wird eine Variable lectureSeriesQuery erstellt, welche über eine einfache SELECT-Abfrage entsprechende Daten aus der OntoWiki-Datenbank zieht.
+´
+$.ajax({
+	  type: "POST",
+	  url: 'http://fbwsvcdev.fh-brandenburg.de/OntoWiki/sparql?query=' + lectureSeriesQuery,
+	  cache: false,
+	  dataType: 'json', 
+	  success: function(successData) {
+		var lectureSeries = $('#lectureSeries');
+		lectureSeries.empty();
+
+		$.each(successData.results.bindings, function( index, value) {
+			var optionForm = document.createElement('option');
+			optionForm.value = value.name.value;
+			lectureSeries.append(optionForm);
+		});
+	  $('[name="lectureSeriesName"]').trigger('focusin');
+	  },
+	  error: function(errorText) {
+		 console.log( errorText );
+		 addWarningAlert();
+	  }
+	});
+´
+
+Mit hilfe von AJAX wird eine POST-request an den Server ´http://fbwsvcdev.fh-brandenburg.de/OntoWiki/sparql?query=´ gesendet. Diese Anfrage erwartet einen JSON-Datentyp. Wenn der POST erfolgreich durchgeführt wurde, dann werden die Daten als Option (select) in einem HTML eingefügt. Die Erstellung einer solchen Option wird durch den Befehl ´document.createElement('option')´ realisiert. Der select wird über ´var lectureSeries = $('#lectureSeries')´ deklariert und die option ´lectureSeries.append(optionForm)´ in dem select eingefügt. Wenn der POST nicht funktioniert wird eine Error-Message auf der KOnsole ausgegeben und zusätzlich eine Meldung im HTML genertiert ´addWarningAlert()´. 
+
+
+
+
+
 
 
