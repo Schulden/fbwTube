@@ -988,7 +988,7 @@ function addRdfPrefix(formDataToObjekt) {
 	var schemaHeadlineEnTitle = formDataToObjekt.schemaHeadlineEn;
 	var schemaInLanguage = formDataToObjekt.schemaInLanguage;
 	var today = new Date();
-	var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+	var date = today.getFullYear()+'-'+(today.getMonth()< 9 ? '0' + (today.getMonth()+1) : today.getMonth()+1)+'-'+today.getDate();
 	var lectureSeriesName = formDataToObjekt.lectureSeriesName.replace( /\s/g, '');
 	var lectureSeriesNameWithSpace = formDataToObjekt.lectureSeriesName;
 	var moduleName = formDataToObjekt.moduleName;
