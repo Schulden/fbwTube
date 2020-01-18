@@ -26,7 +26,7 @@ Verwendete Technologien:
 
 ## Erläuterung ausgewählter Codes
 
-###Beispiel von Queries
+### Beispiel von Queries
 Holen der Daten aus der DB mit jQuery und AJAX:
 ´
 var lectureSeriesQuery = "SELECT ?name WHERE { ?lectureSeries  a <https://bmake.th-brandenburg.de/vidp%23LectureSeries>; <https://schema.org/name>  ?name .};"
@@ -59,7 +59,7 @@ $.ajax({
 
 Mit hilfe von AJAX wird eine POST-request an den Server ```http://fbwsvcdev.fh-brandenburg.de/OntoWiki/sparql?query= ``` gesendet. Diese Anfrage erwartet einen JSON-Datentyp. Wenn der POST erfolgreich durchgeführt wurde, dann werden die Daten als Option (select) in einem HTML eingefügt. Die Erstellung einer solchen Option wird durch den Befehl ```document.createElement('option')``` realisiert. Der select wird über ```var lectureSeries = $('#lectureSeries')``` deklariert und die option ```lectureSeries.append(optionForm)``` in dem select eingefügt. Wenn der POST nicht funktioniert wird eine Error-Message auf der KOnsole ausgegeben und zusätzlich eine Meldung im HTML genertiert ```addWarningAlert()```. So wird es auch für die anderes queries gemacht (z.B. die personQuery).
 
-###Einfügen eines neuen Chapters
+### Einfügen eines neuen Chapters
 Der folgende Code-Ausschnitt zeigt, wie ein neues Chapter in HTML angelegt werden kann. Dazu wird ein Event angelegt, welches an den Button mit der ID ```addChapter```  gebunden ist. Zunächst werden die Container, Label und Inputs in dem DOM erstellt und als Variablen deklariert, wie beispielsweise ```var jsonCard = document.createElement('div')```. Zu den divs, labels und inputs werden  Klassen angelegt, beispielsweise ```jsonCard.classList.add('json-card')``` und dazu die anderen elemente (z.B.: divs, inputs, labels) beigefügt ```jsonCard.appendChild(divFormTrash)```. Danach werden die Element in der HTML ```$(jsonCard).insertBefore(this)``` eingefügt.
 
 
