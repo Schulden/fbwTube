@@ -14,7 +14,7 @@ Einige wichtige Ressourcen vorab:
 - Prototyp/ Ergebnis des Projektes, webbasiertes Tool für den Bearbeiter von Videos: http://univera.de/fbwTube_Test/tool/index.html
 - Scrum-Board: https://trello.com/b/w328rYPt/wpm-meister
 
-##wichtiger Hinweis: Für die Benutzung des Tools ist die aktuelle Version des Internetbrowsers Mozilla FireFox notwendig!
+## wichtiger Hinweis: Für die Benutzung des Tools ist die aktuelle Version des Internetbrowsers Mozilla FireFox notwendig!
 
 
 
