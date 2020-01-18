@@ -32,6 +32,12 @@ $(function() {
 		defaultDate: moment(new Date()).hours(0).minutes(6).seconds(0).milliseconds(0)
 	});
 	
+	//Delete on Hidden
+	$(document).on('hidden.bs.modal', '#modalLoginForm', function () {
+		$('#modalLoginForm').remove();
+		$('.modal-backdrop.fade.show').remove();
+	});
+	
 	//SPARQL-Query Einfeugen
 	$(document).on('click', '#login', function(){		
 		var inputPassword = $('#inputPassword').val();
@@ -53,7 +59,8 @@ $(function() {
 				if(errorText.status == 200){
 					location.reload(true);
 				}else{
-					$('#modalLoginForm').modal('hide');
+					$('#modalLoginForm').remove();
+					$('.modal-backdrop.fade.show').remove();
 					console.log(errorText);
 					addWarningAlert();	 
 				}
