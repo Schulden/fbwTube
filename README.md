@@ -299,5 +299,117 @@ Der folgende Code-Ausschnitt zeigt, wie ein Chapter aus HTML gelöscht werden ka
 
 
 
+### Anzeigen von JSON
+Der folgende Code-Ausschnitt zeigt, wie JSON angezeigt wird. Dazu wird ein Event angelegt, welches an den Inputs von Form mit dem ID ```form#jsonDataFom``` gebunden ist. Zunächst wird den HTML-Formular als JS-Object serialisiert und als Variable ```formDataToObjekt``` deklariert. Zu dem Object wird inzwischen die Links eingefügt und den Lecturer mit dem Name, Vorname, Titel und die Email in der richtige Reihenfolge. Damit den serelisierten JS-Object als JSON angezeigt wird, wird dieses Object in den JSON umgewandelt und als Variable ```serialisedDataObjekt``` deklariert. Mit dem ```syntaxHighlight``` wird die entsprechende Farbe für jedes Element eingefügt, damit man die einzelne Elemente wie z.B.: ```{}```, ```:```, ```;``` usw. und diese als ```pre``` DOM-Element eingefügt.
+
+
+```
+	$(document).on('input', 'form#jsonDataFom', function(){
+		var formDataToObjekt = $(this).serializeObject();
+		
+		//Add Lecture Name to RDF
+		var videoLecture = $('[name="videoLecture"]');
+		videoLecture.val($('#lectureShortcuts').val());
+		videoLecture.trigger('focusin');
+		
+		//Add Lecture Title to RDF
+		var titleVorlesungDe = $('[name="schemaHeadlineDe"]');
+		var titleVorlesungEn = $('[name="schemaHeadlineEn"]');
+		titleVorlesungDe.val($('#titelVorlesung').val());
+		titleVorlesungEn.val($('#titelVorlesung').val());
+		titleVorlesungDe.trigger('focusin');
+		titleVorlesungEn.trigger('focusin');
+		
+		//Add Clip Title to RDF
+		var titleClipNumber = $('#json [id^=titleClip]').length;
+		for(var i=0; i < titleClipNumber; i++) {
+			$('[name="schemaHeadlineDe'+(i+1)+'"]').val($('#titleClip'+i).val());
+			$('[name="schemaHeadlineDe'+(i+1)+'"]').trigger('focusin');
+		}
+
+		if(formDataToObjekt.states !== undefined){
+			formDataToObjekt.courses[0].lecturer = formDataToObjekt.states.join(', ');
+			delete formDataToObjekt.states
+		}
+		
+		//ADD VIMEO LINK
+		for(var i = 0; i < formDataToObjekt.courses[0].chapters.length; i++){
+			formDataToObjekt.courses[0].chapters[i].videos.url_teacher = 'https://vimeo.com/' + formDataToObjekt.courses[0].chapters[i].videos.url_teacher;
+			formDataToObjekt.courses[0].chapters[i].videos.url_presentation = 'https://vimeo.com/' + formDataToObjekt.courses[0].chapters[i].videos.url_presentation;
+		}
+		
+		//ADDING NEW LECTURER TO JSON
+		var newLecturer = $(this).find('[id^="formGroupExampleInputNew"]');
+		if(newLecturer.length !== 0){
+			var newLecturersNames = [];
+			$.each($('[name^="lecturerLabe"][id^="formGroupExampleInputNew"]'), function( index, value) {
+				newLecturersNames.push(value.value);
+			});
+			//ADD Name to JSON-View
+			$.each($('[name^="lecturerName"][id^="formGroupExampleInputNew"]'), function( index, value) {				
+				if(value.value){					
+					if(newLecturersNames[index].includes('Prof.') || newLecturersNames[index].includes('Prof. Dr.') || newLecturersNames[index].includes('Dr.')){						
+						newLecturersNames[index] = newLecturersNames[index] + ' ' + value.value;						
+					}else{
+						if(newLecturersNames[index].includes(',')){
+							newLecturersNames[index] = value.value + ' ' + newLecturersNames[index];
+						}else{
+							newLecturersNames[index] = value.value + ', ' + newLecturersNames[index];
+						}						
+					}
+				}
+			});
+			//ADD Familiename to JSON-View
+			$.each($('[name^="lecturerNachname"][id^="formGroupExampleInputNew"]'), function( index, value) {
+				if(value.value){
+					if(newLecturersNames[index].includes('Prof.') || newLecturersNames[index].includes('Prof. Dr.') || newLecturersNames[index].includes('Dr.')){						
+						newLecturersNames[index] = newLecturersNames[index] + ' ' + value.value;						
+					}else{
+						if(newLecturersNames[index].includes(',')){
+							newLecturersNames[index] = newLecturersNames[index].split(',')[0]+' '+value.value+','+newLecturersNames[index].split(',')[1];
+						}else{
+							newLecturersNames[index] = value.value + ', ' + newLecturersNames[index];
+						}		
+					}
+				}
+			});			
+			//ADD Email to JSON-View
+			var newLecturersEmail = [];
+			$.each($('[name^="lecturerEmail"][id^="formGroupExampleInputNew"]'), function( index, value) {
+				newLecturersEmail.push(value.value);
+			});
+			
+			if(formDataToObjekt.courses[0].lecturer !== '') {
+				formDataToObjekt.courses[0].lecturer = formDataToObjekt.courses[0].lecturer+', '+newLecturersNames.join(', ');
+				formDataToObjekt.courses[0].lecturerMail = formDataToObjekt.courses[0].lecturerMail+', '+newLecturersEmail.join(', ');
+			}else{
+				formDataToObjekt.courses[0].lecturer = formDataToObjekt.courses[0].lecturer+newLecturersNames.join(', ');
+				formDataToObjekt.courses[0].lecturerMail = formDataToObjekt.courses[0].lecturerMail+newLecturersEmail.join(', ');
+			}
+			
+			$.each(newLecturer, function( index, value) {
+				delete formDataToObjekt[value.name];
+			});
+		}
+		
+		var serialisedDataObjekt = JSON.stringify(formDataToObjekt, undefined, 4);
+
+		forCopy = serialisedDataObjekt;
+		var forAppend = syntaxHighlight(serialisedDataObjekt);
+		
+		var pre = document.createElement('pre');
+		pre.innerHTML = forAppend;
+		
+		var jsonDataContainer = $("#jsonData");
+		
+		if(jsonDataContainer.length) {
+			jsonDataContainer.empty();
+			jsonDataContainer.append(pre);
+		}else{
+			jsonDataContainer.append(pre);
+		}
+	});
+```
+
 
 
