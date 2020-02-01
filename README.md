@@ -182,7 +182,120 @@ Der folgende Code-Ausschnitt zeigt, wie ein neues Chapter in HTML angelegt werde
 	});
 ```
 
+### Löschen eines neuen Chapters
+Der folgende Code-Ausschnitt zeigt, wie ein Chapter aus HTML gelöscht werden kann. Dazu wird ein Event angelegt, welches an den Button mit dem Data-Atribut ```[data-remove="delete-element"]```  gebunden ist. Zunächst wird überprüft ob den zu glöschenden Container als von JSON-Formular oder von RDF-Formular zu löschen ist. Dafür wurde die variable ```closestCard``` deklariert und in IF-ELSE-Bedingung verwendet. Der zu löschende Container wird als variable ```removeElementNumber``` deklariert. Um die Containers von DOM zu löschen wurde die Funktion ```remove()``` verwendet und zwar ```closestCard.remove();```. Um die aktuellen IDs überall zu bekommen, werden bei jedem Löschen des Containers die aktuelle Reihnfolge geändert.
 
+
+```
+	$(document).on('click', '[data-remove="delete-element"]', function(){
+		var closestCard = $(this).closest('.json-card');
+		if(closestCard.length !== 0) {
+			var removeElementNumber = parseInt($(this).closest('.json-card').find('.form-control')[0].id.match(/\d+/)[0]);
+			$('[name="schemaHeadlineDe'+(removeElementNumber+1)+'"]').closest('.md-form').remove();
+			
+			var personNamesSelect = $('[name^="personSelect"]');
+			if(personNamesSelect.length !== 0){
+				var firstName = closestCard.find('[name^="lecturerName"]').val();
+				var lastName = closestCard.find('[name^="lecturerNachname"]').val();
+				for(var i=0; i < personNamesSelect.length; i++) {
+					$('[name="'+personNamesSelect[i].name+'"] option[value="'+firstName+lastName+'"]').remove();
+				}
+			}
+
+			//DELETE CARD
+			closestCard.remove();
+			
+			//ADD actual Number to Lecturers
+			var lecturerName = $('[name^="lecturerName"]');
+			var lecturerNachname = $('[name^="lecturerNachname"]');
+			var lecturerLabel = $('[name^="lecturerLabel"]');
+			var lecturerEmail = $('[name^="lecturerEmail"]');
+			if(lecturerName.length !== 0) {				
+				for(var i=0; i < lecturerName.length; i++){
+					//Change Name for JSON
+					lecturerName[i].name = 'lecturerName'+(i+1);
+					lecturerNachname[i].name = 'lecturerNachname'+(i+1);
+					lecturerLabel[i].name = 'lecturerLabel'+(i+1);
+					lecturerEmail[i].name = 'lecturerEmail'+(i+1);
+				}
+			}
+			
+			//ADD actual Number to Clips
+			var chaptersClip = $('[id^="titleClip"]');
+			var speakerClip = $('[id^="speakerClip"]');
+			var screencastClip = $('[id^="screencastClip"]');
+			var schemaDuration = $('[id^="schemaDuration"]');
+			var labelForTitleId = $('[for^="titleClip"]');
+			var labelForSpeakerClipId = $('[for^="speakerClip"]');
+			var labelForScreencastClipId = $('[for^="screencastClip"]');
+			var labelForSchemaDurationId = $('[for^="schemaDuration"]');			
+			for(var i=0; i < chaptersClip.length; i++){
+				//Change ID for JSON
+				chaptersClip[i].id = 'titleClip'+i;
+				speakerClip[i].id = 'speakerClip'+i;
+				screencastClip[i].id = 'screencastClip'+i;
+				schemaDuration[i].id = 'schemaDuration'+i;
+				
+				//Change for Id for Labels
+				labelForTitleId[i].setAttribute('for', 'titleClip'+i);
+				labelForSpeakerClipId[i].setAttribute('for', 'speakerClip'+i);
+				labelForScreencastClipId[i].setAttribute('for', 'screencastClip'+i);
+				labelForSchemaDurationId[i].setAttribute('for', 'schemaDuration'+i);				
+				
+				//Change Name for JSON
+				chaptersClip[i].name = 'courses[0][chapters]['+i+'][title]';
+				speakerClip[i].name = 'courses[0][chapters]['+i+'][videos][url_teacher]';
+				screencastClip[i].name = 'courses[0][chapters]['+i+'][videos][url_presentation]';
+			}			
+		}else{
+			var colosestCard = $(this).closest('.rdf-card');
+			if(colosestCard.children().find('#module').length !==0 || colosestCard.children().find('#bildLogo').length !==0 || colosestCard.children().find('#vorlesungsKurzel').length !==0){
+				colosestCard.children().not(':nth-child(2)').remove();				
+			}else{
+				colosestCard.remove();
+			}				
+			//ADD actual Number to Moduls
+			var vdipModuleTitle = $('[name^="vdipModuleTitle"]');
+			var vdipModuleNameDe = $('[name^="vdipModuleNameDe"]');
+			var vdipModuleNameEn = $('[name^="vdipModuleNameEn"]');
+			var schemaIsPartOfModul = $('[name^="schemaIsPartOfModul"]');
+			var schemaModuleUrl = $('[name^="schemaModuleUrl"]');
+			var personSelect = $('[name^="personSelect"]');
+			var vdipModuleTitleIdFor = $('[for^="vdipModuleTitleId"]');
+			var vdipModuleNameDeIdFor = $('[for^="vdipModuleNameDeId"]');
+			var vdipModuleNameEnIdFor = $('[for^="vdipModuleNameEnId"]');
+			var schemaIsPartOfModulIdFor = $('[for^="schemaIsPartOfModulId"]');
+			var schemaModuleUrlIdFor = $('[for^="schemaModuleUrlId"]');
+			var personSelectIdFor = $('[for^="personSelectId"]');
+			for(var i=0; i < vdipModuleTitle.length; i++){
+				//Change ID for JSON
+				vdipModuleTitle[i].id = 'vdipModuleTitleId'+i;
+				vdipModuleNameDe[i].id = 'vdipModuleNameDeId'+i;
+				vdipModuleNameEn[i].id = 'vdipModuleNameEnId'+i;
+				schemaIsPartOfModul[i].id = 'schemaIsPartOfModulId'+i;
+				schemaModuleUrl[i].id = 'schemaModuleUrlId'+i;
+				personSelect[i].id = 'personSelectId'+i;
+				
+				//Change for Id for Labels
+				vdipModuleTitleIdFor[i].setAttribute('for', 'vdipModuleTitleId'+i);
+				vdipModuleNameDeIdFor[i].setAttribute('for', 'vdipModuleNameDeId'+i);
+				vdipModuleNameEnIdFor[i].setAttribute('for', 'vdipModuleNameEnId'+i);
+				schemaIsPartOfModulIdFor[i].setAttribute('for', 'schemaIsPartOfModulId'+i);
+				schemaModuleUrlIdFor[i].setAttribute('for', 'schemaModuleUrlId'+i);
+				personSelectIdFor[i].setAttribute('for', 'personSelectId'+i);				
+				
+				//Change Name for JSON
+				vdipModuleTitle[i].name = 'vdipModuleTitle'+i;
+				vdipModuleNameDe[i].name = 'vdipModuleNameDe'+i;
+				vdipModuleNameEn[i].name = 'vdipModuleNameEn'+i;
+				schemaIsPartOfModul[i].name = 'schemaIsPartOfModul'+i;
+				schemaModuleUrl[i].name = 'schemaModuleUrl'+i;
+				personSelect[i].name = 'personSelect'+i;
+			}						
+		}
+		$('.form-control').trigger('input');
+	});
+```
 
 
 
