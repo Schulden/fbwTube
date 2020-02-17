@@ -1,4 +1,23 @@
-# fbwTube
+# fbwTube - Enterprise Knowledge Graph Implementierung
+
+Inhaltsverzeichnis
+==============
+
+Aufgabenstellung / Motivation
+
+Prozessmodell
+
+Beschreibung des Prozessmodells
+
+Technische Umsetzung 
+
+Fallstudie
+
+
+
+Aufgabenstellung / Motivation
+==============
+
 
 Dieses Projekt hat im Rahmen der Lehrveranstaltung "Enterprise Knowledge Graph Implementation" im Studiengang Wirtschaftsinformatik (3. Semester) der TH Brandenburg unter Betreuung von Fr. Prof. Dr. Vera G. Meister (Auftraggeber) und Fr. Wenxin Hu stattgefunden. Das Projektteam besteht aus: Cristian Cananau, Marcel Cikus, Jennifer Ferle, Shyshlin Juri und Dennis Schulz. Gearbeitet wurde auf Basis von Scrum (eigentständige Pulls von Aufgaben durch das Team).
 
@@ -6,6 +25,11 @@ Ziel des Projektes war es, für die bestehende Videoplattform "fbwTube" der Hoch
 
 ![Alt text](/Architektur.PNG?raw=true "Architektur")
 
+Anforderungen
+--------------
+
+Ressourcen 
+--------------
 
 Die Herausforderung war dabei, dass auf Basis der Nutzereingaben (Bearbeiter) über ein Web-Formular sowohl ein JSON-File, welches dann über FTB auf den Web-Server gelangt, also auch ein RDF-File, welches mit der Graph-Datenbank OntoWiki syncronisiert wird, erstellt wird. 
 
