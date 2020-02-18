@@ -436,6 +436,8 @@ $(document).on('input', 'form#jsonDataFom', function(){
 ```
 
 ### Hochladen von JSON auf dem univera-Server
+
+
 ```
 //UPLOAD JSON AS JSON-FILE
 $('#upload-json').on('click', function(){
@@ -473,3 +475,41 @@ Hier wird ein AJAX-Post gemacht unter dem URL ```file.php```. Es wird ein JSON g
 ```
 
 Der PHP-Code wrtet auf einem JSON-Post mit dem Name filedata ```$_POST['filedata']```. Sobald den JSON-Post gemacht wird, es wird eine JSON-Datei mit dem geposteten Name ```$_POST['filename']``` unter dem ```DOCUMENT_ROOT``` angelegt, was nichts anders als den Ordner ```public_html``` ist. Der JSON-Post wird unter ungeleten Datei gespeichert ```fwrite($file, $data)```. Am Ende muss man umbedingt die Datei schließen ```fclose($file)```.
+
+
+### Hochladen von RDF auf dem OntoWiki
+
+
+```
+//SPARQL-Query Einfeugen
+$(document).on('click', '#login', function(){		
+	var inputPassword = $('#inputPassword').val();
+	var inputUsername = $('#inputUsername').val();
+
+	if(inputUsername && inputPassword){
+		$.ajax({
+		  type: "POST",
+		  url: 'http://'+inputUsername+':'+inputPassword+'@fbwsvcdev.fh-brandenburg.de/OntoWiki/update?query=' + 'http://fbwsvcdev.fh-brandenburg.de/OntoWiki/update?query=INSERT DATA INTO <http://fbwsvcdev.fh-brandenburg.de/OntoWiki/test/> ' + sparqlQuery,
+		  dataType: 'jsonp',
+		  xhrFields : {
+			withCredentials : true
+		  },
+		  contentType: 'application/x-www-form-urlencoded',
+		  success: function(successData) {
+			location.reload(true);
+		  },
+		  error: function(errorText) {
+			if(errorText.status == 200){
+				location.reload(true);
+			}else{
+				$('#modalLoginForm').remove();
+				$('.modal-backdrop.fade.show').remove();
+				console.log(errorText);
+				addWarningAlert();	 
+			}
+		  }
+		});
+	}
+});
+```
+Beim Clicken auf dem Hochladen-Button wird die Login-Daten (Benutzername und Passwort) geholt und in der URL gepackt, wo auch die Query mit den ganzen Daten geschrieben wird ```'http://'+inputUsername+':'+inputPassword+'@fbwsvcdev.fh-brandenburg.de/OntoWiki/update?query=' + 'INSERT DATA INTO <http://fbwsvcdev.fh-brandenburg.de/OntoWiki/test/> ' + sparqlQuery```. Die Query fügt die Daten in ```OntoWiki/test``` ein. Die ```sparqlQuery``` setzt sich aus dem RDF-Formular zusammen. Der Datentyp ist hier ```jsonp```, weil wir eine Cross-Origin haben, und mit einem einfachen JSON wird es nicht klappen, da der ```fbwsvcdev.fh-brandenburg.de/OntoWiki``` Server die ganzen Requests blokiert.
