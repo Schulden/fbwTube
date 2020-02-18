@@ -435,5 +435,41 @@ $(document).on('input', 'form#jsonDataFom', function(){
 });
 ```
 
+### Hochladen von JSON auf dem univera-Server
+```
+//UPLOAD JSON AS JSON-FILE
+$('#upload-json').on('click', function(){
+	if(forCopy !== null){
+	  $.ajax({
+			type: 'POST',
+			url: 'file.php',
+			data: {filedata: forCopy, filename: $('#lectureShortcuts').val()},
+			success: function(result) {
+				console.log('Daten wurden hochgeladen.');
+				addSuccessAlert();
+			},
+			error: function(result) {
+				console.log(result);
+				addWarningAlert();
+			}
+		});
+	}
+});
+```
+Hier wird ein AJAX-Post gemacht unter dem URL ```file.php```. Es wird ein JSON gepostet, mit den Keys ```filedata``` und ```filename```. Die beiden sind der JSON an sich und den Name der Datei.
 
 
+```
+<?php
+    if (isset($_POST['filedata'])){
+        $data = $_POST['filedata'];
+        $fileName = $_POST['filename'];
+        //DOCUMENT_ROOT ist public_html (hier data als Folder eingeben)
+        $file = fopen($_SERVER['DOCUMENT_ROOT'].'/'.$fileName.'.json', 'w+');
+        fwrite($file, $data);
+        fclose($file);
+    }
+?>
+```
+
+Der PHP-Code wrtet auf einem JSON-Post mit dem Name filedata ```$_POST['filedata']```. Sobald den JSON-Post gemacht wird, es wird eine JSON-Datei mit dem geposteten Name ```$_POST['filename']``` unter dem ```DOCUMENT_ROOT``` angelegt, was nichts anders als den Ordner ```public_html``` ist. Der JSON-Post wird unter ungeleten Datei gespeichert ```fwrite($file, $data)```. Am Ende muss man umbedingt die Datei schließen ```fclose($file)```.
