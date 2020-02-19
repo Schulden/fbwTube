@@ -13,8 +13,8 @@ Inhaltsverzeichnis
 
 
 
-1. Allgemeine Projektinformationen
-==============
+# 1. Allgemeine Projektinformationen
+
 
 
 Dieses Projekt hat im Rahmen der Lehrveranstaltung "Enterprise Knowledge Graph Implementation" im Studiengang Wirtschaftsinformatik (3. Semester) der TH Brandenburg unter Betreuung von Fr. Prof. Dr. Vera G. Meister (Auftraggeber) und Fr. Wenxin Hu stattgefunden. Das Projektteam besteht aus: Cristian Cananau, Marcel Cikus, Jennifer Ferle, Shyshlin Juri und Dennis Schulz. Gearbeitet wurde auf Basis von Scrum (eigentständige Pulls von Aufgaben durch das Team).
@@ -33,15 +33,14 @@ Ziel des Projektes war es, für die bestehende Videoplattform "fbwTube" der Hoch
 
 
 
-2. Beschreibung der Software Architektur
-==========
+# 2. Beschreibung der Software Architektur
+
 
 Auf Basis der Nutzereingaben (Editor) über ein Web-Formular soll sowohl ein JSON-File, welches dann über FTB auf den Web-Server gelangt, also auch ein RDF-File, welches mit der Graph-Datenbank OntoWiki synchronisiert wird, erstellt werden. Im späteren Kapitel zum Source-Code wird aufgezeigt, wie dies technisch umsetzbar ist (verwendbar auch für ähnliche Projekte). Folgende Grafik fasst die Architektur zusammen:
 
 ![Software Architekture](/Architektur.PNG?raw=true "Architektur")
 
-3. Zugrundeliegendes Wissensschema
-==========
+# 3. Zugrundeliegendes Wissensschema
 
 Folgendes RDF-Schema war die Grundlage, zur Gestaltung des RDF-Formulars. Eines der zentralen Elemente ist der „DoubleClip“: Hierbei geht es um zwei Videos – eines, welches den Sprecher zeigt und ein weiteres, welches die zugehörigen Inhalte (in Form von Folien) zeigt:
 
