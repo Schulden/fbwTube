@@ -33,6 +33,7 @@ Inhaltsverzeichnis
 Dieses Projekt hat im Rahmen der Lehrveranstaltung "Enterprise Knowledge Graph Implementation" im Studiengang Wirtschaftsinformatik (3. Semester Master) der TH Brandenburg unter Betreuung von Fr. Prof. Dr. Vera G. Meister (Auftraggeber) und Fr. Wenxin Hu stattgefunden. Das Projektteam besteht aus: Cristian Cananau, Marcel Cikus, Jennifer Ferle, Shyshlin Juri und Dennis Schulz. Gearbeitet wurde auf Basis von Scrum (eigentständige Pulls von Aufgaben durch das Team).
 
 Ziel des Projektes war es, für die bestehende Videoplattform "fbwTube" der Hochschule eine neue, vom Auftraggeber vorgegebene Architektur für das Einpflegen von Informationen rund um das zu veröffentlichende Video durch den Bearbeiter zu implementieren.
+
 WICHTIGER HINWEIS: Für die Benutzung des Tools ist die aktuelle Version des Internetbrowsers Mozilla Firefox notwendig!
 
 ### Ressourcen:
@@ -41,7 +42,7 @@ WICHTIGER HINWEIS: Für die Benutzung des Tools ist die aktuelle Version des Int
 
 - Entwickeltes Tool: http://univera.de/fbwTube_Test/tool/index.html
 
-- Zugehöriges OntoWiki (Zugang erforderlich!):
+- Zugehöriges OntoWiki (Zugang erforderlich!): http://fbwsvcdev.fh-brandenburg.de/OntoWiki/model/info/?m=http%3A%2F%2Ffbwsvcdev.fh-brandenburg.de%2FOntoWiki%2Ftest%2F
 
 - Scrum-Board: https://trello.com/b/w328rYPt/wpm-meister
 
