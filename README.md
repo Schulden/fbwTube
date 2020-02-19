@@ -58,14 +58,14 @@ WICHTIGER HINWEIS: Für die Benutzung des Tools ist die aktuelle Version des Int
 
 Auf Basis der Nutzereingaben (Editor) über ein Web-Formular soll sowohl ein JSON-File, welches dann über FTB auf den Web-Server gelangt, also auch ein RDF-File, welches mit der Graph-Datenbank OntoWiki syncronisiert wird, erstellt werden. Im späteren Kapitel zum Source-Code wird aufgezeigt, wie dies technisch umsetzbar ist (verwendbar auch für ähnliche Projekte). Folgende Grafik fasst die Architektur zusammen:
 
-![Alt text](/img/architecture.PNG?raw=true "Architektur")
+![Alt text](https://github.com/Schulden/fbwTube/blob/master/img/architecture.PNG?raw=true "Architektur")
 
 3 Zugrundeliegendes Wissensschema
 ========
 
 Folgendes RDF-Schema war die Grundlage, zur Gestaltung des RDF-Formulars. Eines der zentralen Elemente ist der „DoubleClip“: Hierbei geht es um zwei Videos – eines, welches den Sprecher zeigt und ein weiteres, welches die zugehörigen Inhalte (in Form von Folien) zeigt:
 
-![Alt text](/img/schema.PNG?raw=true "Schema")
+![Alt text](https://github.com/Schulden/fbwTube/blob/master/img/schema.PNG?raw=true "Schema")
 
 # 4 User Experience Design 
 
@@ -76,7 +76,7 @@ Dieser Teil der Dokumentation beschreibt das Design der Benutzerinteraktion und 
 
 Die horizontale Informationsarchitektur ist so konzipiert, dass die Inhalte des Informationssystems zugänglich für alle Teilnehmer sein wird. Hiermit wird sichergestellt, dass sowohl die Bedürfnisse der Benutzer, als auch der Betreiber so gut wie möglich erfüllt sind. Das System ist einfach und intuitiv zu bedienen. Es bietet eine schnelle und einfache Orientierung. Des Weiteren passt es sich der Zielgruppe an. 
 
-![Alt text](/img/informationArchi.PNG?raw=true "Architektur")
+![Alt text](https://github.com/Schulden/fbwTube/blob/master/img/informationArchi.PNG?raw=true "Architektur")
 
 ### (IA) Logischer Aufbau: 
 
@@ -89,7 +89,7 @@ Der Übergang zwischen den Seiten ist hierarchisch angeordnet. Hierbei ist die S
 
 Die Struktur und das Hauptkonzept von dem Interface wurden mit Wireframes entworfen. Jede Seite ist nach einer entwickelten Basis-Vorlage gestaltet.
  
- ![Alt text](/img/UI.PNG?raw=true "UI-Prototyp")
+ ![Alt text](https://github.com/Schulden/fbwTube/blob/master/img/UI.PNG?raw=true "UI-Prototyp")
  
 ### API Interface Struktur
 
@@ -98,7 +98,7 @@ Die API hat die Form einer Webseite mit Dateneingabe-Formularen für die beiden 
 
 ## 2.3 User Flow
 
-![Alt text](/img/userflow.png?raw=true "UI-Prototyp")
+![Alt text](https://github.com/Schulden/fbwTube/blob/master/img/userflow.png?raw=true "UI-Prototyp")
 
 User Flow Beschreibung: 
 
