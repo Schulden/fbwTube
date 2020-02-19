@@ -3,56 +3,69 @@
 Inhaltsverzeichnis
 ==============
 
-1. Allgemeine Projektinformationen
-2. Beschreibung der Software Architektur
-3. Zugrundeliegendes Wissensschema
-4. User Experience Design
-5. Beschreibung ausgewählter Teile des Source-Codes
-6. Beispielhafter Use Case
+- 1 Allgemeine Projektinformationen
+
+- 2 Beschreibung der Architektur
+
+- 3 Zugrundeliegendes Wissensschema 
+
+- 4 User Experience Design
+
+	- 4.1 Information Architektur
+
+	- 4.2 Wireframes
+
+	- 4.3 User Flow
+
+	- 4.4 UI-Style-Guide
+
+- 5 Beschreibung ausgewählter Teile des Source-Codes
+
+- 6 Beispielhafter Use Case
 
 
 
 
-# 1. Allgemeine Projektinformationen
+1 Allgemeine Projektinformationen
+==============
 
 
+Dieses Projekt hat im Rahmen der Lehrveranstaltung "Enterprise Knowledge Graph Implementation" im Studiengang Wirtschaftsinformatik (3. Semester Master) der TH Brandenburg unter Betreuung von Fr. Prof. Dr. Vera G. Meister (Auftraggeber) und Fr. Wenxin Hu stattgefunden. Das Projektteam besteht aus: Cristian Cananau, Marcel Cikus, Jennifer Ferle, Shyshlin Juri und Dennis Schulz. Gearbeitet wurde auf Basis von Scrum (eigentständige Pulls von Aufgaben durch das Team).
 
-Dieses Projekt hat im Rahmen der Lehrveranstaltung "Enterprise Knowledge Graph Implementation" im Studiengang Wirtschaftsinformatik (3. Semester) der TH Brandenburg unter Betreuung von Fr. Prof. Dr. Vera G. Meister (Auftraggeber) und Fr. Wenxin Hu stattgefunden. Das Projektteam besteht aus: Cristian Cananau, Marcel Cikus, Jennifer Ferle, Shyshlin Juri und Dennis Schulz. Gearbeitet wurde auf Basis von Scrum (eigentständige Pulls von Aufgaben durch das Team).
+Ziel des Projektes war es, für die bestehende Videoplattform "fbwTube" der Hochschule eine neue, vom Auftraggeber vorgegebene Architektur für das Einpflegen von Informationen rund um das zu veröffentlichende Video durch den Bearbeiter zu implementieren.
+WICHTIGER HINWEIS: Für die Benutzung des Tools ist die aktuelle Version des Internetbrowsers Mozilla Firefox notwendig!
 
-Ziel des Projektes war es, für die bestehende Videoplattform "fbwTube" der Hochschule eine neue, vom Auftraggeber vorgegebene Architektur für das Einpflegen von Informationen rund um das zu veröffentlichende Video durch den Bearbeiter zu implementieren. 
+### Ressourcen:
 
-**WICHTIGER HINWEIS:** Für die Benutzung des Tools ist die aktuelle Version des Internetbrowsers Mozilla FireFox notwendig!
+- Live-Plattform „fbwTube“: https://fbwtube.th-brandenburg.de/OntoWiki/fbwTube/Home.html
 
-**Verwendete Technologien:**
-- JavaScript: 
+- Entwickeltes Tool: http://univera.de/fbwTube_Test/tool/index.html
+
+- Zugehöriges OntoWiki (Zugang erforderlich!):
+
+- Scrum-Board: https://trello.com/b/w328rYPt/wpm-meister
+
+### Verwendete Technologien:
+
+- JavaScript 
 	- jQuery
 	- AJAX
 - HTML5
 - CSS3
 
+2 Beschreibung der Architektur
+==========
 
-**Ressourcen:**
-- Live-Plattform "fbwTube": https://fbwtube.th-brandenburg.de/OntoWiki/fbwTube/Home.html
-- Entwickeltes Tool: http://univera.de/fbwTube_Test/tool/index.html
+Auf Basis der Nutzereingaben (Editor) über ein Web-Formular soll sowohl ein JSON-File, welches dann über FTB auf den Web-Server gelangt, also auch ein RDF-File, welches mit der Graph-Datenbank OntoWiki syncronisiert wird, erstellt werden. Im späteren Kapitel zum Source-Code wird aufgezeigt, wie dies technisch umsetzbar ist (verwendbar auch für ähnliche Projekte). Folgende Grafik fasst die Architektur zusammen:
 
-- zugehöriges OntoWiki (Zugang erforderlich!): http://fbwsvcdev.fh-brandenburg.de/OntoWiki/model/info/?m=http%3A%2F%2Ffbwsvcdev.fh-brandenburg.de%2FOntoWiki%2Ftest%2F
+![Alt text](/img/architecture.PNG?raw=true "Architektur")
 
-- Scrum-Board: https://trello.com/b/w328rYPt/wpm-meister
-
-
-
-# 2. Beschreibung der Software Architektur
-
-
-Auf Basis der Nutzereingaben (Editor) über ein Web-Formular soll sowohl ein JSON-File, welches dann über FTB auf den Web-Server gelangt, also auch ein RDF-File, welches mit der Graph-Datenbank OntoWiki synchronisiert wird, erstellt werden. Im späteren Kapitel zum Source-Code wird aufgezeigt, wie dies technisch umsetzbar ist (verwendbar auch für ähnliche Projekte). Folgende Grafik fasst die Architektur zusammen:
-
-![Software Architekture](/Architektur.PNG?raw=true "Architektur")
-
-# 3. Zugrundeliegendes Wissensschema
+3 Zugrundeliegendes Wissensschema
+========
 
 Folgendes RDF-Schema war die Grundlage, zur Gestaltung des RDF-Formulars. Eines der zentralen Elemente ist der „DoubleClip“: Hierbei geht es um zwei Videos – eines, welches den Sprecher zeigt und ein weiteres, welches die zugehörigen Inhalte (in Form von Folien) zeigt:
 
-![Wissensschema](/Architektur.PNG?raw=true "Architektur")
+![Alt text](/img/schema.PNG?raw=true "Schema")
 
 # 4 User Experience Design 
 
@@ -63,9 +76,9 @@ Dieser Teil der Dokumentation beschreibt das Design der Benutzerinteraktion und 
 
 Die horizontale Informationsarchitektur ist so konzipiert, dass die Inhalte des Informationssystems zugänglich für alle Teilnehmer sein wird. Hiermit wird sichergestellt, dass sowohl die Bedürfnisse der Benutzer, als auch der Betreiber so gut wie möglich erfüllt sind. Das System ist einfach und intuitiv zu bedienen. Es bietet eine schnelle und einfache Orientierung. Des Weiteren passt es sich der Zielgruppe an. 
 
+![Alt text](/img/informationArchi.PNG?raw=true "Architektur")
 
-
-**(IA) Logischer Aufbau:**
+### (IA) Logischer Aufbau: 
 
 Der Zugriff auf die API erfolgt über die Hauptwebsite der fbwTube. Die API hat einen 3-Seiten-Architektur. Jede Seite verfügt über ein Formular zum Ausfüllen des entsprechenden Datenformats (JSON und RDF). Auf jeder Seite gibt es die Möglichkeit, eine Datei zu kopieren, herunterzuladen oder hochzuladen. 
 
@@ -76,38 +89,33 @@ Der Übergang zwischen den Seiten ist hierarchisch angeordnet. Hierbei ist die S
 
 Die Struktur und das Hauptkonzept von dem Interface wurden mit Wireframes entworfen. Jede Seite ist nach einer entwickelten Basis-Vorlage gestaltet.
  
+ ![Alt text](/img/UI.PNG?raw=true "UI-Prototyp")
  
-Konzept und Struktur der Hauptseite
-
-**API Interface Struktur**
+### API Interface Struktur
 
 Die API hat die Form einer Webseite mit Dateneingabe-Formularen für die beiden verschiedenen Formate. Das Formular besteht aus zwei Teilen. Rechts sind die Formularfelder, in die alle benötigten Informationen eingetragen werden. Links werden die Daten parallel im ausgewählten Format (JSON oder RDF) angezeigt und zeigen dem User eine Live-Übertragung von den Informationen in rdf. Der Übergang zwischen Seiten verschiedener Formate ist als „Tab-Switcher“ dargestellt und über dem Formularfeld und der Live-Übertragung . Am unteren Rand des Fensters mit dem Code sind 3 Buttons mit folgenden Funktionen: Kopieren des Codes, Hochladen des Codes auf die Website oder Herunterladen als txt.
 
 
-## 4.3 User Flow
+## 2.3 User Flow
 
+![Alt text](/img/userflow.PNG?raw=true "UI-Prototyp")
 
-**User Flow Beschreibung:**
+User Flow Beschreibung: 
 
 1)	Der Benutzer hat die Möglichkeit zu wählen - füllen Sie das Formular im JSON Format aus und dann im RDF Format oder sofort im 		RDF aus.
 2)	Wenn der Benutzer beschließt, das Formular zuerst im JSON Format auszufüllen, kann er das bereits vorbereitete Formular im JSON-	Format hochladen oder das Formular vom Start ausfüllen.
 3)	Dem Benutzer werden zusätzliche Funktionen angeboten: entweder die JSON-Datei zu kopieren oder herunterladen.
 4)	Der Benutzer füllt das Formular im RDF-Format aus. Es gibt zwei Möglichkeiten zum Ausfüllen: Die Erste besteht darin, eine Datei 	 im RDF-Format hochzuladen, die Zweite, das Formular selbst auszufüllen.
-
-
-
-
-
-
-
+5)	Nach dem Ausfüllen aller Formulare kann der Benutzer die Datei im RDF-Format herunterladen oder kopieren oder auf dem Server 		übertragen.
 
 ## 4.4 UI Style Guide
- 
+
+![Alt text](/img/styleguide.PNG?raw=true "UI-Guide")
 
 
-
-# 5. Beschreibung ausgewählter Teile des Source-Codes
-
+5 Beschreibung ausgewählter Teile des Source-Codes
+=========
+## Source Code
 
 ### Beispiel von Queries
 Holen der Daten aus der DB mit jQuery und AJAX:
@@ -573,5 +581,41 @@ $(document).on('click', '#login', function(){
 ```
 Beim Clicken auf dem Hochladen-Button werden die Login-Daten (Benutzername und Passwort) geholt und in die URL gepackt, wo auch die Query mit den ganzen Daten erstellt wird ```'http://'+inputUsername+':'+inputPassword+'@fbwsvcdev.fh-brandenburg.de/OntoWiki/update?query=' + 'INSERT DATA INTO <http://fbwsvcdev.fh-brandenburg.de/OntoWiki/test/> ' + sparqlQuery```. Die Query fügt die Daten in ```OntoWiki/test``` ein. Die ```sparqlQuery``` setzt sich aus dem RDF-Formular zusammen. Der Datentyp ist hier ```jsonp```, weil wir eine Cross-Origin haben, und mit einem einfachen JSON würde es nicht funktionieren, da der ```fbwsvcdev.fh-brandenburg.de/OntoWiki``` Server die ganzen Requests blockiert.
 
-# 6 Beispielhafter Use Case
+6 Beispielhafter Use Case
+=======
 
+Hansi Sparc ist als wissenschaftlicher Mitarbeiter neu an der Technischen Hochschule Brandenburg und wurde mit der Aufgabe betreut, ein bereits gedrehtes und aufbereitetes Video (DoubleClip) von Prof. Grapge mit allen relevanten Angaben auf die Videoplatform „fbwTube“ hochzuladen. Es handelt sich dabei um die Vorlesung „Graph Datenbank VS Graph Dracula“ aus dem Model „Graphen und ihre Strukturen“. 
+
+Hansi nutzt dazu das vorgestellte Tool dieses GitHub-Repositories und landet auf einer Seite mit einem JSON Formular. Dort angekommen überträgt er zunächst die ihm bekannten Daten:
+
+![Alt text](/img/bsp1.PNG?raw=true "Beispiel 1")
+
+Da Prof. Grapge scheinbar noch nicht in der Datenbank vorhanden ist, legt Hansi diesen über einen Klick auf den „+“Button an.
+
+![Alt text](/img/bsp2.PNG?raw=true "Beispiel 2")
+
+Da es sich bei der Vorlesung „„Graph Datenbank VS Graph Dracula“ eher um eine satirische Einführungsvorlesung im Modul handelt, sind hierzu zunächst nur zwei Clips vorhanden, die von Hansi ebenfalls angegeben werden. Die Vimeo IDs wurden ihm vom Prof. vorgegeben, die jeweilige Laufzeit entnimmt er direkt den Videos
+
+![Alt text](/img/bsp3.PNG?raw=true "Beispiel 3")
+
+Hansi betrachtet zufrieden das Ergebnis seiner Eingabe und bemerkt, dass ihm zusätzlich das JSON-File visualisiert wird:
+
+![Alt text](/img/bsp4.PNG?raw=true "Beispiel 4")
+
+Nach Prüfung entscheidet wer sich, dieses hochzuladen und klickt anschließend auf „Weiter“:
+
+![Alt text](/img/bsp5.PNG?raw=true "Beispiel 5")
+
+Er wird daraufhin zum RDF-Formular weitergeleitet und bemerkt, dass sich hierbei viele seiner Eingaben aus dem JSON-Formular in einer RDF-Struktur wiederfinden:
+
+![Alt text](/img/bsp6.PNG?raw=true "Beispiel 6")
+
+Im Formular ergänzt er die Kurzbeschreibung in deutscher und englischer Sprache, sowie zugehörige Schlüsselwörter:
+
+![Alt text](/img/bsp7.PNG?raw=true "Beispiel 7")
+
+Da diese Vorlesung zunächst nur im Modul „Graphen und ihre Strukturen“ gehalten wird, übertragt Hansi dies. Da ebenfalls noch kein Zusammenhang zu einer Vorlesungsreihe besteht, lässt Hansi diese Felder auf den Default-Werten:
+
+![Alt text](/img/bsp8.PNG?raw=true "Beispiel 8")
+
+Er überprüft erneut die Visualisierung des RDF-Files und klickt anschließend auf „Hochladen“. Das Video inkl. der angegebenen Informationen ist nun auf „fbwTube“ hochgeladen! Er freut sich.
