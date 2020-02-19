@@ -68,6 +68,8 @@ Folgendes RDF-Schema war die Grundlage, zur Gestaltung des RDF-Formulars. Eines 
 
 ![alt text](https://github.com/Schulden/fbwTube/blob/master/img/schema.png "Schema")
 
+Quelle: Prof. Dr. Vera G. Meister, Wenxin Hu (2019): Enterprise Knowledge Graph Implementation. Einführung in die Lehrveranstaltung; S. 8
+
 # 4 User Experience Design 
 
 Dieser Teil der Dokumentation beschreibt das Design der Benutzerinteraktion und enthält Elemente des Interaktionsdesigns, Information Architektur und des User Interface Design unter Berücksichtigung von Methoden wie Human-Centered Design und Human-Computer-Interaction.
