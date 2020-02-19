@@ -46,12 +46,12 @@ Verwendete Technologien:
 - HTML5
 - CSS3
 
-## 2 User Experience Design 
+# 2 User Experience Design 
 
 Dieser Teil der Dokumentation beschreibt das Design der Benutzerinteraktion und enthält Elemente des Interaktionsdesigns, Information Architektur und des User Interface Design unter Berücksichtigung von Methoden wie Human-Centered Design und Human-Computer-Interaction.
 
 
-# 2.1 Information Architektur
+## 2.1 Information Architektur
 
 Die horizontale Informationsarchitektur ist so konzipiert, dass die Inhalte des Informationssystems zugänglich für alle Teilnehmer sein wird. Hiermit wird sichergestellt, dass sowohl die Bedürfnisse der Benutzer, als auch der Betreiber so gut wie möglich erfüllt sind. Das System ist einfach und intuitiv zu bedienen. Es bietet eine schnelle und einfache Orientierung. Des Weiteren passt es sich der Zielgruppe an. 
 
@@ -64,7 +64,7 @@ Der Zugriff auf die API erfolgt über die Hauptwebsite der fbwTube. Die API hat 
 Der Übergang zwischen den Seiten ist hierarchisch angeordnet. Hierbei ist die Startseite eine Seite mit einem JSON-Formular. Das Hochladen von Dateien über Formulare erfolgt schrittweise. Als Startpunkt wird ein JSON-Formular genutzt. Der Endpunkt der Iteration ist das Hochladen von Dateien auf den Server mit der Zwischenseite des RDF-Formulars.
 
 
-# 2.2 Wireframes
+## 2.2 Wireframes
 
 Die Struktur und das Hauptkonzept von dem Interface wurden mit Wireframes entworfen. Jede Seite ist nach einer entwickelten Basis-Vorlage gestaltet.
  
@@ -76,7 +76,7 @@ API Interface Struktur
 Die API hat die Form einer Webseite mit Dateneingabe-Formularen für die beiden verschiedenen Formate. Das Formular besteht aus zwei Teilen. Rechts sind die Formularfelder, in die alle benötigten Informationen eingetragen werden. Links werden die Daten parallel im ausgewählten Format (JSON oder RDF) angezeigt und zeigen dem User eine Live-Übertragung von den Informationen in rdf. Der Übergang zwischen Seiten verschiedener Formate ist als „Tab-Switcher“ dargestellt und über dem Formularfeld und der Live-Übertragung . Am unteren Rand des Fensters mit dem Code sind 3 Buttons mit folgenden Funktionen: Kopieren des Codes, Hochladen des Codes auf die Website oder Herunterladen als txt.
 
 
-# 2.3 User Flow
+## 2.3 User Flow
 
 
 User Flow Beschreibung: 
@@ -93,8 +93,10 @@ User Flow Beschreibung:
 
 
 
-# 2.4 UI Style Guide
+## 2.4 UI Style Guide
  
+
+# 3 Software Architektur
 
 
 
@@ -258,7 +260,7 @@ $('#addChapters').on('click', function(){
 ```
 
 ### Löschen eines neuen Chapters
-Der folgende Code-Ausschnitt zeigt, wie ein Chapter aus HTML gelöscht werden kann. Dazu wird ein Event angelegt, welches an den Button mit dem Data-Atribut ```[data-remove="delete-element"]```  gebunden ist. Zunächst wird überprüft ob den zu glöschenden Container als von JSON-Formular oder von RDF-Formular zu löschen ist. Dafür wurde die variable ```closestCard``` deklariert und in IF-ELSE-Bedingung verwendet. Der zu löschende Container wird als variable ```removeElementNumber``` deklariert. Um die Containers von DOM zu löschen wurde die Funktion ```remove()``` verwendet und zwar ```closestCard.remove();```. Um die aktuellen IDs überall zu bekommen, werden bei jedem Löschen des Containers die aktuelle Reihnfolge geändert.
+Der folgende Code-Ausschnitt zeigt, wie ein Chapter aus HTML gelöscht werden kann. Dazu wird ein Event angelegt, welches an den Button mit dem Data-Atribut ```[data-remove="delete-element"]```  gebunden ist. Zunächst wird überprüft, ob den zu gelöschten Container als von JSON-Formular oder von RDF-Formular zu löschen ist. Dafür wurde die Variable ```closestCard``` deklariert und in einer IF-ELSE-Bedingung verwendet. Der zu löschende Container wird als Variable ```removeElementNumber``` deklariert. Um die Container von DOM zu löschen, wurde die Funktion ```remove()``` verwendet und zwar ```closestCard.remove();```. Um die aktuellen ID's überall zu bekommen, werden bei jedem Löschen des Containers die aktuelle Reihnfolge geändert.
 
 
 ```
@@ -375,7 +377,7 @@ $(document).on('click', '[data-remove="delete-element"]', function(){
 
 
 ### Anzeigen von JSON
-Der folgende Code-Ausschnitt zeigt, wie JSON angezeigt wird. Dazu wird ein Event angelegt, welches an den Inputs von Form mit dem ID ```form#jsonDataFom``` gebunden ist. Zunächst wird den HTML-Formular als JS-Object serialisiert und als Variable ```formDataToObjekt``` deklariert. Zu dem Object wird inzwischen die Links eingefügt und den Lecturer mit dem Name, Vorname, Titel und die Email in der richtige Reihenfolge. Damit den serelisierten JS-Object als JSON angezeigt wird, wird dieses Object in den JSON umgewandelt und als Variable ```serialisedDataObjekt``` deklariert. Mit dem ```syntaxHighlight``` wird die entsprechende Farbe für jedes Element eingefügt, damit man die einzelne Elemente wie z.B.: ```{}```, ```:```, ```;``` usw. und diese als ```pre``` DOM-Element eingefügt.
+Der folgende Code-Ausschnitt zeigt, wie das JSON-Format angezeigt wird. Dazu wird ein Event angelegt, welches an den Inputs von Form mit dem ID ```form#jsonDataFom``` gebunden ist. Zunächst wird das HTML-Formular als JS-Object serialisiert und als Variable ```formDataToObjekt``` deklariert. Zu dem Object wird werden die Links eingefügt und den Lecturer mit dem Name, Vorname, Titel und die Email in der richtige Reihenfolge gewandelt. Damit den serelisierten JS-Object als JSON angezeigt wird, wird dieses Object in den JSON umgewandelt und als Variable ```serialisedDataObjekt``` deklariert. Mit dem ```syntaxHighlight``` wird die entsprechende Farbe für jedes Element eingefügt, damit man die einzelne Elemente wie z.B.: ```{}```, ```:```, ```;``` usw. und diese als ```pre``` DOM-Element eingefügt.
 
 
 ```
@@ -525,7 +527,7 @@ Hier wird ein AJAX-Post gemacht unter dem URL ```file.php```. Es wird ein JSON g
 ?>
 ```
 
-Der PHP-Code wrtet auf einem JSON-Post mit dem Name filedata ```$_POST['filedata']```. Sobald den JSON-Post gemacht wird, es wird eine JSON-Datei mit dem geposteten Name ```$_POST['filename']``` unter dem ```DOCUMENT_ROOT``` angelegt, was nichts anders als den Ordner ```public_html``` ist. Der JSON-Post wird unter ungeleten Datei gespeichert ```fwrite($file, $data)```. Am Ende muss man umbedingt die Datei schließen ```fclose($file)```.
+Der PHP-Code wartet auf einem JSON-Post mit dem Name filedata ```$_POST['filedata']```. Sobald der JSON-Post gemacht wurde, wird eine JSON-Datei mit dem Name ```$_POST['filename']``` unter dem ```DOCUMENT_ROOT``` angelegt, was nichts anderes als der Ordner ```public_html``` ist. Der JSON-Post wird unter der Datei gespeichert ```fwrite($file, $data)```. Am Ende muss man umbedingt die Datei schließen ```fclose($file)```.
 
 
 ### Hochladen von RDF auf dem OntoWiki
@@ -563,4 +565,6 @@ $(document).on('click', '#login', function(){
 	}
 });
 ```
-Beim Clicken auf dem Hochladen-Button wird die Login-Daten (Benutzername und Passwort) geholt und in der URL gepackt, wo auch die Query mit den ganzen Daten geschrieben wird ```'http://'+inputUsername+':'+inputPassword+'@fbwsvcdev.fh-brandenburg.de/OntoWiki/update?query=' + 'INSERT DATA INTO <http://fbwsvcdev.fh-brandenburg.de/OntoWiki/test/> ' + sparqlQuery```. Die Query fügt die Daten in ```OntoWiki/test``` ein. Die ```sparqlQuery``` setzt sich aus dem RDF-Formular zusammen. Der Datentyp ist hier ```jsonp```, weil wir eine Cross-Origin haben, und mit einem einfachen JSON wird es nicht klappen, da der ```fbwsvcdev.fh-brandenburg.de/OntoWiki``` Server die ganzen Requests blokiert.
+Beim Clicken auf dem Hochladen-Button werden die Login-Daten (Benutzername und Passwort) geholt und in die URL gepackt, wo auch die Query mit den ganzen Daten erstellt wird ```'http://'+inputUsername+':'+inputPassword+'@fbwsvcdev.fh-brandenburg.de/OntoWiki/update?query=' + 'INSERT DATA INTO <http://fbwsvcdev.fh-brandenburg.de/OntoWiki/test/> ' + sparqlQuery```. Die Query fügt die Daten in ```OntoWiki/test``` ein. Die ```sparqlQuery``` setzt sich aus dem RDF-Formular zusammen. Der Datentyp ist hier ```jsonp```, weil wir eine Cross-Origin haben, und mit einem einfachen JSON würde es nicht funktionieren, da der ```fbwsvcdev.fh-brandenburg.de/OntoWiki``` Server die ganzen Requests blockiert.
+
+# 5 Testing
