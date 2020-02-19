@@ -98,7 +98,7 @@ Die API hat die Form einer Webseite mit Dateneingabe-Formularen für die beiden 
 
 ## 2.3 User Flow
 
-![Alt text](/img/userflow.PNG?raw=true "UI-Prototyp")
+![Alt text](/img/userflow.png?raw=true "UI-Prototyp")
 
 User Flow Beschreibung: 
 
