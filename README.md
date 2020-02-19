@@ -1,4 +1,4 @@
-# fbwTube - Enterprise Knowledge Graph Implementierung
+# fbwTube - Enterprise Knowledge Graph Implementation
 
 Inhaltsverzeichnis
 ==============
