@@ -3,89 +3,89 @@
 Inhaltsverzeichnis
 ==============
 
-1 Product Requirement (Produktanforderung)
-
-2 User Experience Design 
-
-3 Software Architektur 
-
-4 Source Code
-
-5 Quality Assurance 
+1. Allgemeine Projektinformationen
+2. Beschreibung der Software Architektur
+3. Zugrundeliegendes Wissensschema
+4. User Experience Design
+5. Beschreibung ausgewählter Teile des Source-Codes
+6. Beispielhafter Use Case
 
 
 
 
-Aufgabenstellung / Motivation
+1. Allgemeine Projektinformationen
 ==============
 
 
 Dieses Projekt hat im Rahmen der Lehrveranstaltung "Enterprise Knowledge Graph Implementation" im Studiengang Wirtschaftsinformatik (3. Semester) der TH Brandenburg unter Betreuung von Fr. Prof. Dr. Vera G. Meister (Auftraggeber) und Fr. Wenxin Hu stattgefunden. Das Projektteam besteht aus: Cristian Cananau, Marcel Cikus, Jennifer Ferle, Shyshlin Juri und Dennis Schulz. Gearbeitet wurde auf Basis von Scrum (eigentständige Pulls von Aufgaben durch das Team).
 
-Ziel des Projektes war es, für die bestehende Videoplattform "fbwTube" der Hochschule eine neue, vom Auftraggeber vorgegebene Architektur für das Einpflegen von Informationen rund um das zu veröffentlichende Video durch den Bearbeiter zu implementieren. Orientiert wurde sich dabei an: 
+Ziel des Projektes war es, für die bestehende Videoplattform "fbwTube" der Hochschule eine neue, vom Auftraggeber vorgegebene Architektur für das Einpflegen von Informationen rund um das zu veröffentlichende Video durch den Bearbeiter zu implementieren. 
 
-![Alt text](/Architektur.PNG?raw=true "Architektur")
+**WICHTIGER HINWEIS:** **Für die Benutzung des Tools ist die aktuelle Version des Internetbrowsers Mozilla FireFox notwendig!**
 
-1 Product requirement (Produktanforderung)
-==========
+**Ressourcen:**
+- Live-Plattform "fbwTube": https://fbwtube.th-brandenburg.de/OntoWiki/fbwTube/Home.html
+- Entwickeltes Tool: http://univera.de/fbwTube_Test/tool/index.html
 
-Die Herausforderung war dabei, dass auf Basis der Nutzereingaben (Bearbeiter) über ein Web-Formular sowohl ein JSON-File, welches dann über FTB auf den Web-Server gelangt, also auch ein RDF-File, welches mit der Graph-Datenbank OntoWiki syncronisiert wird, erstellt wird. 
-
-Einige wichtige Ressourcen vorab:
-- derzeitige Live-Plattform "fbwTube": https://fbwtube.th-brandenburg.de/OntoWiki/fbwTube/Home.html
 - zugehöriges OntoWiki (Zugang erforderlich!): http://fbwsvcdev.fh-brandenburg.de/OntoWiki/model/info/?m=http%3A%2F%2Ffbwsvcdev.fh-brandenburg.de%2FOntoWiki%2Ftest%2F
-- Prototyp/ Ergebnis des Projektes, webbasiertes Tool für den Bearbeiter von Videos: http://univera.de/fbwTube_Test/tool/index.html
+
 - Scrum-Board: https://trello.com/b/w328rYPt/wpm-meister
 
-WICHTIGER HINWEIS: Für die Benutzung des Tools ist die aktuelle Version des Internetbrowsers Mozilla FireFox notwendig!
 
-Verwendete Technologien:
-- JavaScript
-  - jQuery
-  - AJAX
-- HTML5
-- CSS3
 
-# 2 User Experience Design 
+2. Beschreibung der Software Architektur
+==========
+
+Auf Basis der Nutzereingaben (Editor) über ein Web-Formular soll sowohl ein JSON-File, welches dann über FTB auf den Web-Server gelangt, also auch ein RDF-File, welches mit der Graph-Datenbank OntoWiki synchronisiert wird, erstellt werden. Im späteren Kapitel zum Source-Code wird aufgezeigt, wie dies technisch umsetzbar ist (verwendbar auch für ähnliche Projekte). Folgende Grafik fasst die Architektur zusammen:
+
+![Software Architekture](/Architektur.PNG?raw=true "Architektur")
+
+3. Zugrundeliegendes Wissensschema
+==========
+
+Folgendes RDF-Schema war die Grundlage, zur Gestaltung des RDF-Formulars. Eines der zentralen Elemente ist der „DoubleClip“: Hierbei geht es um zwei Videos – eines, welches den Sprecher zeigt und ein weiteres, welches die zugehörigen Inhalte (in Form von Folien) zeigt:
+
+![Wissensschema](/Architektur.PNG?raw=true "Architektur")
+
+# 4 User Experience Design 
 
 Dieser Teil der Dokumentation beschreibt das Design der Benutzerinteraktion und enthält Elemente des Interaktionsdesigns, Information Architektur und des User Interface Design unter Berücksichtigung von Methoden wie Human-Centered Design und Human-Computer-Interaction.
 
 
-## 2.1 Information Architektur
+## 4.1 Information Architektur
 
 Die horizontale Informationsarchitektur ist so konzipiert, dass die Inhalte des Informationssystems zugänglich für alle Teilnehmer sein wird. Hiermit wird sichergestellt, dass sowohl die Bedürfnisse der Benutzer, als auch der Betreiber so gut wie möglich erfüllt sind. Das System ist einfach und intuitiv zu bedienen. Es bietet eine schnelle und einfache Orientierung. Des Weiteren passt es sich der Zielgruppe an. 
 
 
 
-(IA) Logischer Aufbau: 
+**(IA) Logischer Aufbau: **
 
 Der Zugriff auf die API erfolgt über die Hauptwebsite der fbwTube. Die API hat einen 3-Seiten-Architektur. Jede Seite verfügt über ein Formular zum Ausfüllen des entsprechenden Datenformats (JSON und RDF). Auf jeder Seite gibt es die Möglichkeit, eine Datei zu kopieren, herunterzuladen oder hochzuladen. 
 
 Der Übergang zwischen den Seiten ist hierarchisch angeordnet. Hierbei ist die Startseite eine Seite mit einem JSON-Formular. Das Hochladen von Dateien über Formulare erfolgt schrittweise. Als Startpunkt wird ein JSON-Formular genutzt. Der Endpunkt der Iteration ist das Hochladen von Dateien auf den Server mit der Zwischenseite des RDF-Formulars.
 
 
-## 2.2 Wireframes
+## 4.2 Wireframes
 
 Die Struktur und das Hauptkonzept von dem Interface wurden mit Wireframes entworfen. Jede Seite ist nach einer entwickelten Basis-Vorlage gestaltet.
  
  
 Konzept und Struktur der Hauptseite
 
-API Interface Struktur
+**API Interface Struktur**
 
 Die API hat die Form einer Webseite mit Dateneingabe-Formularen für die beiden verschiedenen Formate. Das Formular besteht aus zwei Teilen. Rechts sind die Formularfelder, in die alle benötigten Informationen eingetragen werden. Links werden die Daten parallel im ausgewählten Format (JSON oder RDF) angezeigt und zeigen dem User eine Live-Übertragung von den Informationen in rdf. Der Übergang zwischen Seiten verschiedener Formate ist als „Tab-Switcher“ dargestellt und über dem Formularfeld und der Live-Übertragung . Am unteren Rand des Fensters mit dem Code sind 3 Buttons mit folgenden Funktionen: Kopieren des Codes, Hochladen des Codes auf die Website oder Herunterladen als txt.
 
 
-## 2.3 User Flow
+## 4.3 User Flow
 
 
-User Flow Beschreibung: 
+**User Flow Beschreibung: **
 
 1)	Der Benutzer hat die Möglichkeit zu wählen - füllen Sie das Formular im JSON Format aus und dann im RDF Format oder sofort im 		RDF aus.
 2)	Wenn der Benutzer beschließt, das Formular zuerst im JSON Format auszufüllen, kann er das bereits vorbereitete Formular im JSON-	Format hochladen oder das Formular vom Start ausfüllen.
 3)	Dem Benutzer werden zusätzliche Funktionen angeboten: entweder die JSON-Datei zu kopieren oder herunterladen.
 4)	Der Benutzer füllt das Formular im RDF-Format aus. Es gibt zwei Möglichkeiten zum Ausfüllen: Die Erste besteht darin, eine Datei 	 im RDF-Format hochzuladen, die Zweite, das Formular selbst auszufüllen.
-5)	Nach dem Ausfüllen aller Formulare kann der Benutzer die Datei im RDF-Format herunterladen oder kopieren oder auf dem Server 		übertragen.
 
 
 
@@ -93,15 +93,14 @@ User Flow Beschreibung:
 
 
 
-## 2.4 UI Style Guide
+
+## 4.4 UI Style Guide
  
 
-# 3 Software Architektur
 
 
+# 5. Beschreibung ausgewählter Teile des Source-Codes
 
-
-## Source Code
 
 ### Beispiel von Queries
 Holen der Daten aus der DB mit jQuery und AJAX:
@@ -567,4 +566,5 @@ $(document).on('click', '#login', function(){
 ```
 Beim Clicken auf dem Hochladen-Button werden die Login-Daten (Benutzername und Passwort) geholt und in die URL gepackt, wo auch die Query mit den ganzen Daten erstellt wird ```'http://'+inputUsername+':'+inputPassword+'@fbwsvcdev.fh-brandenburg.de/OntoWiki/update?query=' + 'INSERT DATA INTO <http://fbwsvcdev.fh-brandenburg.de/OntoWiki/test/> ' + sparqlQuery```. Die Query fügt die Daten in ```OntoWiki/test``` ein. Die ```sparqlQuery``` setzt sich aus dem RDF-Formular zusammen. Der Datentyp ist hier ```jsonp```, weil wir eine Cross-Origin haben, und mit einem einfachen JSON würde es nicht funktionieren, da der ```fbwsvcdev.fh-brandenburg.de/OntoWiki``` Server die ganzen Requests blockiert.
 
-# 5 Testing
+# 6 Beispielhafter Use Case
+
