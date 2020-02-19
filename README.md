@@ -3,15 +3,12 @@
 Inhaltsverzeichnis
 ==============
 
-Aufgabenstellung / Motivation
+1 Product requirement (Produktanforderung)
+2 User Experience Design 
+3 Software Architektur 
+4 Source Code
+5 Quality Assurance 
 
-Prozessmodell
-
-Beschreibung des Prozessmodells
-
-Technische Umsetzung 
-
-Fallstudie
 
 
 
@@ -25,11 +22,8 @@ Ziel des Projektes war es, für die bestehende Videoplattform "fbwTube" der Hoch
 
 ![Alt text](/Architektur.PNG?raw=true "Architektur")
 
-Anforderungen
---------------
-
-Ressourcen 
---------------
+1 Product requirement (Produktanforderung)
+==========
 
 Die Herausforderung war dabei, dass auf Basis der Nutzereingaben (Bearbeiter) über ein Web-Formular sowohl ein JSON-File, welches dann über FTB auf den Web-Server gelangt, also auch ein RDF-File, welches mit der Graph-Datenbank OntoWiki syncronisiert wird, erstellt wird. 
 
@@ -48,7 +42,60 @@ Verwendete Technologien:
 - HTML5
 - CSS3
 
-## Erläuterung ausgewählter Codes
+## 2 User Experience Design 
+
+Dieser Teil der Dokumentation beschreibt das Design der Benutzerinteraktion und enthält Elemente des Interaktionsdesigns, Information Architektur und des User Interface Design unter Berücksichtigung von Methoden wie Human-Centered Design und Human-Computer-Interaction.
+
+
+# 2.1 Information Architektur
+
+Die horizontale Informationsarchitektur ist so konzipiert, dass die Inhalte des Informationssystems zugänglich für alle Teilnehmer sein wird. Hiermit wird sichergestellt, dass sowohl die Bedürfnisse der Benutzer, als auch der Betreiber so gut wie möglich erfüllt sind. Das System ist einfach und intuitiv zu bedienen. Es bietet eine schnelle und einfache Orientierung. Des Weiteren passt es sich der Zielgruppe an. 
+
+
+
+(IA) Logischer Aufbau: 
+
+Der Zugriff auf die API erfolgt über die Hauptwebsite der fbwTube. Die API hat einen 3-Seiten-Architektur. Jede Seite verfügt über ein Formular zum Ausfüllen des entsprechenden Datenformats (JSON und RDF). Auf jeder Seite gibt es die Möglichkeit, eine Datei zu kopieren, herunterzuladen oder hochzuladen. 
+
+Der Übergang zwischen den Seiten ist hierarchisch angeordnet. Hierbei ist die Startseite eine Seite mit einem JSON-Formular. Das Hochladen von Dateien über Formulare erfolgt schrittweise. Als Startpunkt wird ein JSON-Formular genutzt. Der Endpunkt der Iteration ist das Hochladen von Dateien auf den Server mit der Zwischenseite des RDF-Formulars.
+
+
+# 2.2 Wireframes
+
+Die Struktur und das Hauptkonzept von dem Interface wurden mit Wireframes entworfen. Jede Seite ist nach einer entwickelten Basis-Vorlage gestaltet.
+ 
+ 
+Konzept und Struktur der Hauptseite
+
+API Interface Struktur
+
+Die API hat die Form einer Webseite mit Dateneingabe-Formularen für die beiden verschiedenen Formate. Das Formular besteht aus zwei Teilen. Rechts sind die Formularfelder, in die alle benötigten Informationen eingetragen werden. Links werden die Daten parallel im ausgewählten Format (JSON oder RDF) angezeigt und zeigen dem User eine Live-Übertragung von den Informationen in rdf. Der Übergang zwischen Seiten verschiedener Formate ist als „Tab-Switcher“ dargestellt und über dem Formularfeld und der Live-Übertragung . Am unteren Rand des Fensters mit dem Code sind 3 Buttons mit folgenden Funktionen: Kopieren des Codes, Hochladen des Codes auf die Website oder Herunterladen als txt.
+
+
+# 2.3 User Flow
+
+
+User Flow Beschreibung: 
+
+1)	Der Benutzer hat die Möglichkeit zu wählen - füllen Sie das Formular im JSON Format aus und dann im RDF Format oder sofort im 		RDF aus.
+2)	Wenn der Benutzer beschließt, das Formular zuerst im JSON Format auszufüllen, kann er das bereits vorbereitete Formular im JSON-	Format hochladen oder das Formular vom Start ausfüllen.
+3)	Dem Benutzer werden zusätzliche Funktionen angeboten: entweder die JSON-Datei zu kopieren oder herunterladen.
+4)	Der Benutzer füllt das Formular im RDF-Format aus. Es gibt zwei Möglichkeiten zum Ausfüllen: Die Erste besteht darin, eine Datei 	 im RDF-Format hochzuladen, die Zweite, das Formular selbst auszufüllen.
+5)	Nach dem Ausfüllen aller Formulare kann der Benutzer die Datei im RDF-Format herunterladen oder kopieren oder auf dem Server 		übertragen.
+
+
+
+
+
+
+
+# 2.4 UI Style Guide
+ 
+
+
+
+
+## Source Code
 
 ### Beispiel von Queries
 Holen der Daten aus der DB mit jQuery und AJAX:
