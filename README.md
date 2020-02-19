@@ -58,14 +58,14 @@ WICHTIGER HINWEIS: Für die Benutzung des Tools ist die aktuelle Version des Int
 
 Auf Basis der Nutzereingaben (Editor) über ein Web-Formular soll sowohl ein JSON-File, welches dann über FTB auf den Web-Server gelangt, also auch ein RDF-File, welches mit der Graph-Datenbank OntoWiki syncronisiert wird, erstellt werden. Im späteren Kapitel zum Source-Code wird aufgezeigt, wie dies technisch umsetzbar ist (verwendbar auch für ähnliche Projekte). Folgende Grafik fasst die Architektur zusammen:
 
-![Alt text](https://github.com/Schulden/fbwTube/blob/master/img/architecture.PNG "Architektur")
+![alt text](https://github.com/Schulden/fbwTube/blob/master/img/architecture.png "Architektur")
 
 3 Zugrundeliegendes Wissensschema
 ========
 
 Folgendes RDF-Schema war die Grundlage, zur Gestaltung des RDF-Formulars. Eines der zentralen Elemente ist der „DoubleClip“: Hierbei geht es um zwei Videos – eines, welches den Sprecher zeigt und ein weiteres, welches die zugehörigen Inhalte (in Form von Folien) zeigt:
 
-![Alt text](https://github.com/Schulden/fbwTube/blob/master/img/schema.PNG "Schema")
+![alt text](https://github.com/Schulden/fbwTube/blob/master/img/schema.png "Schema")
 
 # 4 User Experience Design 
 
@@ -76,7 +76,7 @@ Dieser Teil der Dokumentation beschreibt das Design der Benutzerinteraktion und 
 
 Die horizontale Informationsarchitektur ist so konzipiert, dass die Inhalte des Informationssystems zugänglich für alle Teilnehmer sein wird. Hiermit wird sichergestellt, dass sowohl die Bedürfnisse der Benutzer, als auch der Betreiber so gut wie möglich erfüllt sind. Das System ist einfach und intuitiv zu bedienen. Es bietet eine schnelle und einfache Orientierung. Des Weiteren passt es sich der Zielgruppe an. 
 
-![Alt text](https://github.com/Schulden/fbwTube/blob/master/img/informationArchi.PNG?raw=true "Architektur")
+![alt text](https://github.com/Schulden/fbwTube/blob/master/img/informationArchi.png "Architektur")
 
 ### (IA) Logischer Aufbau: 
 
@@ -89,7 +89,7 @@ Der Übergang zwischen den Seiten ist hierarchisch angeordnet. Hierbei ist die S
 
 Die Struktur und das Hauptkonzept von dem Interface wurden mit Wireframes entworfen. Jede Seite ist nach einer entwickelten Basis-Vorlage gestaltet.
  
- ![Alt text](https://github.com/Schulden/fbwTube/blob/master/img/UI.PNG?raw=true "UI-Prototyp")
+ ![alt text](https://github.com/Schulden/fbwTube/blob/master/img/UI.png "UI-Prototyp")
  
 ### API Interface Struktur
 
@@ -98,7 +98,7 @@ Die API hat die Form einer Webseite mit Dateneingabe-Formularen für die beiden 
 
 ## 2.3 User Flow
 
-![Alt text](https://github.com/Schulden/fbwTube/blob/master/img/userflow.png?raw=true "UI-Prototyp")
+![alt text](https://github.com/Schulden/fbwTube/blob/master/img/userflow.png "UI-Prototyp")
 
 User Flow Beschreibung: 
 
@@ -110,7 +110,7 @@ User Flow Beschreibung:
 
 ## 4.4 UI Style Guide
 
-![Alt text](/img/styleguide.PNG?raw=true "UI-Guide")
+![aalt text](https://github.com/Schulden/fbwTube/blob/master/img/styleguide.png "UI-Guide")
 
 
 5 Beschreibung ausgewählter Teile des Source-Codes
@@ -588,34 +588,34 @@ Hansi Sparc ist als wissenschaftlicher Mitarbeiter neu an der Technischen Hochsc
 
 Hansi nutzt dazu das vorgestellte Tool dieses GitHub-Repositories und landet auf einer Seite mit einem JSON Formular. Dort angekommen überträgt er zunächst die ihm bekannten Daten:
 
-![Alt text](/img/bsp1.PNG?raw=true "Beispiel 1")
+![alt text](https://github.com/Schulden/fbwTube/blob/master/img/bsp1.png "Beispiel 1")
 
 Da Prof. Grapge scheinbar noch nicht in der Datenbank vorhanden ist, legt Hansi diesen über einen Klick auf den „+“Button an.
 
-![Alt text](/img/bsp2.PNG?raw=true "Beispiel 2")
+![Alt text](https://github.com/Schulden/fbwTube/blob/master/img/bsp2.png "Beispiel 2")
 
 Da es sich bei der Vorlesung „„Graph Datenbank VS Graph Dracula“ eher um eine satirische Einführungsvorlesung im Modul handelt, sind hierzu zunächst nur zwei Clips vorhanden, die von Hansi ebenfalls angegeben werden. Die Vimeo IDs wurden ihm vom Prof. vorgegeben, die jeweilige Laufzeit entnimmt er direkt den Videos
 
-![Alt text](/img/bsp3.PNG?raw=true "Beispiel 3")
+![alt text](/img/bsp3.png "Beispiel 3")
 
 Hansi betrachtet zufrieden das Ergebnis seiner Eingabe und bemerkt, dass ihm zusätzlich das JSON-File visualisiert wird:
 
-![Alt text](/img/bsp4.PNG?raw=true "Beispiel 4")
+![alt text](https://github.com/Schulden/fbwTube/blob/master/img/bsp4.png "Beispiel 4")
 
 Nach Prüfung entscheidet wer sich, dieses hochzuladen und klickt anschließend auf „Weiter“:
 
-![Alt text](/img/bsp5.PNG?raw=true "Beispiel 5")
+![alt text](https://github.com/Schulden/fbwTube/blob/master/img/bsp5.png "Beispiel 5")
 
 Er wird daraufhin zum RDF-Formular weitergeleitet und bemerkt, dass sich hierbei viele seiner Eingaben aus dem JSON-Formular in einer RDF-Struktur wiederfinden:
 
-![Alt text](/img/bsp6.PNG?raw=true "Beispiel 6")
+![alt text](https://github.com/Schulden/fbwTube/blob/master/img/bsp6.png "Beispiel 6")
 
 Im Formular ergänzt er die Kurzbeschreibung in deutscher und englischer Sprache, sowie zugehörige Schlüsselwörter:
 
-![Alt text](/img/bsp7.PNG?raw=true "Beispiel 7")
+![alt text](https://github.com/Schulden/fbwTube/blob/master/img/bsp7.png "Beispiel 7")
 
 Da diese Vorlesung zunächst nur im Modul „Graphen und ihre Strukturen“ gehalten wird, übertragt Hansi dies. Da ebenfalls noch kein Zusammenhang zu einer Vorlesungsreihe besteht, lässt Hansi diese Felder auf den Default-Werten:
 
-![Alt text](/img/bsp8.PNG?raw=true "Beispiel 8")
+![alt text](https://github.com/Schulden/fbwTube/blob/master/img/bsp8.png "Beispiel 8")
 
 Er überprüft erneut die Visualisierung des RDF-Files und klickt anschließend auf „Hochladen“. Das Video inkl. der angegebenen Informationen ist nun auf „fbwTube“ hochgeladen! Er freut sich.
