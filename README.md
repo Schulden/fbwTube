@@ -3,10 +3,14 @@
 Inhaltsverzeichnis
 ==============
 
-1 Product requirement (Produktanforderung)
+1 Product Requirement (Produktanforderung)
+
 2 User Experience Design 
+
 3 Software Architektur 
+
 4 Source Code
+
 5 Quality Assurance 
 
 
@@ -33,7 +37,7 @@ Einige wichtige Ressourcen vorab:
 - Prototyp/ Ergebnis des Projektes, webbasiertes Tool für den Bearbeiter von Videos: http://univera.de/fbwTube_Test/tool/index.html
 - Scrum-Board: https://trello.com/b/w328rYPt/wpm-meister
 
-## WICHTIGER HINWEIS: Für die Benutzung des Tools ist die aktuelle Version des Internetbrowsers Mozilla FireFox notwendig!
+WICHTIGER HINWEIS: Für die Benutzung des Tools ist die aktuelle Version des Internetbrowsers Mozilla FireFox notwendig!
 
 Verwendete Technologien:
 - JavaScript
