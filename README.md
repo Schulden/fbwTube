@@ -58,14 +58,14 @@ WICHTIGER HINWEIS: Für die Benutzung des Tools ist die aktuelle Version des Int
 
 Auf Basis der Nutzereingaben (Editor) über ein Web-Formular soll sowohl ein JSON-File, welches dann über FTB auf den Web-Server gelangt, also auch ein RDF-File, welches mit der Graph-Datenbank OntoWiki syncronisiert wird, erstellt werden. Im späteren Kapitel zum Source-Code wird aufgezeigt, wie dies technisch umsetzbar ist (verwendbar auch für ähnliche Projekte). Folgende Grafik fasst die Architektur zusammen:
 
-![Alt text](https://github.com/Schulden/fbwTube/blob/master/img/architecture.PNG?raw=true "Architektur")
+![Alt text](https://github.com/Schulden/fbwTube/blob/master/img/architecture.PNG "Architektur")
 
 3 Zugrundeliegendes Wissensschema
 ========
 
 Folgendes RDF-Schema war die Grundlage, zur Gestaltung des RDF-Formulars. Eines der zentralen Elemente ist der „DoubleClip“: Hierbei geht es um zwei Videos – eines, welches den Sprecher zeigt und ein weiteres, welches die zugehörigen Inhalte (in Form von Folien) zeigt:
 
-![Alt text](https://github.com/Schulden/fbwTube/blob/master/img/schema.PNG?raw=true "Schema")
+![Alt text](https://github.com/Schulden/fbwTube/blob/master/img/schema.PNG "Schema")
 
 # 4 User Experience Design 
 
