@@ -605,7 +605,7 @@ Hansi betrachtet zufrieden das Ergebnis seiner Eingabe und bemerkt, dass ihm zus
 
 ![alt text](https://github.com/Schulden/fbwTube/blob/master/img/bsp4.png "Beispiel 4")
 
-Nach Prüfung entscheidet wer sich, dieses hochzuladen und klickt anschließend auf „Weiter“:
+Nach Prüfung entscheidet er sich, dieses hochzuladen und klickt anschließend auf „Weiter“:
 
 ![alt text](https://github.com/Schulden/fbwTube/blob/master/img/bsp5.png "Beispiel 5")
 
