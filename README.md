@@ -21,7 +21,15 @@ Dieses Projekt hat im Rahmen der Lehrveranstaltung "Enterprise Knowledge Graph I
 
 Ziel des Projektes war es, für die bestehende Videoplattform "fbwTube" der Hochschule eine neue, vom Auftraggeber vorgegebene Architektur für das Einpflegen von Informationen rund um das zu veröffentlichende Video durch den Bearbeiter zu implementieren. 
 
-**WICHTIGER HINWEIS:** **Für die Benutzung des Tools ist die aktuelle Version des Internetbrowsers Mozilla FireFox notwendig!**
+**WICHTIGER HINWEIS:** Für die Benutzung des Tools ist die aktuelle Version des Internetbrowsers Mozilla FireFox notwendig!
+
+**Verwendete Technologien:**
+- JavaScript: 
+	- jQuery
+	- AJAX
+- HTML5
+- CSS3
+
 
 **Ressourcen:**
 - Live-Plattform "fbwTube": https://fbwtube.th-brandenburg.de/OntoWiki/fbwTube/Home.html
@@ -57,7 +65,7 @@ Die horizontale Informationsarchitektur ist so konzipiert, dass die Inhalte des 
 
 
 
-**(IA) Logischer Aufbau: **
+**(IA) Logischer Aufbau:**
 
 Der Zugriff auf die API erfolgt über die Hauptwebsite der fbwTube. Die API hat einen 3-Seiten-Architektur. Jede Seite verfügt über ein Formular zum Ausfüllen des entsprechenden Datenformats (JSON und RDF). Auf jeder Seite gibt es die Möglichkeit, eine Datei zu kopieren, herunterzuladen oder hochzuladen. 
 
@@ -79,7 +87,7 @@ Die API hat die Form einer Webseite mit Dateneingabe-Formularen für die beiden 
 ## 4.3 User Flow
 
 
-**User Flow Beschreibung: **
+**User Flow Beschreibung:**
 
 1)	Der Benutzer hat die Möglichkeit zu wählen - füllen Sie das Formular im JSON Format aus und dann im RDF Format oder sofort im 		RDF aus.
 2)	Wenn der Benutzer beschließt, das Formular zuerst im JSON Format auszufüllen, kann er das bereits vorbereitete Formular im JSON-	Format hochladen oder das Formular vom Start ausfüllen.
